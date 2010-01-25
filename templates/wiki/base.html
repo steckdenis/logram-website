@@ -1,0 +1,22 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block FAriane %}{{ block.super }} &raquo; <a href="wiki.html">{% trans "Wiki" %}</a>{% endblock %}
+
+
+{# On n'est plus dans l'accueil, mais dans le wiki #}
+
+{% block Wiki %}{% if in_discover %}class="actif"{% endif %}{% endblock %}
+{% block Docs %}{% if not in_discover %}class="actif"{% endif %}{% endblock %}
+
+{% block menu %}
+    <h2>{% trans "Wiki" %}</h2>
+    
+    <ul>
+        <li><a href="wiki.html">{% trans "Accueil du wiki" %}</a></li>
+        <li><a href="wiki-1.html">{% trans "Une page au hasard" %}</a></li>
+        <li><a href="wiki-2-1.html">{% trans "Changements" %}</a></li>
+    </ul>
+    
+    <div class="separateur"></div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "forum/viewtopic.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }}
+    {% if not news.is_private %}
+        <a href="news-1-1-{{ catid }}-0.html">{{ cat }}</a>
+    {% else %}
+        <a href="news-1-1-0-{{ news.author_id }}.html">
+            {% blocktrans with news.author.uname as uname %}
+                Journaux de {{ uname }}
+            {% endblocktrans %}
+        </a>
+    {% endif %}
+    &raquo;
+    {{ news.title }}
+{% endblock %}
+
+{% block pagination %}
+    <div class="pagination">
+        {% for pg in list_pages %}
+            <a href="news-2-{{ news.id }}-{{ pg }}-{{ news.title|slugify }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block embedded %}
+    <div id="news_pane">
+        <div id="news_infos">
+            {{ news.date_published|format_date|capfirst }} {% trans "par" %} {{ news.author|color_pseudo }},
+            
+            {% if not news.is_private %}
+                {% trans "dans" %} 
+                <a href="news-1-1-{{ catid }}-0.html">{{ cat }}</a>,
+            {% else %}
+                <a href="news-1-1-0-{{ news.author_id }}.html">{% trans "voir les journaux" %}</a>,
+            {% endif %}
+            
+            <a href="#comments">{{ topic.num_posts }} {% trans "commentaires" %}</a>
+        </div>
+        
+        <div id="news_content">
+            {{ news.body|lcode }}
+        </div>
+    </div>
+    
+    {% if not news.published %}
+        <form action="news-5-4-{{ news.id }}.html" method="post">
+            <fieldset>
+                <legend>{% trans "Validation" %}</legend>
+                
+                <ul class="form_ul">
+                    <li>
+                        <label for="act">{% trans "Action" %} :</label>
+                        <select name="act">
+                            <option value="validate">{% trans "Valider" %}</option>
+                            <option value="reject">{% trans "Rejeter" %}</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="reason">{% trans "En cas de refus, raison" %} :</label>
+                        <input type="text" name="reason" maxlength="200" />
+                    </li>
+                </ul>
+                
+                <p style="text-align: center;">
+                    <input type="submit" />
+                </p>
+            </fieldset>
+        </form>
+    {% endif %}
+    
+    <h2 id="comments">{% trans "Commentaires" %}</h2>
+{% endblock %}

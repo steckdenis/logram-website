@@ -1,0 +1,139 @@
+{% extends "demands/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans type.name %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo;
+    {% trans type.name %}
+{% endblock %}
+
+{% block body %}
+    <h1>{% trans type.name %}</h1>
+
+    <p>
+        {% blocktrans with type.name as t %}
+            Voici la page qui liste les demandes de type <strong>{{ t }}</strong>. Cette page
+            est conçue pour être puissante : vous pouvez filtrer et ordonner les demandes comme
+            vous voulez.
+        {% endblocktrans %}
+    </p>
+
+    <div id="forum_tools">
+        <strong>{% trans "Afficher uniquement les demandes" %} :</strong>
+
+        {% for s in status %}
+            {% if not forloop.first %}
+                &bull;
+            {% endif %}
+
+            <a href="demand-3-{{ type.id }}-{{ s.id }}-{{ order_by }}-{{ page }}.html">
+                {% trans s.name %}
+            </a>
+        {% endfor %}
+    </div>
+
+    <style type="text/css">
+        .demand_tbl tr th {
+            background-color: #{{ type.color }} !important;
+        }
+
+        .demand_tbl, .demand_tbl td, .demand_tbl th {
+            border-color: #{{ type.color }} !important;
+        }
+    </style>
+    
+    <table class="demand_tbl" style="text-align: center;">
+        <tr>
+            <th>
+                {% ifnotequal order_by "author" %}
+                    <a href="demand-3-{{ type.id }}-{{ st }}-author-{{ page }}.html">
+                        {% trans "Auteur" %}
+                    </a>
+                {% else %}
+                    {% trans "Auteur" %}
+                {% endifnotequal %}
+            </th>
+            <th>
+                {% ifnotequal order_by "datec" %}
+                    <a href="demand-3-{{ type.id }}-{{ st }}-datec-{{ page }}.html">
+                        {% trans "Date de création" %}
+                    </a>
+                {% else %}
+                    {% trans "Date de création" %}
+                {% endifnotequal %}
+            </th>
+            <th>
+                {% ifnotequal order_by "title" %}
+                    <a href="demand-3-{{ type.id }}-{{ st }}-title-{{ page }}.html">
+                        {% trans "Titre" %}
+                    </a>
+                {% else %}
+                    {% trans "Titre" %}
+                {% endifnotequal %}
+            </th>
+            <th>
+                {% ifnotequal order_by "category" %}
+                    <a href="demand-3-{{ type.id }}-{{ st }}-category-{{ page }}.html">
+                        {% trans "Catégorie" %}
+                    </a>
+                {% else %}
+                    {% trans "Catégorie" %}
+                {% endifnotequal %}
+            </th>
+            <th>
+                {% ifnotequal order_by "status" %}
+                    <a href="demand-3-{{ type.id }}-{{ st }}-status-{{ page }}.html">
+                        {% trans "Statut" %}
+                    </a>
+                {% else %}
+                    {% trans "Statut" %}
+                {% endifnotequal %}
+            </th>
+            <th>
+                {% ifnotequal order_by "priority" %}
+                    <a href="demand-3-{{ type.id }}-{{ st }}-priority-{{ page }}.html">
+                        {% trans "Priorité" %}
+                    </a>
+                {% else %}
+                    {% trans "Priorité" %}
+                {% endifnotequal %}
+            </th>
+        </tr>
+        {% for d in pg.object_list %}
+            <tr>
+                <td>
+                    {{ d.author|color_pseudo }}
+                </td>
+                <td>
+                    {{ d.created_at|format_date }}
+                </td>
+                <td>
+                    <a href="demand-5-{{ d.id }}-1.html">
+			{% if d.status.closed %}<del>{% endif %}
+                        {{ d.title }}
+			{% if d.status.closed %}</del>{% endif %}
+                    </a>
+                    {% if d.is_proposed %}
+                        <img style="vertical-align: middle;" src="{{ style }}/img/proposed_demand.png" alt="{% trans "Demande proposée" %}" />
+                    {% endif %}
+                </td>
+                <td>
+                    {% trans d.category.name %}
+                </td>
+                <td>
+                    <a href="demand-3-{{ type.id }}-{{ d.status.id }}-{{ order_by }}-{{ page }}.html">
+                        {% trans d.status.name %}
+                    </a>
+                </td>
+                <td>
+                    <span
+                        title="{% trans d.priority.description %}"
+                        style="color: rgb({{ d.priority.red }}, 0, {{ d.priority.blue }});">
+                            {% trans d.priority.name %}
+                    </span>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "pastebin/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% trans "Nouveau post" %} 
+{% endblock %}
+
+{% block body %}    
+    <script type="text/javascript" src="/style/lform.js"></script>
+    
+    <h1>{% trans "Dépôt de sources" %}</h1>
+    
+    <div>
+        <h2>{% trans "Derniers Posts" %}</h2>
+        
+        <ul>    
+            {% for paste in latest_paste %}
+                <li>
+                    <a href="pastebin-3-{{ paste.uniqid }}.html">
+                        {{ paste.title }}
+                    </a>,
+                    
+                    {% trans "créé" %} {{ paste.created|format_date }},
+                    {% trans "se termine" %} {{ paste.ended|format_date}}
+                    
+                    <br />
+                    
+                    {% if paste.author %}
+                        {{ paste.author|color_pseudo }}
+                    {% else %}
+                        {% trans "Anonyme" %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <hr />
+    
+    <div>
+        <h2>{% trans "Nouveau post" %}</h2>
+        
+        <form action="pastebin-2.html" method="post">
+            {% include "pastebin/edit_form.html" %}
+        </form>
+    </div>
+    
+{% endblock %}

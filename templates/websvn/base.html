@@ -1,0 +1,13 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="devcorner.html">{% trans "Le coin du développeur" %}</a> &raquo; 
+    <a href="websvn-1.html">{% trans "WebSVN" %}</a>
+{% endblock %}
+
+{% block Devcorner %}class="actif"{% endblock %}
+
+{% block menu %}
+    {% include "global/devcorner_menu.html" %}
+{% endblock %}

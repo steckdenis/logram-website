@@ -1,0 +1,16 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Liste des flux RSS disponible" %} {% endblock %}
+
+{% block body %}    
+    <ul>
+        <li><a href="/feeds/latestnews/" alt="">{% trans "Dernières nouvelles" %}</a></li>
+        <li><a href="/feeds/latestjournal/" alt="">{% trans "Derniers journaux" %}</a></li>
+        <li><a href="/feeds/latestask/" alt="">{% trans "Dernières demandes" %}</a></li>
+        <li><a href="/feeds/latestmsg/" alt="">{% trans "Derniers messages du forum" %}</a></li>
+        <li><a href="/feeds/latestwiki/" alt="">{% trans "Derniers Wiki crée" %}</a></li>
+		<li><a href="/feeds/latestpackages/" alt="">{% trans "Derniers paquets disponibles" %}</a></li>
+    </ul>
+{% endblock %}

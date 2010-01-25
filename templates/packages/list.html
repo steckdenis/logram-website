@@ -1,0 +1,53 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Paquets" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% if distro %}
+        {% trans "Paquets de Logram" %} {{ distro.name }}
+        {% if section %}
+            {% trans "dans la section" %} {% trans section.long_name %}
+        {% endif %}
+    {% else %}
+        {% trans "Paquets" %}
+    {% endif %}
+
+{% endblock %}
+
+{% block body %}
+    {% if distro %}
+        <h1>
+            {% trans "Paquet de Logram" %} {{ distro.name }}
+            {% if section %}
+                {% trans "dans la section" %} {% trans section.long_name %}
+            {% endif %}
+        </h1>
+    {% else %}
+        <h1>{% trans "Paquets" %}</h1>
+    {% endif %}
+
+    {% if distro %}
+        {# Ne pas regrouper les paquets par distribution #}
+        
+        {% with packages as pkgs %}
+            {% include "packages/sublist.html" %}
+        {% endwith %}
+    {% else %}
+        {# Regrouper les paquets par distribution #}
+
+        {% regroup packages by distribution as distros %}
+
+        {% for distro in distros %}
+            <h2>
+                {% blocktrans with distro.grouper|capfirst as dname %}
+                    Paquets dans Logram {{ dname }}
+                {% endblocktrans %}
+            </h2>
+
+            {% with distro.list as pkgs %}
+                {% include "packages/sublist.html" %}
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

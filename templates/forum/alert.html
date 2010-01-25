@@ -1,0 +1,48 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Alerter les modérateurs" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Alerter les modérateurs" %}</h1>
+    
+    {% blocktrans %}
+        <p>
+            Si vous trouvez que quelqu'un dans ce topic ne respecte pas les règles, vous
+            pouvez en avertir les modérateurs, qui viendront faire un tour sur le topic. C'est
+            particulièrement utile pour quand il y a beaucoup d'activité sur le forum (événement, 
+            sortie, etc), et que les modérateurs ne savent pas où regarder
+        </p>
+        
+        <p>
+            Votre identifiant sera enregistré avec l'alerte. Les modérateurs sauront qui les a appelés,
+            et pourront vous remercier. <strong>En aucun cas votre identité sera communiquée lors du passage
+            des modérateurs</strong>,
+            les membres fautifs ne sauront pas vous faire de représailles. Alertez donc tranquille.
+        </p>
+        
+        <p>
+            En plus de l'alerte, nous vous demandons de fournir un commentaire, qui permet aux modérateurs
+            de savoir qui a commis une faute, de quel genre, et où la trouver. Si vous avez une ID précise du message,
+            ainsi que la page sur laquelle il se trouve, ça aide vraiment. Pour obtenir l'ID d'un message, passez la
+            souris sur le signe "#" à côté de la date de postage du message. Regarder l'url à laquelle envoie ce lien, elle
+            est du style «forum-2-3-1-blah-blah.html#r<strong>8</strong>». C'est ce chiffre qui est l'ID du message.
+        </p>
+    {% endblocktrans %}
+    
+    <form action="forum-12-{{ topic_id }}.html" method="post">
+        <fieldset>
+            <legend>{% trans "Commentaire" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Alerter les modérateurs" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

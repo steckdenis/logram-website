@@ -1,0 +1,100 @@
+{% extends "mp/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{{ usertopic.topic.title }}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {{ usertopic.topic.title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ usertopic.topic.title }}</h1>
+
+    <h2 style="text-align: center;">{{ usertopic.topic.subtitle }}</h2>
+
+    <h3>{% trans "Participants" %}</h3>
+
+    <ul>
+        {% for part in parts %}
+            <li>
+                {% if part.has_deleted %}<del>{% endif %}
+                {{ part.user|color_pseudo }}
+                {% if part.has_deleted %}</del>{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if usertopic.is_master %}
+        <form action="mp-6-{{ usertopic.topic.id }}.html" method="post">
+            <p>
+                <strong>{% trans "Ajouter des participants" %} :</strong>
+                <input type="text" name="parts" id="parts">
+                <em>{% trans "pseudos séparés par des virgules" %}</em>
+                <input type="submit" value="{% trans "Ajouter" %}" />
+            </p>
+        </form>
+    {% endif %}
+
+    <table>
+        <tr>
+            <th style="width: 150px;">{% trans "Auteur" %}</th>
+            <th>{% trans "Message" %}</th>
+        </tr>
+        {% for post in msgs %}
+            <tr class="forum_post_header">
+                <td style="text-align: center;">
+                    {{ post.author|color_pseudo }}
+                </td>
+                <td>
+                    <div style="float: right;">
+                        {% ifequal post.author user.get_profile %}
+                            <a href="mp-4-{{ post.id }}.html">{% trans "Éditer" %}</a>
+                        {% endifequal %}
+                    </div>
+
+                    <a href="#r{{ post.id }}" id="r{{ post.id }}">#</a>
+                    {{ post.date_created|format_date }}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: top;">
+                    {% with post.author as profile %}
+                        {% include "forum/authorpane.html" %}
+                    {% endwith %}
+                </td>
+                <td style="vertical-align: top;">
+                    <div>
+                        {{ post.body|lcode }}
+                    </div>
+
+                    {% ifnotequal post.date_created post.date_modified %}
+                        <h4 class="forum_post_edits">{% trans "Dernière édition" %}</h4>
+
+                        <ul class="forum_post_edits_ul">
+                            <li>{{ post.date_modified|format_date|capfirst }}</li>
+                        </ul>
+                    {% endifnotequal %}
+
+                    {% if post.author.sign %}
+                        <div class="forum_post_sign">
+                            {{ post.author.sign|lcode }}
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="pagination">
+        {% for pg in pages %}
+            <a href="mp-2-{{ usertopic.topic.id }}-{{ pg }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
+
+    <form action="mp-3-{{ usertopic.topic.id }}.html" method="post">
+        <fieldset>
+            <legend>{% trans "Répondre" %}</legend>
+
+            {% include "global/lform.html" %}
+        </fieldset>
+    </form>
+{% endblock %}

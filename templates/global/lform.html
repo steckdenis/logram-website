@@ -1,0 +1,68 @@
+{% load i18n %}
+{% load general_tags %}
+
+<script type="text/javascript" src="/style/lform.js"></script>
+
+<p style="text-align: center;">
+    <input type="button" value="{% trans "Gras" %}" onclick="tags('**', '**', 'body');" />
+    <input type="button" value="{% trans "Italique" %}" onclick="tags('*', '*', 'body');" />
+    <input type="button" value="{% trans "Lien" %}" onclick="tags('[bla bla](', ')', 'body');" />
+    <input type="button" value="{% trans "Citation" %}" onclick="tags('> ', '', 'body');" />
+    <input type="button" value="{% trans "Mini code" %}" onclick="tags('`', '`', 'body');" />
+    <input type="button" value="{% trans "Ligne horizontale" %}" onclick="tags('----', '', 'body');" />
+    <input type="button" value="{% trans "Table des matières" %}" onclick="tags('[TOC]', '', 'body');" /><br />
+
+    <input type="button" value="{% trans "Titre 1" %}" onclick="tags('# ', ' #', 'body');" />
+    <input type="button" value="{% trans "Titre 2" %}" onclick="tags('## ', ' ##', 'body');" />
+    <input type="button" value="{% trans "Titre 3" %}" onclick="tags('### ', ' ###', 'body');" />
+    <input type="button" value="{% trans "Image" %}" onclick="tags('![bla bla](', ')', 'body');" />
+    <input type="button" value="{% trans "Liste" %}" onclick="tags('* ', '', 'body');" />
+    <select id="code_lang" onchange="add_code();">
+        <option value="none">{% trans "Code" %}</option>
+        {% languages %}
+    </select><br />
+
+    {% if upload_url %}
+        <a href="{{ upload_url}}" style="vertical-align: middle; margin-right: 40px;">
+            <img src="{{ style }}/img/upload.png" alt="Upload" title="{% trans "Envoyer un fichier" %}" />
+        </a>
+    {% endif %}
+
+    <img src="/style/smilies/smile.png" alt=":)" onclick="tags(' :) ', '', 'body');" />
+    <img src="/style/smilies/clin.png" alt=";)" onclick="tags(' ;) ', '', 'body');" />
+    <img src="/style/smilies/heureux.png" alt=":D" onclick="tags(' :D ', '', 'body');" />
+    <img src="/style/smilies/hihi.png" alt="^^" onclick="tags(' ^^ ', '', 'body');" />
+    <img src="/style/smilies/langue.png" alt=":p" onclick="tags(' :p ', '', 'body');" />
+    <img src="/style/smilies/triste.png" alt=":(" onclick="tags(' :( ', '', 'body');" />
+    <img src="/style/smilies/blink.gif" alt="o_O" onclick="tags(' o_O ', '', 'body');" />
+    <img src="/style/smilies/huh.png" alt=":o" onclick="tags(' :o ', '', 'body');" />
+    <img src="/style/smilies/mechant.png" alt="x(" onclick="tags(' x( ', '', 'body');" />
+    <img src="/style/smilies/pinch.png" alt="&gt;_&lt;" onclick="tags(' >_< ', '', 'body');" />
+    <img src="/style/smilies/pleure.png" alt=":'(" onclick="tags(' :\'( ', '', 'body');" />
+    <img src="/style/smilies/rire.gif" alt=":lol:" onclick="tags(' :lol: ', '', 'body');" />
+    <img src="/style/smilies/rouge.png" alt=":euh:" onclick="tags(' :euh: ', '', 'body');" />
+    <img src="/style/smilies/siffle.png" alt=":ouch:" onclick="tags(' :-° ', '', 'body');" />
+    <img src="/style/smilies/soleil.png" alt="B-)" onclick="tags(' B-) ', '', 'body');" />
+    <img src="/style/smilies/unsure.gif" alt=":unsure:" onclick="tags(' :unsure: ', '', 'body');" />
+    <img src="/style/smilies/waw.png" alt=":O" onclick="tags(' :O ', '', 'body');" />
+    <img src="/style/smilies/angry.gif" alt=":angry:" onclick="tags(' :angry: ', '', 'body');" />
+    <img src="/style/smilies/pirate.png" alt=":pirate:" onclick="tags(' :pirate: ', '', 'body');" />
+    <img src="/style/smilies/ninja.png" alt=":ninja:" onclick="tags(' :ninja: ', '', 'body');" />
+    <img src="/style/smilies/zorro.png" alt=":zorro:" onclick="tags(' :zorro: ', '', 'body');" />
+    <img src="/style/smilies/magicien.png" alt=":magician:" onclick="tags(' :magician: ', '', 'body');" />
+    <img src="/style/smilies/ange.png" alt=":angel:" onclick="tags(' :angel: ', '', 'body');" />
+    <img src="/style/smilies/diable.png" alt=":evil:" onclick="tags(' :evil: ', '', 'body');" />
+</p>
+
+<p style="text-align:center;">
+    <textarea name="body" id="body" width="30" height="6" style="width: 80%; height: 300px;">{{ body }}</textarea>
+</p>
+
+<p style="text-align:center;">
+    <input type="button" value="{% trans "Aperçu" %}" onclick="apercu('body','lform_preview','');" />
+    <input type="submit" value="{% trans "Poster" %}" />
+</p>
+
+<h2>{% trans "Aperçu" %}</h2>
+
+<div id="lform_preview"></div>

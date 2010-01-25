@@ -1,0 +1,36 @@
+{% extends "users/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Changement de mot de passe" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Changement de mot de passe" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Changement de mot de passe" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Le <em>mot de passe</em> est vraiment très important. C'est lui qui garanti que personne ne peut
+            se connecter sur votre compte à votre place. Ne donnez jamais votre mot de passe à quelqu'un.<br />
+            Un bon mot de passe se compose de lettres, chiffres et caractères spéciaux. N'utilisez surtout pas
+            un mot du dictionnaire, ou votre date de naissance, etc. Bon mot de passe : rTtO54;c9. Mauvais mot de
+            passe : gertrude_petit
+        {% endblocktrans %}
+    </p>
+    
+    <form action="user-5-3.html" method="post">
+        <fieldset>
+            <legend>{% trans "Mot de passe" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Changer de mot de passe" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

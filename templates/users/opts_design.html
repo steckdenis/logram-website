@@ -1,0 +1,35 @@
+{% extends "users/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Changement de design" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Changement de design" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Changement de design" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Si le design actuel du site ne vous plaît pas, vous pouvez sans problèmes changer de <em>design</em>.
+            Un design est un ensemble de fichiers qui décrivent l'apparence du site et ses images. Vous pouvez
+            utiliser un design <em>officiel</em>, testé et maintenu, ou un design <em>non-officiel</em>, créé
+            par un membre. Vous pouvez également créer votre propre design (voire le wiki pour informations)
+        {% endblocktrans %}
+    </p>
+    
+    <form action="user-5-4.html" method="post">
+        <fieldset>
+            <legend>{% trans "Design" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Changer de design" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "users/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mes options" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Accueil des options" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Mes options" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Vous voici sur la page de vos options. C'est ici que vous pouvez changer la manière dont le site
+            agit, ainsi que les informations vous concernant.
+        {% endblocktrans %}
+    </p>
+    
+    <h2>{% trans "Profil" %}</h2>
+    
+    <ul>
+        <li><a href="user-5-1.html">{% trans "Profil" %}</a></li>
+        <li><a href="user-5-2.html">{% trans "Pseudo et e-mail" %}</a></li>
+        <li><a href="user-5-3.html">{% trans "Mot de passe" %}</a></li>
+    </ul>
+    
+    <h2>{% trans "Le site" %}</h2>
+    
+    <ul>
+        <li><a href="user-5-4.html">{% trans "Design du site" %}</a></li>
+    </ul>
+{% endblock %}

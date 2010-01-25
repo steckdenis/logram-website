@@ -1,0 +1,122 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {% blocktrans with package.version as pv and package.name as pn and package.arch.name as pa %}
+        Télécharger {{ pn }}-{{ pv }} ({{ pa }})
+    {% endblocktrans %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% blocktrans with package.version as pv and package.name as pn and package.arch.name as pa %}
+        Télécharger {{ pn }}-{{ pv }} ({{ pa }})
+    {% endblocktrans %}
+{% endblock %}
+
+
+{% block body %}
+    <h1>
+        {% blocktrans with package.version as pv and package.name as pn and package.arch.name as pa %}
+            Télécharger {{ pn }}-{{ pv }} ({{ pa }})
+        {% endblocktrans %}
+    </h1>
+    
+    <p>
+        {% blocktrans with package.name as pn %}
+            Voici la liste des mirroirs qui proposent {{ pn }} en téléchargement. Choisissez le mirroir
+            le plus proche de chez vous (ou dans le même pays/région) pour avoir le téléchargement le
+            plus rapide et ne pas encombrer le mirroir central (archive.logram-project.org)
+        {% endblocktrans %}
+    </p>
+    
+    <div id="sections_right">
+        <h2 style="text-align: center;">{% trans "Mirroirs en Europe" %}</h2>
+        
+        <ul>
+            {% for mirror in mirrors %}
+                {% ifequal mirror.place 1 %}
+                    <li>
+                        <a href="{{ mirror.url }}/{{ package.download_url }}">
+                            {{ mirror.url }}
+                        </a>
+                    </li>
+                {% endifequal %}
+            {% endfor %}
+        </ul>
+        
+        <h2 style="text-align: center;">{% trans "Mirroirs en Afrique" %}</h2>
+        
+        <ul>
+            {% for mirror in mirrors %}
+                {% ifequal mirror.place 5 %}
+                    <li>
+                        <a href="{{ mirror.url }}/{{ package.download_url }}">
+                            {{ mirror.url }}
+                        </a>
+                    </li>
+                {% endifequal %}
+            {% endfor %}
+        </ul>
+        
+        <h2 style="text-align: center;">{% trans "Mirroirs autre part" %}</h2>
+        
+        <ul>
+            {% for mirror in mirrors %}
+                {% ifequal mirror.place 0 %}
+                    <li>
+                        <a href="{{ mirror.url }}/{{ package.download_url }}">
+                            {{ mirror.url }}
+                        </a>
+                    </li>
+                {% endifequal %}
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div id="sections_left">
+        <h2 style="text-align: center;">{% trans "Mirroirs en Amérique" %}</h2>
+        
+        <ul>
+            {% for mirror in mirrors %}
+                {% ifequal mirror.place 2 %}
+                    <li>
+                        <a href="{{ mirror.url }}/{{ package.download_url }}">
+                            {{ mirror.url }}
+                        </a>
+                    </li>
+                {% endifequal %}
+            {% endfor %}
+        </ul>
+        
+        <h2 style="text-align: center;">{% trans "Mirroirs en Asie" %}</h2>
+        
+        <ul>
+            {% for mirror in mirrors %}
+                {% ifequal mirror.place 3 %}
+                    <li>
+                        <a href="{{ mirror.url }}/{{ package.download_url }}">
+                            {{ mirror.url }}
+                        </a>
+                    </li>
+                {% endifequal %}
+            {% endfor %}
+        </ul>
+        
+        <h2 style="text-align: center;">{% trans "Mirroirs en Océanie" %}</h2>
+        
+        <ul>
+            {% for mirror in mirrors %}
+                {% ifequal mirror.place 4 %}
+                    <li>
+                        <a href="{{ mirror.url }}/{{ package.download_url }}">
+                            {{ mirror.url }}
+                        </a>
+                    </li>
+                {% endifequal %}
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div style="clear: right;"></div>
+{% endblock %}

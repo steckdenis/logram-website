@@ -1,0 +1,65 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Résultats de la recherche" %}{% endblock %}
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Résultats de la recherche" %}{% endblock %}
+
+
+{% block body %}
+    <h1>{% trans "Résultats de la recherche" %}</h1>
+
+    <p>
+        {% blocktrans %}
+            Voici les résultats de la recherche que vous avez demandé, par ordre de pertinence
+        {% endblocktrans %}
+    </p>
+
+    <table>
+        <tr>
+            <th style="width: 100px;">{% trans "Pertinence" %}</th>
+            <th>{% trans "Résultat" %}</th>
+            <th style="width: 60px;">{% trans "Type" %}</th>
+        </tr>
+        {% for hit in results %}
+            <tr>
+                <td>
+                    <div class="bar" style="margin: 0px; padding: 0px; width:100px;">
+                        <div class="bar_bar" style="width: {{ hit.percent }}%;">
+                            {{ hit.percent }}%
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {# Notre super vue nous a rempli hit.type, on n'a plus qu'à adapter le résultat #}
+                    
+                    {% ifequal hit.type "Post" %}
+                        <em>{{ hit.instance.contents|truncatewords:15 }}</em>
+                        (<a href="forum-2-{{ hit.instance.topic_id }}-1-show.html">{% trans "Sujet" %}</a>)
+                    {% endifequal %}
+
+                    {% ifequal hit.type "Page" %}
+                        <em>{{ hit.instance.body|truncatewords:15 }}</em>
+                        (<a href="wiki-{{ hit.instance.slug }}.{{ hit.instance.lang }}.html">{{ hit.instance.title }}</a>)
+                    {% endifequal %}
+
+                    {% ifequal hit.type "News" %}
+                        <em>{{ hit.instance.intro|truncatewords:15 }}</em>
+                        (<a href="news-2-{{ hit.instance.id }}-1-{{ hit.instance.title|slugify }}.html">{{ hit.instance.title }}</a>)
+                    {% endifequal %}
+                </td>
+                <td style="text-align: center;">
+                    {% ifequal hit.type "Post" %}{% trans "Message" %}{% endifequal %}
+                    {% ifequal hit.type "Page" %}{% trans "Wiki" %}{% endifequal %}
+                    {% ifequal hit.type "News" %}{% trans "Nouvelle" %}{% endifequal %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% comment %}<div class="pagination">
+        {% for pg in list_pages %}
+            <a href="search-{{ pg }}.html?q={{ q }}">{{ pg }}</a>
+        {% endfor %}
+    </div>{% endcomment %}
+{% endblock %}

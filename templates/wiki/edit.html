@@ -1,0 +1,79 @@
+{% extends "wiki/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% if page %}
+        {{ page.title }}
+    {% else %}
+        {% trans "Création d'une page" %}
+    {% endif %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% if page %}
+        <a href="wiki-{{ page.slug }}.{{ page.lang }}.html">
+            {{ page.title }}
+        </a>
+        &raquo;
+        {% trans "Édition" %}
+    {% else %}
+        {% trans "Création d'une page" %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {% if page %}
+            {{ page.title }}
+        {% else %}
+            {% trans "Création d'une page" %}
+        {% endif %}
+    </h1>
+    
+    {% blocktrans %}
+        <p>
+            <strong>Conseils pour la rédaction :</strong> N'oubliez pas de vérifier votre mise en
+            page en cliquand sur «Aperçu». Vérifiez également l'orthographe et la grammaire. Vos propos
+            doivent être compréhensibles par un utilisateur moyen sans connaissances techniques, sauf
+            si votre page est adressée à un public particulier (page de spécifications, page pour
+            développeurs, etc).
+        </p>
+        
+        <p>
+            Le wiki est formaté en <a href="wiki-markdown.html">Markdown</a>. Si vous
+            devez mettre des images, <a href="upload-1-0.html">envoyez-les ici</a>.
+        </p>
+        
+        <p>
+            <strong>Attention :</strong> Vérifiez que la page que vous cherchez n'existe pas dans une
+            autre langue. Si c'est le cas, allez sur cette page, et cliquez sur «Traduire».
+        </p>
+        
+        <p>
+            <strong>Remarque :</strong> Si vous n'êtes pas connectés, votre adresse IP sera sauvegardée
+            dans le <em>log</em>, et sera visible de tous les utilisateurs.
+        </p>
+    {% endblocktrans %}
+    
+    <form action="wiki-3-{{ page_id }}-{{ identifier }}-{{ slug }}.html" method="post">
+        <fieldset>
+            <legend>{% trans "Page" %}</legend>
+            
+            <p>
+                <ul class="forum_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            {% if request.user.is_anonymous %}
+                <p style="text-align: center;">
+                    <img src="/captcha.png" alt="CAPTCHA" /><br />
+                    <label for="captcha">{{ captcha_string|safe }}</label>
+                    <input type="text" name="captcha" id="captcha" />
+                </p>
+            {% endif %}
+            
+            {% include "global/lform.html" %}
+        </fieldset>
+    </form>
+{% endblock %}

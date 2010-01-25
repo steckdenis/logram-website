@@ -1,0 +1,32 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% blocktrans with topic.title as title %}
+        Sondage du sujet «{{ title }}»
+    {% endblocktrans %}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {% blocktrans with topic.title as title %}
+            Sondage du sujet «{{ title }}»
+        {% endblocktrans %}
+    </h1>
+    
+    <form action="forum-15-{{ topic.id }}.html" method="post">
+        <fieldset>
+            <legend>{% trans "Ajouter un sondage" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Créer le sondage" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

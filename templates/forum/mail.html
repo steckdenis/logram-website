@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load general_tags %}
+{% blocktrans with body|safe as msg %}Bonjour,
+
+Un nouveau message a été posté dans le sujet «{{ topic }}» par {{ user }}. Le contenu de ce message est le suivant :
+
+----
+
+{{ msg }}
+
+----
+
+Vous pouvez consulter ce message directement à l'adresse http://www.logram-project.org/{{ url }} . Merci de ne pas répondre à ce mail, vous ne recevrez pas de réponse.
+
+En vous souhaitant une agréable journée et une éventuelle bonne visite sur le site,
+L'équipe de développement de Logram
+
+PS: Vous avez reçu ce mail parce que vous êtes enregistré sur le site de Logram ( http://www.logram-project.org ) et que vous avez décidé de surveiller ce sujet. Si vous ne souhaitez plus recevoir de mails pour ce sujet, suivez le lien donné plus haut et cliquez sur «Ne plus surveiller».
+{% endblocktrans %}

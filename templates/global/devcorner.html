@@ -1,0 +1,68 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Le coin du développeur" %}{% endblock %}
+
+{% block Devcorner %}class="actif"{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="devcorner.html">{% trans "Le coin du développeur" %}</a>
+{% endblock %}
+
+{% block menu %}
+    {% include "global/devcorner_menu.html" %}
+{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Le coin du développeur" %}</h1>
+    
+    {% blocktrans %}
+        <p>
+            Logram prône l'ouverture, et pour pousser ce fait jusqu'à son maximum, tout le développement est ouvert.
+        </p>
+        
+        <p>
+            Cette page contient les outils de développement en ligne utilisés par les développeurs de Logram, et également à votre disposition. Au fur et à mesure que Logram avancera, les outils seront ajoutés à cette page, qui fera office de «fourre-tout». Ainsi, rien n'est caché, et le reste du site web reste propre, adapté à une communauté grandissante.
+        </p>
+    {% endblocktrans %}
+    
+    <a href="websvn-1.html">
+        <img src="{{ style }}/img/websvn_icon.png" alt="{% trans "WebSVN" %}" class="devcorner_img_left" />
+    </a>
+    <div class="devcorner_desc_left">
+        <h2><a href="websvn-1.html">{% trans "Code source en ligne" %}</a></h2>
+        
+        <p>
+            {% blocktrans %}
+                Logram utilise le système de gestion des sources Subversion, qui permet aux développeurs de travailler ensemble, en même temps, et de gérer les changements faits par tout le monde.
+            {% endblocktrans %}
+        </p>
+        
+        <p>
+            {% blocktrans %}
+                Ce module vous permet de naviger dans la toute dernière version des sources de Logram, et de les récupérer. Ainsi, vous êtes toujours à jour et pouvez poster des rapports de bugs plus pertinents.
+            {% endblocktrans %}
+        </p>
+    </div>
+    
+    <a href="pastebin-1.html">
+        <img src="{{ style }}/img/pastebin_icon.png" alt="{% trans "Pastebin" %}" class="devcorner_img_right" />
+    </a>
+    <div class="devcorner_desc_right">
+        <h2><a href="pastebin-1.html">{% trans "Morceaux de code" %}</a></h2>
+        
+        <p>
+            {% blocktrans %}
+                Quelques fois, au hasard de discussions sur IRC ou par mail, ou carrément dans le forum, des développeurs ont besoin de montrer de petits morceaux de code, et éventuellement de les éditer plus tard. Ces morceaux sont temporaires, ils ne vont donc pas dans le dépôt Subversion.
+            {% endblocktrans %}
+        </p>
+        
+        <p>
+            {% blocktrans %}
+                Ce module vous permet de poster vos propres morceaux de code, supprimés après un certain temps, et de les éditer. Ainsi, vous pouvez partager des idées facilement, avec tout le confort nécessaire (coloration de code, historique des modifications, visualisation des différences).
+            {% endblocktrans %}
+        </p>
+    </div>
+    
+    <div style="clear: left;"></div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "news/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Édition d'une nouvelle" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Édition d'une nouvelle" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Édition d'une nouvelle" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Vous voici sur la page d'édition d'une nouvelle. Les nouvelles sont rédigées dans le langage
+            de formattage <a href="wiki-markdown.html">Markdown</a>. Pensez à bien vérifier l'orthographe, la
+            syntaxe et la présentation. Vous avez tout votre temps pour rédiger une nouvelle, et vous pouvez
+            le faire en plusieur fois (elle ne sera proposée à la validation que quand vous le voudrez).
+        {% endblocktrans %}
+    </p>
+    
+    <form action="news-4-{{ id }}-{{ title|slugify|default:"new" }}.html" method="post">
+        <fieldset>
+            <legend>{% trans "Nouvelle" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            {% include "global/lform.html" %}
+        </fieldset>
+    </form>
+{% endblock %}

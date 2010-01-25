@@ -1,0 +1,91 @@
+{% extends "upload/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mes fichiers" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }}
+    {% if dir_id %}
+        &raquo; {{ dir.name }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>{% trans "Mes fichiers" %}</h1>
+    
+    <p>
+        {% blocktrans with dir.name as dirname %}
+            Vous pouvez ici gérer les fichiers et dossiers du dossier <strong>{{ dirname }}</strong>. Vous pouvez
+            envoyer des fichiers, les modifier et les supprimer.
+        {% endblocktrans %}
+    </p>
+        
+    <p>
+        {% if not perms.upload.ignore_quota %}
+            {% blocktrans with dir.quota|filesizeformat as quota and available|filesizeformat as avail %}
+                Un quota vous est attribué dans ce dossier, et vous ne pouvez pas le dépasser. Actuellement, il vous
+                reste <strong>{{ avail }}</strong> de disponibles, sur <strong>{{ quota }}</strong>.
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans with dir.used|filesizeformat as used and dir.quota|filesizeformat as quota %}
+                Vous utilisez actuellement <strong>{{ used }}</strong>. Il y a normalement un quota de <strong>{{ quota }}</strong> pour ce dossier, mais vous êtes autorisé à l'ignorer. Vous en avez de la chance.
+            {% endblocktrans %}
+        {% endif %}
+    </p>
+    
+    {% if render_form %}
+        <form action="upload-2-{{ dir.id }}.html" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <legend>{% trans "Envoi de fichier" %}</legend>
+                
+                <p>
+                    <ul class="form_ul">
+                        {{ form.as_ul }}
+                    </ul>
+                </p>
+                
+                <p style="text-align: center;">
+                    <input type="submit" value="{% trans "Envoyer" %}" />
+                </p>
+                
+                <p style="font-size: 0.8em; color:#555;">
+                    <strong>{% trans "Extensions autorisées :" %}</strong>
+                    
+                    {% for ext in exts %}
+                        {% if not forloop.first %}
+                            &bull;
+                        {% endif %}
+                        {{ ext }}
+                    {% endfor %}
+                    
+                    {% if perms.upload.ingore_extensions %}
+                        &bull; {% trans "et tout ce que vous voulez !" %}
+                    {% endif %}
+                </p>
+            </fieldset>
+        </form>
+    {% endif %}
+    
+    <h2>{% trans "Contenu" %}</h2>
+    
+    <p>
+        {% blocktrans %}
+            Vous ne pouvez pas créer de dossier, ils sont créés automatiquement. Vous disposez néanmoins
+            d'un dossier libre dans lequel placer tous vos documents&nbsp;: <strong>Dossier personnel</strong>. Les
+            autres dossiers sont créés quand vous postez sur le forum, rédigez une documentation, soumettez un bug, etc.
+        {% endblocktrans %}
+    </p>
+    
+    <ul class="files_ul">
+        {% for dir in dirs %}
+            <li class="files_dir"><a href="upload-1-{{ dir.id }}.html">{{ dir.name }}</a></li>
+        {% endfor %}
+        {% for file in files %}
+            <li class="files_file">
+                <a href="files/{{ file.path }}">{{ file.name }}</a> (
+                <a href="upload-3-{{ file.id }}.html" style="color: red;">{% trans "Supprimer" %}</a>)
+            </li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}

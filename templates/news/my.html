@@ -1,0 +1,217 @@
+{% extends "news/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Mes nouvelles" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Mes nouvelles" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Mes nouvelles" %}</h1>
+    
+    {% blocktrans %}
+        <p>
+            Le site de Logram vit grâce à Logram lui-même, ses développeurs, ses graphistes, sa
+            communauté d'utilisateurs, etc. Pour rendre le site encore plus dynamique, les utilisateurs
+            ont la possibilité de proposer des <em>nouvelles</em>, qui seront affichées en page d'accueil.
+        </p>
+        
+        <p>
+            Cette page vous permet de créer et de gérer vos nouvelles, ainsi que de les proposer à l'équipe
+            de Logram. L'acceptation de votre nouvelle est au choix de l'équipe, qui se réserve le droit
+            de la modifier.
+        </p>
+        
+        <p>
+            Une bonne nouvelle est belle, propre, sans fautes d'orthographes, et illustrée. Nous ne vous
+            demandons pas de mettre une dizaine d'images, mais quelques-unes pour illustrer vos propos.
+            Accordez également beaucoup d'importance à la mise en page, utilisant le langage de balisage
+            <a href="wiki-markdown.html">Markdown</a>.
+        </p>
+    {% endblocktrans %}
+    
+    <p style="text-align: center;">
+        <a href="news-4-0-new.html">
+            <img src="{{ style }}/img/create_news.png" alt="{% trans "Créer une nouvelle" %}" />
+        </a>
+    </p>
+    
+    <h2>{% trans "Mes nouvelles en cours d'édition" %}</h2>
+    
+    <table>
+        <tr>
+            <th>{% trans "Titre" %}</th>
+            <th style="width: 125px;">{% trans "État" %}</th>
+            <th style="width: 200px;">{% trans "Dernière modification" %}</th>
+            <th style="width: 250px;">{% trans "Actions" %}</th>
+        </tr>
+        
+        {% for news in news_list %}
+            {% if not news.published and not news.rejected and not news.is_private %}
+                <tr>
+                    <td>
+                        <a href="news-4-{{ news.id }}-{{ news.title|slugify }}.html">
+                            {{ news.title }}
+                        </a>
+                    </td>
+                    <td style="text-align: center;">
+                        {% if news.to_validate %}
+                            <img src="{{ style }}/img/validation.png" alt="{% trans "Proposée" %}" />
+                        {% else %}
+                            <img src="{{ style }}/img/edition.png" alt="{% trans "En cours d'édition" %}" />
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        {{ news.date_modified|format_date }}
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="news-5-1-{{ news.id }}.html">
+                            <img src="{{ style }}/img/supprimer.png" alt="{% trans "Supprimer" %}" />
+                        </a>
+                        
+                        {% if news.to_validate %}
+                            <a href="news-5-2-{{ news.id }}.html">
+                                <img src="{{ style }}/img/editer.png" alt="{% trans "Ne plus proposer" %}" />
+                            </a>
+                        {% else %}
+                            <a href="news-5-2-{{ news.id }}.html">
+                                <img src="{{ style }}/img/fairevalider.png" alt="{% trans "Proposer" %}" />
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    
+    <h2>{% trans "Mes nouvelles refusées" %}</h2>
+    
+    {% blocktrans %}
+    <p>
+        Si une de vos news a été refusée, elle apparaîtra ici. Cliquez simplement sur son nom, et modifiez-la
+        en prenant en compte les commentaires laissés par le validateur qui l'a refusée. Une fois corrigée,
+        cliquez sur le bouton «Faire valider». N'insistez pas trop tout de fois (pas plus de 3 fois), car
+        un validateur énnervé a plutôt tendance à supprimer directement les news au lieu de les refuser.
+    </p>
+    
+    <p>
+        Si vous ne souhaitez pas reprendre la news, et l'abandonner, alors cliquez sur le bouton «Supprimer».
+    </p>
+    {% endblocktrans %}
+    
+    <table>
+        <tr>
+            <th>{% trans "Titre" %}</th>
+            <th>{% trans "Raison du refus" %}</th>
+            <th style="width: 200px;">{% trans "Dernière modification" %}</th>
+            <th style="width: 250px;">{% trans "Actions" %}</th>
+        </tr>
+        
+        {% for news in news_list %}
+            {% if news.rejected and not news.is_private %}
+                <tr>
+                    <td>
+                        <a href="news-4-{{ news.id }}-{{ news.title|slugify }}.html">
+                            {{ news.title }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ news.rejected_reason }}
+                    </td>
+                    <td style="text-align: center;">
+                        {{ news.date_modified|format_date }}
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="news-5-1-{{ news.id }}.html">
+                            <img src="{{ style }}/img/supprimer.png" alt="{% trans "Supprimer" %}" />
+                        </a>
+                        
+                        {% if news.to_validate %}
+                            <a href="news-5-2-{{ news.id }}.html">
+                                <img src="{{ style }}/img/editer.png" alt="{% trans "Ne plus proposer" %}" />
+                            </a>
+                        {% else %}
+                            <a href="news-5-2-{{ news.id }}.html">
+                                <img src="{{ style }}/img/fairevalider.png" alt="{% trans "Proposer" %}" />
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    
+    <h2>{% trans "Mes nouvelles en ligne" %}</h2>
+    
+    <table>
+        <tr>
+            <th>{% trans "Titre" %}</th>
+            <th style="width: 200px;">{% trans "Dernière modification" %}</th>
+        </tr>
+        
+        {% for news in news_list %}
+            {% if news.published and not news.is_private %}
+                <tr>
+                    <td>
+                        {{ news.title }}
+                    </td>
+                    <td style="text-align: center;">
+                        {{ news.date_modified|format_date }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    
+    <h2>{% trans "Mes entrées de journal" %}</h2>
+    
+    <table>
+        <tr>
+            <th>{% trans "Titre" %}</th>
+            <th style="width: 125px;">{% trans "État" %}</th>
+            <th style="width: 200px;">{% trans "Dernière modification" %}</th>
+            <th style="width: 300px;">{% trans "Actions" %}</th>
+        </tr>
+        
+        {% for news in news_list %}
+            {% if news.is_private %}
+                <tr>
+                    <td>
+                        {% if not news.published %}
+                            <a href="news-4-{{ news.id }}-{{ news.title|slugify }}.html">
+                                {{ news.title }}
+                            </a>
+                        {% else %}
+                            {{ news.title }} (<em>{% trans "Dépublier pour éditer" %}</em>)
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        {% if news.published %}
+                            <img src="{{ style }}/img/enligne.png" alt="{% trans "En ligne" %}" />
+                        {% else %}
+                            <img src="{{ style }}/img/edition.png" alt="{% trans "En cours d'édition" %}" />
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        {{ news.date_modified|format_date }}
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="news-5-1-{{ news.id }}.html">
+                            <img src="{{ style }}/img/supprimer.png" alt="{% trans "Supprimer" %}" />
+                        </a>
+                        
+                        {% if not news.published %}
+                            <a href="news-5-3-{{ news.id }}.html">
+                                <img src="{{ style }}/img/publish.png" alt="{% trans "Publier" %}" />
+                            </a>
+                        {% else %}
+                            <a href="news-5-3-{{ news.id }}.html">
+                                <img src="{{ style }}/img/depublish.png" alt="{% trans "Dépublier" %}" />
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}

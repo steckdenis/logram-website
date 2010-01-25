@@ -1,0 +1,97 @@
+{% extends "pastebin/base.html" %}
+{% load i18n %}
+
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {{ paste.title }}  ({{ paste.format_str }})
+{% endblock %}
+
+{% block body %}
+    <div id="pb_info">
+        <ul>
+            <li>
+                {% trans "Posté par" %}
+                {% if not paste.author_id %}
+                    <em>{% trans "Anonyme" %}</em>
+                {% else %}
+                    {{ paste.author|color_pseudo }}
+                {% endif %}
+                
+                {{ paste.created|format_date }}
+            </li>
+            <li>
+                {% trans "Se termine" %}
+                {{ paste.ended|format_date }}
+            </li>
+            {% if paste.author_m_id %}
+                <li>
+                    {% trans "Modifié par" %}
+                    {{ paste.author_m|color_pseudo }}
+                    {{ paste.modified|format_date }}
+                </li>
+            {% endif %}
+            <li>
+                <strong>{% trans "Actions :" %}</strong>
+                
+                <a href="pastebin-4-{{ paste.uniqid }}.html" >{% trans "Télécharger" %}</a>
+                
+                {% if can_edit_paste %}
+                    &bull; <a href="pastebin-5-{{ paste.uniqid }}.html" >{% trans "Modifier" %}</a>
+                {% endif %}
+                
+                &bull; <a href="pastebin-7-{{ paste.uniqid }}.html" >{% trans "Avertir les modérateurs" %}</a>
+
+                {% if user.is_staff %}
+                    &bull; <a href="/admin/pastebin/pastebin/?q={{ paste.uniqid }}" >{% trans "Administration" %}</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    
+    <div class="pastebin_code">
+        {% code paste.format %}{{ contents|safe }}{% endcode %}
+    </div>
+
+    {% if paste.author_m_id %}
+        <hr />
+        
+        <h3>{% trans "Modifications depuis l'ancienne version" %}</h3>
+        
+        <div class="pastebin_code">
+            {{ difftable|safe }}
+        </div>
+        
+        <p>
+            <table style="width: 40%; margin:auto; margin-top: 10px;" summary="{% trans "Légende" %}">
+                <tr>
+                    <th colspan="2">{% trans "Légende" %}</th>
+                </tr>
+                <tr>
+                    <td style="width:50%;text-align:center;">
+                        <table border="" summary="{% trans "Couleurs" %}">
+                            <tr><th> {% trans "Couleurs" %} </th> </tr>
+                            <tr><td class="diff_add">{% trans "Ajouté" %}</td></tr>
+                            <tr><td class="diff_chg">{% trans "Changé" %}</td> </tr>
+                            <tr><td class="diff_sub">{% trans " Supprimé" %}</td> </tr>
+                        </table>
+                    </td>
+                    <td style="width:50%;text-align:center;">
+                        <table border="" summary="{% trans "Liens" %}">
+                            <tr><th colspan="2"> {% trans "Liens" %} </th> </tr>
+                            <tr><td>(f) {% trans "Premier changement" %}</td> </tr>
+                            <tr><td>(n) {% trans "Changement suivant" %}</td> </tr>
+                            <tr><td>(t) {% trans "Retour en Haut" %}</td> </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </p>
+        
+        <h4>{% trans "Contenu original" %}</h4>
+        
+        <div class="pastebin_code" />
+            {% code paste.format %}{{ contents_old|safe }}{% endcode %}
+        </div>
+    {% endif %}
+{% endblock %}

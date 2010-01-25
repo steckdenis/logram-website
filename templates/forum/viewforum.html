@@ -1,0 +1,144 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+
+{% block title %}
+    {% if not isnt_a_forum %}
+        {% trans forum.name %}
+    {% else %}
+        {# Quand la template est utilisée pour les derniers sujets, etc #}
+        {{ title }}
+    {% endif %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% if not isnt_a_forum %}
+        {% trans forum.name %}
+    {% else %}
+        {# Quand la template est utilisée pour les derniers sujets, etc #}
+        {{ title }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if not isnt_a_forum %}
+        <h1>{% trans forum.name %}</h1>
+        <h2 style="text-align: center;">{% trans forum.description %}</h2>
+    {% else %}
+        <h1>{{ title }}</h1>
+    {% endif %}
+    
+    {% if not user.is_anonymous %}
+        <div id="forum_tools">
+            <strong>{% trans "Actions :" %}</strong>
+            
+            {% if not isnt_a_forum %}
+                {% if perms.forum.add_topic %}
+                    <a href="forum-6-{{ forum.id }}.html">{% trans "Nouveau sujet" %}</a> &bull;
+                {% endif %}
+            {% else %}
+                {% ifequal forum.id 0 %}
+                    <a href="forum.html">{% trans "Ne plus filtrer" %}</a> &bull;
+                {% else %}
+                    <a href="forum-1-{{ forum.id }}-0-forum.html">{% trans "Ne plus filtrer" %}</a> &bull;
+                {% endifequal %}
+            {% endif %}
+            
+            {% if not on_unread_topics %}
+                <a href="forum-7-{{ forum.id }}-1.html">{% trans "Sujets non-lus" %}</a> &bull;
+            {% else %}
+                {% trans "Sujets non-lus" %} &bull;
+            {% endif %}
+            {% if not on_my_topics %}
+                <a href="forum-8-{{ forum.id }}-1.html">{% trans "Mes sujets" %}</a> &bull;
+            {% else %}
+                {% trans "Mes sujets" %} &bull;
+            {% endif %}
+            {% if not on_visited_topics %}
+                <a href="forum-9-{{ forum.id }}-1.html">{% trans "Sujets visités" %}</a> &bull;
+            {% else %}
+                {% trans "Sujets visités" %} &bull;
+            {% endif %}
+            {% if not on_posted_topics %}
+                <a href="forum-10-{{ forum.id }}-1.html">{% trans "Où j'ai posté" %}</a>
+            {% else %}
+                {% trans "Où j'ai posté" %}
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <table>
+        <tr>
+            <th style="width: 100px;"></th>
+            <th>{% trans "Sujet" %}</th>
+            <th style="width: 60px;">{% trans "Pages" %}</th>
+            <th style="width: 100px;">{% trans "Auteur" %}</th>
+            <th style="width: 100px;">{% trans "Messages" %}</th>
+            <th style="width: 180px;">{% trans "Dernier message" %}</th>
+        </tr>
+        {% for topic in topics %}
+            <tr {% if topic.stick %} class="forum_sticky" {% endif %}>
+                <td style="text-align: right">
+                    {% if topic.stick %}
+                        <img src="{{ style }}/img/postit.png" alt="S" title="{% trans "Post-it" %}" />
+                    {% else %}
+                        <img src="{{ style }}/img/empty.png" alt="-" />
+                    {% endif %}
+                    {% if topic.closed %}
+                        <img src="{{ style }}/img/lock.png" alt="L" title="{% trans "Fermé" %}" />
+                    {% else %}
+                        <img src="{{ style }}/img/empty.png" alt="-" />
+                    {% endif %}
+                    {% if topic.resolved %}
+                        <img src="{{ style }}/img/resolu.png" alt="R" title="{% trans "Résolu" %}" />
+                    {% else %}
+                        <img src="{{ style }}/img/empty.png" alt="-" />
+                    {% endif %}
+                    {% if topic.read %}
+                        <img src="{{ style }}/img/forum_read.png" alt="-" title="{% trans "Lu" %}" />
+                    {% else %}
+                        <img src="{{ style }}/img/forum_unread.png" alt="N" title="{% trans "Non-lu" %}" />
+                    {% endif %}
+                </td>
+                <td style="line-height: 14px;">
+                    <div class="lang_flag">
+                        <img src="{{ style }}/img/{{ topic.lang }}.png" alt="fr" />
+                    </div>
+                    {% if topic.last_read_post_id and not topic.read %}
+                        <a href="forum-2-{{ topic.id }}-{{ topic.last_read_post_page }}-{{ topic.title|slugify }}.html#r{{ topic.last_read_post_id }}" style="float: left;">
+                            <img src="{{ style }}/img/last_post_read.png" alt="{% trans "Dernier message lu" %}" title="{% trans "Dernier message lu" %}" />
+                        </a>
+                    {% endif %}
+                    <a href="forum-2-{{ topic.id }}-1-{{ topic.title|slugify }}.html">{{ topic.title }}</a><br />
+                    <span class="forum_subtitle">{{ topic.subtitle }}</span>
+                </td>
+                <td style="text-align: center;">
+                    {% for page in topic.pages %}
+                        <a href="forum-2-{{ topic.id }}-{{ page }}-{{ topic.title|slugify }}.html">{{ page }}</a>
+                    {% endfor %}
+                </td>
+                <td style="text-align: center;">
+                    {{ topic.author|color_pseudo }}
+                </td>
+                <td style="text-align: center;">
+                    {{ topic.num_posts }}
+                </td>
+                <td style="text-align: center;">
+                    {% if topic.last_post %}
+                        {% trans "Par" %} {{ topic.last_post.author|color_pseudo }}
+                        {{ topic.last_post.date_created|format_date }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <div class="pagination">
+        {% for pg in list_pages %}
+            <a href="forum-1-{{ forum.id }}-{{ pg }}-{{ forum.name|slugify }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}

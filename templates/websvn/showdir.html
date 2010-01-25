@@ -1,0 +1,129 @@
+{% extends "websvn/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {{ path }} - {% trans "WebSVN" %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }}
+    {% for part in pathparts %}
+        &raquo;
+        <a href="websvn-1.html?p={{ part.path }}&amp;r={{ rev.number }}">
+            {{ part.text }}
+        </a>
+    {% endfor %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ path }} - {% trans "WebSVN" %}</h1>
+
+    {% blocktrans with rev.number as rev %}
+        <p>
+            Voici le contenu du dossier <strong>{{ path }}</strong> à la révision <strong>{{ rev }}</strong>.
+            Vous pouvez consulter, pour chaque fichier ou dossier, le <em>log</em> de cet élément, ainsi que le
+            voir à une certaine révision.
+        </p>
+
+        <p>
+            Pour récupérer le contenu de ce dossier sur votre ordinateur, <a href="http://v4dev.logram-project.org/wiki-install-package.html">installez</a> Subversion
+            et entrez ceci dans une <a href="wiki-console.html">console</a> :
+
+            <code class="console">
+                svn co {{ svnparam }} {{ url }}
+            </code>
+        </p>
+    {% endblocktrans %}
+
+    <table style="text-align: center; font-size: 0.9em;">
+        <tr>
+            <th>{% trans "Nom" %}</th>
+            <th style="width: 100px;">{% trans "Taille" %}</th>
+            <th style="width: 80px;">{% trans "Révision" %}</th>
+            <th style="width: 120px;">{% trans "Auteur" %}</th>
+            <th style="width: 180px;">{% trans "Date" %}</th>
+            <th style="width: 300px;">{% trans "Log" %}</th>
+        </tr>
+        {% if parent %}
+            <tr>
+                <td style="text-align: left;">
+                    <img src="{{ style }}/img/go-up.png" alt="" style="vertical-align: middle;"/>
+                    {% if rev.number %}
+                        <a rel="nofollow" href="websvn-1.html?p={{ parent}}&amp;r={{ rev.number }}">..</a>
+                    {% else %}
+                        <a rel="nofollow" href="websvn-1.html?p={{ parent}}">..</a>
+                    {% endif %}
+                </td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        {% endif %}
+        {% for entry in entries|dictsortreversed:"kind" %}
+            <tr>
+                <td style="text-align: left;">
+                    {% ifequal entry.type "file" %}
+                        <img src="{{ style }}/img/file.png" alt="file" style="vertical-align: middle;"/>
+                        {% if not rev_specified %}
+                            <a rel="nofollow" href="websvn-3.html?p={{ entry.path }}">{{ entry.filename }}</a>
+                        {% else %}
+                            <a rel="nofollow" href="websvn-3.html?p={{ entry.path }}&amp;r={{ entry.created_rev.number }}">{{ entry.filename }}</a>
+                        {% endif %}
+                    {% else %}
+                        <img src="{{ style }}/img/folder.png" alt="file" style="vertical-align: middle;"/>
+                        {% if not rev_specified %}
+                            <a rel="nofollow" href="websvn-1.html?p={{ entry.path }}">{{ entry.filename }}</a>
+                        {% else %}
+                            <a rel="nofollow" href="websvn-1.html?p={{ entry.path }}&amp;r={{ entry.created_rev.number }}">{{ entry.filename }}</a>
+                        {% endif %}
+                        (<a href="websvn-3.html?p={{ entry.path }}">{% trans "Log" %}</a>)
+                    {% endifequal %}
+                </td>
+                <td>
+                    {{ entry.size|filesizeformat }}
+                </td>
+                <td>
+                    {% ifequal entry.type "file" %}
+                        <a rel="nofollow" href="websvn-2.html?p={{ entry.path }}&amp;r={{ entry.created_rev.number }}">
+                    {% else %}
+                        <a rel="nofollow" href="websvn-1.html?p={{ entry.path }}&amp;r={{ entry.created_rev.number }}">
+                    {% endifequal %}
+                        {{ entry.created_rev.number }}
+                    </a>
+                </td>
+                <td>
+                    {{ entry.last_author }}
+                </td>
+                <td>
+                    {{ entry.date|format_date }}
+                </td>
+                <td>
+                    {{ entry.log }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="websvn_dir_log">
+        <h3>{% trans "Dernière révision" %} (r{{ log.revision.number }})</h3>
+
+        <ul>
+            <li>
+                <strong>{% trans "Auteur" %} :</strong>
+                {{ log.author }}
+            </li>
+            <li>
+                <strong>{% trans "Date" %} :</strong>
+                {{ log.date|format_date }}
+            </li>
+            <li>
+                <strong>{% trans "Message" %} :</strong>
+                <div class="websvn_log_message">
+                    {{ log.message|lcode }}
+                </div>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

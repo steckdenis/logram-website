@@ -1,0 +1,16 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block FAriane %}{{ block.super }} &raquo; <a href="downloads.html">{% trans "Téléchargements" %}</a> {% endblock %}
+
+{% block Downloads %}class="actif"{% endblock %}
+{% block menu %}
+    <h2>{% trans "Téléchargements" %}</h2>
+    
+    <ul>
+        <li><a href="downloads.html">{% trans "Téléchargements" %}</a></li>
+        <li><a href="packages-1.html">{% trans "Les paquets" %}</a></li>
+    </ul>
+    
+    <div class="separateur"></div>
+{% endblock %}

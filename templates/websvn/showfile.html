@@ -1,0 +1,66 @@
+{% extends "websvn/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {{ path }} - {% trans "WebSVN" %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }}
+    {% for part in pathparts %}
+        &raquo;
+        {% if not forloop.last %}
+            <a href="websvn-1.html?p={{ part.path }}&amp;r={{ rev.number }}">
+                {{ part.text }}
+            </a>
+        {% else %}
+            {% blocktrans with part.text as file %}
+                Contenu de {{ file }}
+            {% endblocktrans %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ path }} - {% trans "WebSVN" %}</h1>
+
+    {% blocktrans with rev.number as rev %}
+        <p>
+            Voici le contenu du fichier <strong>{{ path }}</strong> à la révision <strong>{{ rev }}</strong>.
+        </p>
+
+        <p>
+            Pour récupérer le contenu de ce fichier sur votre ordinateur, installez Subversion
+            et entrez ceci dans une <a href="wiki-console.html">console</a> :
+
+            <code class="console">
+                svn co {{ svnparam }} {{ url }}
+            </code>
+        </p>
+    {% endblocktrans %}
+
+    <div style="overflow: scroll; max-height: 600px;">
+        {{ content|safe }}
+    </div>
+
+    <div class="websvn_dir_log">
+        <h3>{% trans "Dernière révision" %} (r{{ log.revision.number }})</h3>
+
+        <ul>
+            <li>
+                <strong>{% trans "Auteur" %} :</strong>
+                {{ log.author }}
+            </li>
+            <li>
+                <strong>{% trans "Date" %} :</strong>
+                {{ log.date|format_date }}
+            </li>
+            <li>
+                <strong>{% trans "Message" %} :</strong>
+                <div class="websvn_log_message">
+                    {{ log.message|lcode }}
+                </div>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

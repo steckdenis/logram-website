@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<p class="poll_question">
+    <img src="{{ style }}/img/question.png" alt="" />
+    {{ poll.question }}
+</p>
+                    
+<form action="forum-16-{{ poll.id }}.html" method="post">
+    <ul>
+        {% for c in poll.choices %}
+            <li>
+                {% if poll.can_vote %}
+                    <input type="radio" name="choice" id="choice_{{ c.id }}" value="{{ c.id }}" />
+                {% endif %}
+
+                <label for="choice_{{ c.id }}">{% trans c.choice %}</label>
+
+                {% if not poll.can_vote %}
+                    {% blocktrans with c.votes as votes and poll.total as total %}
+                        ({{ votes }} votes sur {{ total }})
+                    {% endblocktrans %}
+
+                    <div class="bar" style="margin:0px !important; width: 95%;">
+                        <div class="bar_bar" style="width: {{ c.percent }}%; margin:0px !important; border:none !important;">
+                            {{ c.percent }}%
+                        </div>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if poll.can_vote %}
+        <p style="text-align: center;">
+            <input type="submit" value="{% trans "Voter" %}" />
+        </p>
+    {% endif %}
+</form>

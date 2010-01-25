@@ -1,0 +1,32 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Édition d'un message" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Édition d'un message" %}{% endblock %}
+
+
+{% block body %}
+    <h1>{% trans "Édition d'un message" %}</h1>
+
+    {% if is_mp %}
+        <form action="mp-4-{{ pid }}.html" method="post">
+    {% else %}
+        <form action="forum-{{ url }}-{{ pid }}.html" method="post">
+    {% endif %}
+        <fieldset>
+            <legend>{% trans "Message" %}</legend>
+
+            {% if not is_mp %}
+            <p>
+                <ul class="forum_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            {% endif %}
+            
+            {% include "global/lform.html" %}
+        </fieldset>
+    </form>
+{% endblock %}

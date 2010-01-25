@@ -1,0 +1,13 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block Demandes %}class="actif"{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="demand-1.html">
+        {% trans "Demandes" %}
+    </a>
+{% endblock %}

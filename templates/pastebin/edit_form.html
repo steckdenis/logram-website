@@ -1,0 +1,45 @@
+{% load i18n %}
+
+            <p>
+                <ul class="form_ul">
+                    <li>
+                        <label for="format">{% trans "Coloration Syntaxique" %}</label>
+                        <select id="format" name="format">
+                            <option value="none">{% trans "Pas de coloration" %}</option>
+                            {{ formats|safe }}
+                        </select>
+                    </li>
+                    <li>
+                        <label for="title">{% trans "Titre" %}</label>
+                        <input type="text" name="title" id="title" maxlength="200" value="{{ title }}" />
+                    </li>
+                    <li>
+                        <label>{% trans "Durée de sauvegarde" %}</label>
+                        <input type="radio" name="fin" value="d" {% ifequal expires "d" %}checked="checked"{% endifequal %}{% if not expires %}checked="checked"{% endif %} />
+                        {% trans "Un jour" %}
+
+                        <input type="radio" name="fin" value="w" {% ifequal expires "w" %}checked="checked"{% endifequal %} />
+                        {% trans "Une semaine" %}
+
+                        <input type="radio"name="fin" value="m" {% ifequal expires "m" %}checked="checked"{% endifequal %} />
+                        {% trans "Un mois" %}
+                            
+                        {% if user.is_authenticated %}
+                            <input type="radio"name="fin" value="n" {% ifequal expires "n" %}checked="checked"{% endifequal %} />
+                            {% trans "Pour toujours" %}
+                        {% endif %}
+                    </li>
+                 </ul>
+            </p>
+                
+            <p style="text-align: center;">
+                <textarea name="body" id="body" style="width: 80%; height:300px">{{ body }}</textarea>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="button" value="{% trans "Aperçu" %}" onclick="apercu('body','form_preview','format');" />
+                <input type="submit" value="{% trans "Poster" %}" />
+            </p>
+            
+            <h2>{% trans "Aperçu" %}</h2>
+            <div style="margin-top:3%;" id="form_preview"></div>

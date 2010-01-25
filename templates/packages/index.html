@@ -1,0 +1,135 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Téléchargements" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Téléchargements" %}</h1>
+    
+    {% blocktrans %}
+        <p>
+            Bienvenue sur la page de téléchargement de Logram. C'est ici que vous pouvez télécharger
+            les LiveCD officiels, ainsi que plein d'autres choses, listées dans le tableau suivant.
+        </p>
+        
+        <p>
+            Si vous ne savez pas quelle
+            <em>architecture</em> votre ordinateur utilise, prenez la version <strong>i686</strong>, qui
+            marche sur tous les compatibles PC et les MAC récents. Si vous savez que votre ordinateur est
+            récent (moins de 2 ou 3 ans), alors vous pouvez essayer la version <strong>amd64</strong>, bien plus
+            rapide et plus adaptée au matériel d'aujourd'hui.
+        </p>
+        
+        <p>
+            De toute manière, vous ne prenez pas de risques. Si la version amd64 ne marche pas, essayez la version
+            i686. Le téléchargement est libre et gratuit, et les images peuvent être 
+            <a href="wiki-liveusb.html">écrites sur clé USB</a>, pour ne pas gaspiller de CD.
+        </p>
+    {% endblocktrans %}
+    
+    <span><h1>{% trans "Téléchargements" %}</h1></span>
+    
+    <table class="download_table">
+        <tr>
+            <th>{% trans "Image" %}</th>
+            <th>{% trans "Description" %}</th>
+        </tr>
+        {% for category in downloads.values %}
+            <tr>
+                <td class="forum_category" colspan="2">
+                    <strong>{% trans category.name %}</strong> : 
+                    <span class="forum_subtitle">{% trans category.description %}</span>
+                </td>
+            </tr>
+            
+            {% for download in category.downloads.values %}
+                <tr>
+                    <td class="download_screen">
+                        <a href="/files/{{ download.screen }}">
+                            <img src="/files/{{ download.thb }}" alt="{% trans "Aperçu" %}" />
+                        </a>
+                    </td>
+                    <td class="download_desc">
+                        <h3>{{ download.name }}</h3>
+                        
+                        <div class="download_desc_desc">
+                            {{ download.description|lcode }}
+                        </div>
+                        
+                        <div class="download_desc_variants">
+                            <img src="{{ style }}/img/download.png" class="download_desc_img" alt="" />
+                            {% for variant in download.variants.values %}
+                                {% if not forloop.first %}
+                                    &bull;
+                                {% endif %}
+                                <a href="/files/{{ variant.url }}">
+                                    {{ variant.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+    
+    <span><h1>{% trans "Derniers paquets" %}</h1></span>
+    
+    {% blocktrans %}
+        <p>
+            Un paquet est un fichier compressé contenant un programme ou un morceau de celui-ci, et qui
+            peut être installé très facilement. La liste ci-dessous <strong>n'a pas pour but que vous les
+            téléchargiez</strong> si vous ne savez pas ce que vous faites. En effet, avec un simple
+            paquet en votre possession, vous ne savez rien faire.
+        </p>
+        
+        <p>
+            Si vous n'avez pas installé Logram, téléchargez la version <strong>stable</strong> du LiveCD
+            de Logram (voir ci-dessus). Si vous avez installé Logram, vous pouvez très facilement obtenir
+            le paquet de votre choix en allant dans K»Configuration du système»Gestionnaire de paquets. Pour
+            plus d'aide, voyez <a href="wiki-install-package.html">Installer un paquet</a> sur le wiki.
+        </p>
+        
+        <p>
+            Cette liste n'est donc là qu'à but informatif, pour que vous puissiez voir à quel rythme les 
+            paquets arrivent dans Logram, et sont mis à jour. Si l'ordinateur sur lequel vous comptez installer
+            Logram n'a pas d'accès à Internet, alors c'est la seule bonne raison de télécharger les paquets. Par
+            exemple, s'il vous faut GIMP, cliquez sur «tous les paquets», puis «Graphismes», puis cherchez «gimp»,
+            cliquez dessus et téléchargez-le. N'oubliez pas de télécharger également toutes ses dépendances, et ainsi de suite.
+        </p>
+    {% endblocktrans %}
+    
+    <table style="text-align: center;">
+        <tr>
+            <th>{% trans "Paquet" %}</th>
+            <th>{% trans "Version" %}</th>
+            <th>{% trans "Distribution" %}</th>
+            <th>{% trans "Mainteneur" %}</th>
+            <th>{% trans "Date" %}</th>
+        </tr>
+        {% for pkg in packages %}
+            <tr>
+                <td>
+                    <a href="packages-4-{{ pkg.id }}.html">
+                        {{ pkg.name }} ({{ pkg.arch.name }})
+                    </a>
+                </td>
+                <td>
+                    {{ pkg.version }}
+                </td>
+                <td>
+                    <a href="packages-2-{{ pkg.distribution.id }}.html">
+                        Logram {{ pkg.distribution.name }}
+                    </a>
+                </td>
+                <td>
+                    <span style="font-size: 0.8em;">{{ pkg.maintainer_email }}</span>
+                </td>
+                <td>
+                    {{ pkg.date|format_date }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

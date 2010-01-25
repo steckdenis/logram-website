@@ -1,0 +1,95 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block menu %}
+    {# On n'affiche rien ici #}
+{% endblock %}
+
+{% block title %}{% blocktrans with profile.user.username as uname %}Profil de {{ uname }}{% endblocktrans %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% blocktrans with profile.user.username as uname %}Profil de {{ uname }}{% endblocktrans %}{% endblock %}
+{% block body %}
+    <h1>{% blocktrans with profile.user.username as uname %}Profil de {{ uname }}{% endblocktrans %}</h1>
+    
+    <table id="usertable" cellspacing="10">
+        <tr>
+            <td class="usertable">
+                <h3>{% trans "Informations générales" %}</h3>
+                
+                <div style="float: left; width: 150px; margin: 10px; margin-top: 0px; text-align: center;">
+                    {% include "forum/authorpane.html" %}
+                </div>
+                
+                <div style="margin-left: 170px;">
+                    <ul>
+                        <li>
+                            <strong>{% trans "Pseudo :" %}</strong> {{ profile|color_pseudo }}
+                        </li>
+                        <li>
+                            <strong>{% trans "Status :" %}</strong>
+                            {% if profile.user.is_active %}
+                                {% trans "Actif" %}
+                            {% else %}
+                                {% trans "Bannis" %}
+                            {% endif %}
+                        </li>
+                        <li>
+                            <strong>{% trans "Points bonus :" %}</strong> {{ profile.point }}
+                        </li>
+                        <li>
+                            <strong>{% trans "Dernière connexion :" %}</strong><br />
+                            {{ profile.user.last_login|format_date }}
+                        </li>
+                        <li>
+                            <strong>{% trans "Date d'inscription :" %}</strong><br />
+                            {{ profile.user.date_joined|format_date }}
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td class="usertable">
+                <h3>{% trans "Communication" %}</h3>
+
+                <ul>
+                    <li><a href="mp-1-1.html?sendto={{ profile.uname|urlencode }}#newmp">{% trans "Lui envoyer un MP" %}</a></li>
+                </ul>
+                
+                <h4>{% trans "Adresse e-mail" %}</h4>
+                
+                {% if not profile.show_email %}
+                    <em>{% trans "Ne souhaite pas la rendre publique" %}</em>
+                {% else %}
+                    {{ profile.user.email|safe }}
+                {% endif %}
+                
+                <h4>{% trans "Signature" %}</h4>
+                
+                <div>
+                    {{ profile.sign|lcode }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="width: 100%" class="usertable">
+                <h3>{% trans "Texte personnel" %}</h3>
+                
+                <div>
+                    {{ profile.pperso|lcode }}
+                </div>
+            </td>
+        </tr>
+        {% if ok %}
+            <tr>
+                <td colspan="2" style="width:100%;" class="usertable">
+                    <h3>{% trans "Dernier paste" %}</h3>
+                    <div class="user_last_paste">
+                        <div class="news_infos">{% trans "Se termine" %} {{ paste.ended|format_date }}</div>
+                        {% code paste.format %}{{ paste.contents }}{% endcode %}
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+{% endblock %}

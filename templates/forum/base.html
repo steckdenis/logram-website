@@ -1,0 +1,20 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% block FAriane %}{{ block.super }} &raquo; <a href="forum.html">{% trans "Forums" %}</a>{% endblock %}
+{# On n'est plus dans l'accueil, mais dans le forum #}
+
+{% block Forum %}class="actif"{% endblock %}
+
+{% block menu %}
+    <h2>{% trans "Forum" %}</h2>
+    
+    <ul>
+        <li><a href="forum.html">{% trans "Accueil des forums" %}</a></li>
+        <li><a href="forum-7-0-1.html">{% trans "Sujets non-lus" %}</a></li>
+        <li><a href="forum-8-0-1.html">{% trans "Mes sujets" %}</a></li>
+        <li><a href="forum-9-0-1.html">{% trans "Sujets visités" %}</a></li>
+        <li><a href="forum-10-0-1.html">{% trans "Où j'ai posté" %}</a></li>
+    </ul>
+    
+    <div class="separateur"></div>
+{% endblock %}

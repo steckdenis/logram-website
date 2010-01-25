@@ -1,0 +1,17 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% blocktrans %}Fichiers de {{ pkg }}{% endblocktrans %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% blocktrans %}Fichiers de {{ pkg }}{% endblocktrans %} {% endblock %}
+
+{% block body %}
+    <h1>{% blocktrans %}Fichiers de {{ pkg }}{% endblocktrans %}</h1>
+    
+    <ul style="list-style-image: none;">
+        {% for file in files %}
+            <li>{{ file }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

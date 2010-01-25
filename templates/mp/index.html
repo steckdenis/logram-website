@@ -1,0 +1,103 @@
+{% extends "mp/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Messages privés" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Messages privés" %}</h1>
+
+    <p>
+        {% blocktrans %}
+            Voici la page des messages privés. Un message privé est un ensemble de messages
+            partagés avec un nombre limité d'utilisateurs (que vous choisissez), et permettant
+            de discuter en privé avec un ou plusieurs membres.
+        {% endblocktrans %}
+    </p>
+
+    <form action="mp-7.html" method="post">
+        <table style="text-align: center;">
+            <tr>
+                <th>{% trans "Titre" %}</th>
+                <th style="width: 60px;">{% trans "Pages" %}</th>
+                <th style="width: 200px;">{% trans "Participants" %}</th>
+                <th style="width: 80px;">{% trans "Messages" %}</th>
+                <th style="width: 160px;">{% trans "Dernier message" %}</th>
+                <th style="width: 40px;"></th>
+            </tr>
+            {% for usertopic in usertopics %}
+                <tr>
+                    <td style="line-height: 14px; text-align: left;">
+                        {% if usertopic.read %}
+                            <img src="{{ style }}/img/forum_read.png" alt="R" style="float: left;" />
+                        {% else %}
+                            <img src="{{ style }}/img/forum_unread.png" alt="-" style="float: left;" />
+                        {% endif %}
+                        <div style="margin-left: 30px;">
+                            {% if usertopic.last_read_post_id and not usertopic.read %}
+                                <a href="mp-2-{{ usertopic.topic_id }}-{{ usertopic.last_post_page }}.html#r{{ usertopic.last_read_post_id }}">
+                                    <img src="{{ style }}/img/last_post_read.png" alt="{% trans "Dernier message lu" %}" />
+                                </a>
+                            {% endif %}
+                            <a href="mp-2-{{ usertopic.topic_id }}-1.html">{{ usertopic.topic.title }}</a><br />
+                            <span class="forum_subtitle">{{ usertopic.topic.subtitle }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        {% for p in usertopic.pages %}
+                            <a href="mp-2-{{ usertopic.topic_id }}-{{ p }}.html">{{ p }}</a>
+                        {% endfor %}
+                    </td>
+                    <td style="font-size: 0.8em;">
+                        {% for part in usertopic.parts %}
+                            {% if not forloop.first %}
+                                &bull;
+                            {% endif %}
+                            {% if part.read %}
+                                <img src="{{ style }}/img/forum_read.png" alt="R" style="vertical-align: middle;" />
+                            {% else %}
+                                <img src="{{ style }}/img/forum_unread.png" alt="-" style="vertical-align: middle;" />
+                            {% endif %}
+                            {% if part.deleted %}<del>{% endif %}
+                            {{ part.user|color_pseudo }}
+                            {% if part.deleted %}</del>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ usertopic.topic.num_messages }}
+                    </td>
+                    <td style="line-height: 15px;">
+                        {{ usertopic.topic.last_message.date_created|format_date|capfirst }}<br />
+                        {% trans "par" %}
+                        {{ usertopic.topic.last_message.author|color_pseudo }}
+                    </td>
+                    <td>
+                        <input type="checkbox" name="mp[{{ usertopic.topic.id }}]" />
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div class="pagination">
+            {% for pg in pages %}
+                <a href="mp-1-{{ pg }}.html">{{ pg }}</a>
+            {% endfor %}
+        </div>
+    
+        <p style="text-align: right;">
+            <input type="submit" value="{% trans "Supprimer les messages sélectionnés" %}" />
+        </p>
+    </form>
+
+    <form action="mp-1-1.html" method="post" id="newmp">
+        <fieldset>
+            <legend>{% trans "Nouvelle discussion" %}</legend>
+
+            <ul class="form_ul">
+                {{ form.as_ul }}
+            </ul>
+
+            {% include "global/lform.html" %}
+        </fieldset>
+    </form>
+{% endblock %}

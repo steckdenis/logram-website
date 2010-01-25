@@ -1,0 +1,53 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+
+{# Cette template reprend un peu la même apparence que celle de packages.debian.org #}
+
+{% block title %}{% blocktrans with distro.name as dname %}Sections de Logram {{ dname }}{% endblocktrans %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% blocktrans with distro.name as dname %}Sections de Logram {{ dname }}{% endblocktrans %}
+{% endblock %}
+
+    
+{% block body %}
+    <h1>{% blocktrans with distro.name as dname %}Sections de Logram {{ dname }}{% endblocktrans %}</h1>
+    
+    <div id="sections_right">
+        <dl>
+            {% for section in sections %}
+                {% if not forloop.counter|divisibleby:"2" %}
+                    <dt>
+                        <a href="packages-3-{{ distro.id }}-{{ section.id }}.html" title="{{ section.name }}">
+                            {% trans section.long_name %}
+                        </a>
+                    </dt>
+                    <dd>
+                        {% trans section.desc %}
+                    </dd>
+                {% endif %}
+            {% endfor %}
+        </dl>
+    </div>
+    
+    {# Même chose, mais on change le divisibleby. On a donc deux colonnes équitablement remplies #}
+    
+    <div id="sections_left">
+        <dl>
+            {% for section in sections %}
+                {% if forloop.counter|divisibleby:"2" %}
+                    <dt>
+                        <a href="packages-3-{{ distro.id }}-{{ section.id }}.html" title="{{ section.name }}">
+                            {% trans section.long_name %}
+                        </a>
+                    </dt>
+                    <dd>
+                        {% trans section.desc %}
+                    </dd>
+                {% endif %}
+            {% endfor %}
+        </dl>
+    </div>
+    
+    <div style="clear: right;"></div>
+{% endblock %}

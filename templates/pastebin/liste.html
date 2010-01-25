@@ -1,0 +1,36 @@
+{% extends "pastebin/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% trans "Mes posts" %} 
+{% endblock %}
+
+{% block body %}
+    <h1>Mes Posts</h1>
+    
+    <p>
+        {% blocktrans %}
+            Voici la liste des morceaux de code que vous avez posté, classés par ordre de post
+        {% endblocktrans %}
+    </p>
+    
+    {% for p in paste %}
+        <h3 class="news_index_title">
+            <a href="pastebin-3-{{ p.uniqid }}.html">
+                {{ p.title }}
+            </a>
+        </h3>
+        
+        <div class="news_infos">
+            {{ p.created|format_date|capfirst }},
+            {% trans "expires" %} {{ p.ended|format_date }},
+            <strong>{{ p.format_str }}</strong>
+        </div>
+        
+        <div class="news_index_intro">
+            {% code p.format %}{{ p.contents|safe }}{% endcode %}
+        </div>
+    {% endfor %}
+
+{% endblock %}

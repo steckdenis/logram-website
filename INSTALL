@@ -1,0 +1,62 @@
+Installer et tester la v4
+=========================
+
+Installer et teste la v4 est encore assez simple. Vous avez tout d'abord
+besoin de ces dépendances :
+
+* Django >= 1.1 (à télécharger sur djangoproject.com pour être à jour)
+* python-markdown >= 2.0 (http://sourceforge.net/projects/python-markdown/files/)
+* Pygments (celui de la distrib est bon)
+* Un serveur MySQL qui marche
+* python-svn
+* Djapian, pour la recherche : http://code.google.com/p/djapian/
+
+Installation
+------------
+
+L'installation se fait en plusieurs étapes assez simples :
+
+NOTE: Préfixez chaque commande du type "./manage ..." de "PYTHONPATH=$(dirname $PWD) ". Ainsi, Python
+      sait où trouver votre installation de la v4.
+
+* Créer une base de donnée (avec phpmyadmin par exemple)
+* faire un lien symbolique depuis www vers pyv4 (la v4 a besoin de ce nom) :
+    ln -s www pyv4
+    cd pyv4
+* Éditer le fichier settings.sample.py comme c'est expliqué dedans, et le renommer en settings.py
+* Creer un nouveau dossier : onlines avec les droits 777
+* Lancer, dans pyv4/, "./manage.py syncdb"
+* syncdb vous demande un nom d'utilisateur, REFUSEZ
+* Retournez dans phpMyAdmin et exécutez les requêtes suivantes :
+    INSERT INTO `auth_group` (`id`, `name`) VALUES(1, 'Utilisateur'),(2, 'Administrateur');
+    INSERT INTO `general_profile` (`id`, `user_id`, `main_group_id`, `uname`, `main_group_name`, `website`, `quote`, `pperso`, `avatar`, `sign`, `style`, `point`, `show_email`, `main_dir_id`)
+    VALUES(0, 0, 0, 'anonyme', 'anonyme', 'http://www.logram-project.org', 'Ca marche !', '', '', '', '/style/default', 0, 0, 0);
+    INSERT INTO `upload_directory` (`id`, `name`, `quota`, `used`, `user_id`, `parent_id`, `sha1hash`, `type`)
+    VALUES(1, 'root', 0, 0, 1, 1, '', NULL);   
+
+* Lancez "./manage.py runserver"
+* Allez à http://localhost:8000/, et cliquez sur «S'enregistrer»
+* Choisissez un pseudo et un mot de passe, puis validez. Normalement, ça marche. S'il affiche une erreur du style «No ... match the query», trouvez dans phpMyAdmin la table qui pourrait correspondre et ajoutez l'enregistrement qui va bien. Ensuite, rapportez le bug. Aide sur #logram-project@freenode.
+* Retourner dans phpMyAdmin et :
+    * allez dans general_profile et supprimer l'utilisateur "anonyme"
+    * allez dans auth_user, éditez l'user dont l'id est 1, et metez is_staff et is_superuser à 1
+    * allez dans general_profile, éditez l'user dont l'id est celui de votre utilisateur et mettez :
+        * main_group_id à 2 (normalement l'id du groupe Administrateur)
+        * main_group_name à Administrateur
+* Allez sur la v4, vous êtes administrateur avec tous les droits. L'url http://localhost:8000/admin vous permet d'accéder au panneau d'administration, et ainsi d'ajouter des forums, des catégories de nouvelles, etc.
+
+Have fun !
+
+Rapport de bugs
+---------------
+
+Comme vous pouvez vous en douter, ça ne sert à rien de remplir des rapports
+de bug sur _votre_ v4. Pour raporter un bug, postez dans le forum
+de http://www.logram-project.org. Si la marche à suivre pour l'installation
+ne fonctionne pas, allez également dans ce forum (et ce fichier sera édité).
+
+Notez que dès que la v4 sera lancée sur le serveur de Logram, ce sera dans la
+partie «Demande de type bugs» qu'il faudra raporter les bugs, et plus sur le
+forum.
+
+Bon amusement.

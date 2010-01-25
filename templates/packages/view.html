@@ -1,0 +1,158 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{{ package.name|capfirst }}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {{ package.name|capfirst }} {% trans "dans" %} Logram {{ package.distribution.name }}
+{% endblock %}
+    
+{% block body %}
+    <h1>{{ package.name|capfirst }} {% trans "dans" %} Logram {{ package.distribution.name }}</h1>
+    
+    <p>
+        {% blocktrans with package.name as pkg and package.version as ver %}
+            Voici la page d'information du paquet {{ pkg }}-{{ ver }}. Vous trouverez ici des liens pour le
+            télécharger, des informations sur ses dépendances, sur ses versions dans les 
+            différentes distributions, etc.
+        {% endblocktrans %}
+    </p>
+
+    <hr />
+
+    <p>
+        {{ package.long_desc|lcode }}
+    </p>
+    
+    <h2>{% trans "Informations générales" %}</h2>
+
+    <ul>
+        <li>
+            <strong>{% trans "Titre" %} :</strong>
+            {{ package.title }}
+        </li>
+        <li>
+            <strong>{% trans "Description courte" %} :</strong>
+            {{ package.short_desc }}
+        </li>
+        <li>
+            <strong>{% trans "Site web de l'auteur" %} :</strong>
+            <a href="{{ package.upstream_url }}">{{ package.upstream_url }}</a>
+        </li>
+        <li>
+            <strong>{% trans "Version upstream" %} :</strong>
+            {% ifnotequal package.upstream_version "0" %}
+                {{ package.upstream_version }}
+            {% else %}
+                <em>{% trans "Paquet propre à Logram" %}</em>
+            {% endifnotequal %}
+        </li>
+        <li>
+            <strong>{% trans "Version Logram" %} :</strong>
+            {{ package.logram_version }}
+        </li>
+        <li>
+            <strong>{% trans "Taille du téléchargement" %} :</strong>
+            {{ package.download_size|filesizeformat }}
+        </li>
+        <li>
+            <strong>{% trans "Taille des fichiers installés" %} :</strong>
+            {{ package.install_size|filesizeformat }}
+        </li>
+        <li>
+            <strong>{% trans "Mainteneur du paquet (à contacter en cas de défaillance)" %} :</strong>
+            {% if package.maintainer_user %}
+                {{ package.maintainer_user|color_pseudo }}
+            {% else %}
+                {{ package.maintainer_san }}
+            {% endif %}
+        </li>
+    </ul>
+
+    <h2>{% trans "Dépendances" %}</h2>
+
+    <strong>{% trans "Légende" %} :</strong>
+    <span class="deps_dep">{% trans "Dépend de" %}</span> &bull;
+    <span class="deps_sugg">{% trans "Suggère" %}</span> &bull;
+    <span class="deps_conf">{% trans "Est en conflit avec" %}</span> &bull;
+    <span class="deps_prov">{% trans "Fourni" %}</span> &bull;
+    <span class="deps_repl">{% trans "Remplace" %}</span>
+
+    <ul class="deps_ul">
+        {% for dep in package.depends %}
+            {% if dep %}
+                <li class="deps_dep">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in package.suggests %}
+            {% if dep %}
+                <li class="deps_sugg">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in package.conflicts %}
+            {% if dep %}
+                <li class="deps_conf">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in package.provides %}
+            {% if dep %}
+                <li class="deps_prov">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in package.replaces %}
+            {% if dep %}
+                <li class="deps_repl">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <h2>{% trans "Téléchargements" %}</h2>
+
+    <p>
+        {% blocktrans with package.name as pkg %}
+            Le paquet {{pkg}} peut être téléchargé pour les architectures et versions suivantes. Une fois
+            que vous aurez choisi l'architecture qui vous convient, vous arriverez sur la page
+            de sélection des mirroirs. C'est alors à ce moment-là que vous pourrez télécharger votre
+            paquet. Les paquets en <em>italique</em> sont ceux qui ont la même version que celui
+            affiché sur cette page.
+        {% endblocktrans %}
+    </p>
+
+    <table style="text-align: center;">
+        <tr>
+            <th>{% trans "Distribution" %}</th>
+            <th>{% trans "Version" %}</th>
+            <th>{% trans "Architecture" %}</th>
+            <th style="width:360px;">{% trans "Voir" %}</th>
+        </tr>
+        {% for pkg in pkgs %}
+            <tr
+                {% ifequal pkg.version package.version %}
+                    style="font-style: italic;"
+                {% endifequal %}
+                >
+                <td>
+                    <a href="packages-2-{{ pkg.distribution.id }}.html">
+                        Logram {{ pkg.distribution.name }}
+                    </a>
+                </td>
+                <td>
+                    {{ pkg.version }}
+                </td>
+                <td>
+                    {{ pkg.arch.name }}
+                </td>
+                <td>
+                    <a href="packages-4-{{ pkg.id }}.html">
+                        {% trans "Paquet" %}
+                    </a>
+                    &bull;
+                    <a href="packages-6-{{ pkg.id }}.html">
+                        {% trans "Télécharger" %}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

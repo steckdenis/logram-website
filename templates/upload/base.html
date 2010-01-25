@@ -1,0 +1,12 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% block FAriane %}{{ block.super }} &raquo; <a href="upload-1-0.html">{% trans "Mes fichiers" %}</a>{% endblock %}
+{% block menu %}
+    <h2>{% trans "Fichiers" %}</h2>
+    
+    <ul>
+        <li><a href="upload-1-0.html">{% trans "Mes fichiers" %}</a></li>
+    </ul>
+    
+    <div class="separateur"></div>
+{% endblock %}

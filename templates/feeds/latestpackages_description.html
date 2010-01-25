@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load general_tags %}
+{% trans "Publié " %}{{ obj.date|format_date }}<br />
+<div>
+<h3>{% trans "Informations générales" %}</h3>
+<ul>
+        <li>
+            <strong>{% trans "Titre" %} :</strong>
+            {{ obj.title }}
+        </li>
+        <li>
+            <strong>{% trans "Description courte" %} :</strong>
+            {{ obj.short_desc }}
+        </li>
+        <li>
+            <strong>{% trans "Version upstream" %} :</strong>
+            {% ifnotequal obj.upstream_version "0" %}
+                {{ obj.upstream_version }}
+            {% else %}
+                <em>{% trans "Paquet propre à Logram" %}</em>
+            {% endifnotequal %}
+        </li>
+        <li>
+            <strong>{% trans "Version Logram" %} :</strong>
+            {{ obj.logram_version }}
+        </li>
+        <li>
+            <strong>{% trans "Taille du téléchargement" %} :</strong>
+            {{ obj.download_size|filesizeformat }}
+        </li>
+        <li>
+            <strong>{% trans "Taille des fichiers installés" %} :</strong>
+            {{ obj.install_size|filesizeformat }}
+        </li>
+        <li>
+            <strong>{% trans "Mainteneur du paquet (à contacter en cas de défaillance)" %} :</strong>
+            {% if obj.maintainer_user %}
+                {{ obj.maintainer_user|color_pseudo }}
+            {% else %}
+                {{ obj.maintainer_san }}
+            {% endif %}
+        </li>
+    </ul>
+</div>

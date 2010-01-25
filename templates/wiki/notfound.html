@@ -1,0 +1,28 @@
+{% extends "wiki/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Page de documentation non-trouvée" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% trans "Page de documentation non-trouvée" %}
+{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Page de documentation non-trouvée" %}</h1>
+    
+    <p>
+        {% blocktrans %}La page que vous recherchez, <strong>{{ slug }}</strong>, n'existe pas. Elle a peut-être
+        été supprimée, renomée, ou vous vous êtes trompé dans son nom.{% endblocktrans %}
+    </p>
+        
+    <p>
+        {% if perms.wiki.add_page %}
+            {% blocktrans %}Si vous pensez que cette page pourrait être utile à d'autres, vous pouvez
+            <a href="wiki-3-0-0-{{ slug }}.html">la créer</a>. Si vous avez absolument besoin de l'information
+            contenue dans cette page, vous pouvez toujours essayer la recherche dans le menu de
+            gauche.{% endblocktrans %}
+        {% else %}
+            {% blocktrans %}Vous n'avez malheureusement pas le droit de créer cette page vous-même. Une des solutions est de s'inscrire, ou, si vous êtes déjà inscrit, de demander à pouvoir créer une page de wiki (ou signaler ce problème, le wiki devrait être ouvert à tous les membres).{% endblocktrans %}
+        {% endif %}
+        </p>
+{% endblock %}

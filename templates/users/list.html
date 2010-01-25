@@ -1,0 +1,99 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Liste des membres" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% if not is_staff %}
+        {% if is_connected %}
+            {% trans "Membres en ligne" %}
+        {% else %}
+            {% trans "Liste des membres" %}
+        {% endif %}
+    {% else %}
+        {% trans "Membres de l'équipe" %}
+    {% endif %}
+{% endblock %}
+
+
+{% block body %}
+    {% if not is_staff %}
+        {% if is_connected %}
+            <h1>{% trans "Membres en ligne" %}</h1>
+
+            <p>
+                {% blocktrans %}
+                    Voici la liste des membres connectés sur le site de Logram. Un membre est déclaré comme
+                    connecté si sa dernière activité sur le site remonte à il y a moins de 5 minutes. Il y
+                    a actuellement <strong>{{ anons }} visiteur(s) anonyme(s)</strong> et <strong>{{ regs }} membre(s)
+                    enregistré(s)</strong> en ligne. Ci-dessous, la liste de ces membres enregistrés.
+                {% endblocktrans %}
+            </p>
+        {% else %}
+            <h1>{% trans "Liste des membres" %}</h1>
+
+            <p>
+                {% blocktrans %}
+                    Cette page liste les utilisateurs inscrits du site, ainsi que quelques informations sur
+                    eux, dans l'ordre alphabétique. Si vous voulez apparaître dans la liste, <a href="register.html">enregistrez-vous</a>.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+    {% else %}
+        <h1>{% trans "Membres de l'équipe" %}</h1>
+        
+        <p>
+            {% blocktrans %}
+                Vous trouverez ici la liste des membres de l'équipe de Logram, classés par groupes. Si vous avez un problème
+                spécifique à Logram (donc pas une question, mais par exemple un problème d'organisation), alors ce sont eux
+                qu'il faut contacter, suivant leur groupe (les questions sur les artworks à un graphiste, pas à un webmaster)
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+    
+    <table>
+        <tr>
+            {% if is_staff %}
+                <th>{% trans "Avatar" %}</th>
+            {% endif %}
+            <th>{% trans "Pseudo" %}</th>
+            <th>{% trans "Groupe principal" %}</th>
+            <th>{% trans "Site web" %}</th>
+            <th style="width: 150px;">{% trans "Date d'inscription" %}</th>
+        </tr>
+        
+        {% for profile in profiles %}
+            <tr>
+                {% if is_staff %}
+                    <td style="text-align: center;">
+                        {{ profile.quote }}<br />
+                        <a href="{{ profile.website }}">
+                            <img src="{{ profile.avatar }}" alt="Avatar" />
+                        </a>
+                    </td>
+                {% endif %}
+                <td style="text-align: center;">
+                    {{ profile|color_pseudo }}
+                </td>
+                <td style="text-align: center;">
+                    {% trans profile.main_group_name %}
+                </td>
+                <td style="text-align: center;">
+                    <a href="{{ profile.website }}">{{ profile.website }}</a>
+                </td>
+                <td style="text-align: center;">
+                    {{ profile.user.date_joined|format_date }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    {% if list_pages %}
+        <div class="pagination">
+            {% for pg in list_pages %}
+                <a href="user-{{ pindex }}-{{ pg }}.html">{{ pg }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

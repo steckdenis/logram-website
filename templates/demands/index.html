@@ -1,0 +1,73 @@
+{% extends "demands/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Demandes" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Demandes" %}</h1>
+    
+    {% blocktrans %}
+        <p>
+            Les demandes vous permettent de communiquer de manière organisée avec les développeurs
+            de Logram. C'est grâce à elles que vous savez proposer vos idées, soumettre vos contributions,
+            rapporter des bugs, mais aussi voir les bugs, idées et contributions.
+        </p>
+
+        <p>
+            Le système de demandes de Logram est extrêmement puissant, et vous permet de faire plein
+            de choses. C'est ici que se déroule toute l'organisation et la vie du projet. Vous pouvez
+            contribuer de plusieurs manières :
+
+            <ul>
+                <li>En rapportant des bugs, ou en partageant vos images et documents en rapport avec Logram</li>
+                <li>En réalisant les demandes des autres (si vous êtes graphistes, packageur, codeur, etc).</li>
+                <li>Quand vous avez réalisé beaucoup de choses, vous pouvez rentrer dans l'équipe de Logram</li>
+                <li>En notant les demandes (celles qui vous plaisent, celles qui sont bien réalisées, etc). Ainsi, les développeurs savent ce qui vous intéresse</li>
+            </ul>
+        </p>
+    {% endblocktrans %}
+
+    <h2>{% trans "Types de demandes" %}</h2>
+
+    <p>
+        {% blocktrans %}
+            Voici les différents <em>types de demandes</em>. En effet, les demandes sont classées
+            par types (bugs, artworks, paquets, patchs, etc). Pour chaque type, vous pouvez demander
+            quelque-chose, ou proposer quelque-chose (sauf pour les bugs, que vous ne pouvez pas
+            proposer. Si vous avez trouvé une faille, soumettez un patch, ou un bug si vous ne savez
+            pas la résoudre).
+        {% endblocktrans %}
+    </p>
+
+    {% for type in types %}
+        <div class="demand_{% cycle 'left' 'right' %}" style="background-color: #{{ type.color }}">
+            <img class="demand_icon" src="{{ type.icon }}" alt="{% trans "Icône" %}" />
+            
+            <h3>{% trans type.name %}</h3>
+
+            <p>
+                {% trans type.description %}
+            </p>
+
+            <p class="demand_index_actions">
+                {% if type.can_new and perms.demands.add_demand %}
+                    <a href="demand-2-1-{{ type.id }}.html">
+                        <img src="{{ style }}/img/demand_new_{{ LANGUAGE_CODE }}.png" alt="{% trans "Nouveau" %}" />
+                    </a>
+                {% endif %}
+                {% if type.can_propose and perms.demands.add_demand %}
+                    <a href="demand-2-2-{{ type.id }}.html">
+                        <img src="{{ style }}/img/demand_propose_{{ LANGUAGE_CODE }}.png" alt="{% trans "Proposer" %}" />
+                    </a>
+                {% endif %}
+                <a href="demand-3-{{ type.id }}-0-datec-1.html">
+                    <img src="{{ style }}/img/demand_list_{{ LANGUAGE_CODE }}.png" alt="{% trans "Liste" %}" />
+                </a>
+            </p>
+        </div>
+
+        {% cycle '' '<div style="clear: both;"></div>' %}
+    {% endfor %}
+
+    <div style="clear: both;"></div>
+{% endblock %}

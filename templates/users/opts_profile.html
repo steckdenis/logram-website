@@ -1,0 +1,31 @@
+{% extends "users/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Changement de profil" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Changement de profil" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Changement de profil" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Votre profil est ce que les autres membres voient de vous. C'est sur cette page que vous pouvez
+            les renseigner sur ce que vous êtes, ou autre. Exprimez-vous.
+        {% endblocktrans %}
+    </p>
+    
+    <form action="user-5-1.html" method="post">
+        <fieldset>
+            <legend>{% trans "Profil" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            {% include "global/lform.html" %}
+        </fieldset>
+    </form>
+{% endblock %}

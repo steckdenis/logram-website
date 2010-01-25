@@ -1,0 +1,49 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Connexion" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Connexion" %}{% endblock %}
+
+
+{% block body %}
+    <h1>{% trans "Connexion" %}</h1>
+
+    {% if is_error %}
+        <div class="message_error">{{ error_string }}</div>
+    {% endif %}
+    
+    <p>
+        {% blocktrans %}
+            Entez votre <em>pseudo</em> et votre <em>mot de passe</em>. Le pseudo est l'identifiant
+            que vous avez choisi au moment de votre enregistrement.<br />
+            Si vous avez perdu votre mot de passe, envoyez un message au webmaster (lien en bas de la
+            page), en lui précisant :
+                
+            <ul>
+                <li>Votre <em>pseudo</em></li>
+                <li>Votre adresse e-mail</li>
+            </ul>
+        {% endblocktrans %}
+    </p>
+
+    <form method="post" action="login-1.html">
+        <fieldset>
+            <legend>{% trans "Connexion" %}</legend>
+            
+            <p>
+                <label for="username">{% trans "Pseudo :" %}</label>
+                    <input type="text" name="username" value="{{ pseudo }}" />
+                <br />
+                <label for="password">{% trans "Mot de passe :" %}</label>
+                    <input type="password" name="password" />
+                    <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}" />
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Se connecter" %}" />
+            </p>
+        </fieldset>
+    </form>
+
+{% endblock %}

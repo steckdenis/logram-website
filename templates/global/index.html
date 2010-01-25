@@ -1,0 +1,280 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Accueil" %}{% endblock %}
+
+{% block Accueil %}class="actif"{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Distribution Linux Logram : Ne subissez plus, choisissez !" %}</h1>
+        
+    <p>
+        {% blocktrans %}
+            Logram est une distribution Linux simple, belle et efficace. Elle regroupe
+            tout le nécessaire à une distribution de qualité agréable à utiliser, et à la pointe de la
+            technologie : un système basé sur Debian, KDE dans sa dernière version, des outils
+            simples et puissants, et plein d'applications 100% Libres.
+        {% endblocktrans %}
+    </p>
+        
+    <div id="index_dblocks">
+        <div id="index_discover">
+            <h3>{% trans "Découvrir" %}</h3>
+                
+            <p>
+                {% blocktrans %}
+                    <a href="wiki-discover.html">Découvrez Logram</a>, son univers, ce qu'il peut vous apporter, à quoi il ressemble, comment il s'utilise, et bien plus encore.
+                {% endblocktrans %}
+            </p>
+        </div>
+            
+        <div id="index_test">
+            <h3>{% trans "Tester" %}</h3>
+                
+            <p>
+                {% blocktrans %}
+                    <a href="downloads.html">Téléchargez</a> et <a href="wiki-install.html">installez</a> Logram, ou testez-le simplement sans toucher à votre ordinateur. Le tout est extrêmement simple et agréable.
+                {% endblocktrans %}
+            </p>
+        </div>
+            
+        <div id="index_invloved">
+            <h3>{% trans "Participer" %}</h3>
+                
+            <p>
+                {% blocktrans %}
+                    <a href="register.html">Enregistrez-vous</a>, puis <a href="forum.html">posez vos questions</a>, <a href="wiki.html">documentez-vous</a>, <a href="demand-1.html">proposez des idées</a>, voire même <a href="websvn-1.html">participez</a> à l'élaboration du futur de Logram !
+                {% endblocktrans %}
+            </p>
+        </div>
+    </div>
+    
+    <div id="index_blocks">
+        <div id="index_blocks_left">
+            <div id="index_block_news">
+                <h3>{% trans "Dernières nouvelles" %}</h3>
+                
+                <ul>
+                    {% for news in latest_news %}
+                        <li>
+                            <a 
+                                href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html" 
+                                title="{% blocktrans with news.author.uname as uname and news.date_published|format_date as dt %}par {{ uname }} {{ dt }}{% endblocktrans %}">
+                                    {{ news.title }}
+                            </a>
+                            <div class="index_block_header">
+                                {{ news.intro }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <a href="news-1-1-0-0.html" class="next_link"><img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" /></a>
+            </div>
+            
+            <div id="index_block_message">
+                <h3>{% trans "Derniers messages du forum" %}</h3>
+                
+                <ul>
+                    {% for topic in latest_topics %}
+                        <li>
+                            <a
+                                href="forum-2-{{ topic.id }}-{{ topic.last_post_page }}-{{ topic.title|slugify }}.html#r{{ topic.last_post.id }}"
+                                title="{% trans "par" %} {{ topic.last_post.author.uname }} {{ topic.last_post.date_created|format_date }}">
+                                    {{ topic.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <a href="forum.html" class="next_link"><img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" /></a>
+            </div>
+            
+            <div id="index_block_wiki">
+                <h3>{% trans "Pages de documentation modifiées" %}</h3>
+                
+                <ul>
+                    {% for change in latest_wiki %}
+                        <li>
+                            <a
+                                href="wiki-{{ change.page.slug }}.{{ change.page.lang }}.html"
+                                title="{% trans "par" %} {% if change.author_user %}{{ change.author_user.uname }}{% else %}{{ change.author_ip }}{% endif %} {{ change.date|format_date }}">
+                                    {{ change.page.title }}
+                            </a>
+                            <div class="index_block_header">
+                                {{ change.comment }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <a href="wiki.html" class="next_link"><img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" /></a>
+            </div>
+        </div>
+            
+        <div id="index_blocks_right">
+            {% if poll %}
+                <div id="index_block_poll">
+                    <h3>{% trans "Sondage en cours" %}</h3>
+                    
+                    {% include "forum/viewpoll.html" %}
+                </div>
+            {% endif %}
+            
+            <div id="index_block_bugs">
+                <h3>{% trans "Dernières demandes" %}</h3>
+                
+                <ul>
+                    {% for d in latest_demands %}
+                        <li>
+                            <a
+                                href="demand-5-{{ d.id }}-1.html"
+                                title="{{ d.created_at|format_date|capfirst }} {% trans "par" %} {{d.author.uname }}">
+                                    {{ d.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <a href="demand-1.html" class="next_link"><img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" /></a>
+            </div>
+            
+            <div id="index_block_privnews">
+                <h3>{% trans "Derniers journaux" %}</h3>
+                
+                <ul>
+                    {% for news in latest_journals %}
+                        <li>
+                            <a 
+                                href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html" 
+                                title="{{ news.date_published|format_date }}">
+                                    {{ news.title }}
+                            </a>
+                            {% trans "par" %}
+                            <a href="news-1-1-0-{{ news.author_id }}.html">
+                                {{ news.author.uname }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+             <div id="index_block_packages">
+                <h3>{% trans "Derniers paquets" %}</h3>
+                
+                <ul>
+                    {% for package in latest_packages %}
+                        <li>
+                            <a
+                                href="packages-4-{{ package.id }}.html"
+                                title="{{ package.date|format_date|capfirst }}">
+                                    {{ package.name }}-{{ package.version }} ({{ package.arch.name }})
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <a href="packages-1.html" class="next_link"><img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" /></a>
+            </div>
+            
+            <div id="index_block_stats">
+                <h3>{% trans "Statistiques" %}</h3>
+                
+                <ul>
+                    <li>
+                        <strong>{% trans "Utilisateurs enregistrés" %} :</strong>
+                        {{ stats.users }}
+                    </li>
+                    <li>
+                        <strong>{% trans "Dernier membre enregistré" %} :</strong>
+                        {{ stats.last_user|color_pseudo }}
+                    </li>
+                    <li>
+                        <strong>{% trans "Nombre de demandes" %} :</strong>
+                        {% blocktrans with stats.open_demands as open and stats.demands as demands %}
+                            {{ open }} ouvertes (sur {{ demands }})
+                        {% endblocktrans %}
+                    </li>
+                    <li>
+                        <strong>{% trans "Statistiques du forum" %} :</strong>
+                        {% blocktrans with stats.forums as forums and stats.topics as topics and stats.messages as messages %}
+                            {{ forums }} forums, {{ topics }} topics et {{ messages }} messages
+                        {% endblocktrans %}
+                    </li>
+                    {% comment %}<li>
+                        <strong>{% trans "Utilisateurs de Logram dans le monde" %} :</strong>
+                        11 243
+                    </li>{% endcomment %}
+                    <li>
+                        <strong>{% trans "Nombre de paquets dans la distribution" %} :</strong>
+                        {{ stats.packages }}
+                    </li>
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+    
+    {% if perms.news.change_news or perms.forum.view_alerts %}
+        <hr style="clear: both;" />
+        
+        <div id="index_blocks">
+            {% if perms.news.change_news %}
+                <div id="index_blocks_left">
+                    <div id="index_block_newstovalidate">
+                        <h3>{% trans "Nouvelles en attente de validation" %}</h3>
+                        
+                        <ul>
+                            {% for news in latest_validate_news %}
+                                <li>
+                                    <a 
+                                        href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html" 
+                                        title="{% blocktrans with news.author.uname as uname and news.date_published|format_date as dt %}par {{ uname }} {{ dt }}{% endblocktrans %}">
+                                            {{ news.title }}
+                                    </a>
+                                    <div class="index_block_header">
+                                        {{ news.intro }}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+            
+            {% if perms.forum.view_alerts %}
+                <div id="index_blocks_right">
+                    <div id="index_block_alerts">
+                        <h3>{% trans "Alertes aux modérateurs" %}</h3>
+                        
+                        <ul>
+                            {% for alert in moderator_alerts %}
+                                <li>
+                                    {% if alert.topic %}
+                                        <a href="forum-2-{{ alert.topic.id }}-0-{{ alert.topic.title|slugify }}.html">
+                                                {{ alert.topic.title }}
+                                        </a>
+                                        ({{ alert.author|color_pseudo }}, 
+                                         <a href="forum-14-{{ alert.id }}.html">Supprimer</a>)
+                                    {% else %}
+                                        <a href="pastebin-3-{{ alert.paste.uniqid }}.html">
+                                                {{ alert.paste.title }}
+                                        </a>
+                                        ({{ alert.author|color_pseudo }}, 
+                                        <a href="pastebin-8-{{ alert.id }}.html">Supprimer</a>)
+                                    {% endif %}
+                                    <div class="index_block_header">
+                                        {{ alert.comment }}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <div style="clear: both;"></div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% load general_tags %}
+
+{% block title %}Dépôt de sources{% endblock %}
+{% block Devcorner %}class="actif"{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="devcorner.html">{% trans "Le coin du développeur" %}</a> &raquo; 
+    <a href="pastebin-1.html">{% trans "Dépôt de sources" %}</a>
+{% endblock %}
+
+{% block menu %}
+    {% include "global/devcorner_menu.html" %}
+    
+    <h2>{% trans "Pastebin" %}</h2>
+    
+    <ul>
+        <li><a href="pastebin-1.html">{% trans "Derniers posts" %}</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="pastebin-9.html">{% trans "Mes posts" %}</a></li>
+        {% endif %}
+    </ul>
+    
+    <div class="separateur"></div>
+{% endblock %}

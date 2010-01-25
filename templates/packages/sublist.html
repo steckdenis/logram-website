@@ -1,0 +1,21 @@
+    <dl>
+        {% regroup pkgs by name as gpkgs %}
+
+        {% for pkg in gpkgs %}
+            <dt>
+                {{ pkg.grouper }}
+            </dt>
+            <dd>
+                <ul style="margin: 0px; list-style-image: none;">
+                    {% for spkg in pkg.list %}
+                        <li>
+                            <strong>{{ spkg.arch.name }}</strong>
+                            <a href="packages-4-{{ spkg.id }}.html">
+                                {{ spkg.name }}-{{ spkg.version }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        {% endfor %}
+    </dl>

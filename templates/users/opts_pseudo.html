@@ -1,0 +1,38 @@
+{% extends "users/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Changement de pseudo" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Changement de pseudo" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Changement de pseudo" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Votre <em>pseudonyme</em> vous identifie pour les autres utilisateurs. Il est courant d'en
+            utiliser sur Internet pour ne pas dévoiler sa véritable identité, ou pour s'en créer une deuxième.
+            <em>ptilou59*</em> a peut-être une réputation, alors que <em>Jean-Jackes Dumatin*</em> en a une autre.
+        {% endblocktrans %}
+    </p>
+    
+    <p style="font-size: 0.8em; text-align: right; font-style: italic;">
+        {% trans "* Toute ressemblance avec une personne réelle n'est que pure coincidence" %}
+    </p>
+    
+    <form action="user-5-2.html" method="post">
+        <fieldset>
+            <legend>{% trans "Pseudonyme" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Modifier mes informations" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

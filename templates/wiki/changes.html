@@ -1,0 +1,80 @@
+{% extends "wiki/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{{ page.title }} - {% trans "Historique" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% if not page.ignore_breadcrumb %}
+        <a href="wiki-{{ page.slug }}.{{ page.lang }}.html">
+                {{ page.title }}
+        </a>
+        &raquo;
+    {% endif %}
+    {% trans "Historique" %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ page.title }} - {% trans "Historique" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Voici la liste des changements faits sur cette page. Vous pouvez en profiter pour regarder
+            à quoi ressemblait une page à un moment donné. <strong>Attention</strong> tout de même, vérifiez
+            bien pour quelle raison elle a été modifiée ensuite (images choquantes insérées, textes ebscènes, virus, etc).
+        {% endblocktrans %}
+    </p>
+    
+    <table>
+        <tr>
+            <th style="width: 120px;">{% trans "Auteur" %}</th>
+            {% if global_changes %}
+                <th>{% trans "Page" %}</th>
+            {% endif %}
+            <th style="width: 150px;">{% trans "Date" %}</th>
+            <th>{% trans "Commentaire" %}</th>
+            <th style="width: 200px;">{% trans "Actions" %}</th>
+        </tr>
+        {% for change in changes %}
+            <tr>
+                <td style="text-align:center;">
+                    {% if change.author_user %}
+                        {{ change.author_user|color_pseudo }}
+                    {% else %}
+                        {{ change.author_ip }}
+                    {% endif %}
+                </td>
+                {% if global_changes %}
+                    <td style="text-align:center;">
+                        <a href="wiki-{{ change.page.slug }}.{{ change.page.lang }}.html">
+                            {{ change.page.title }}
+                        </a>
+                        ({{ change.page.lang}})
+                    </td>
+                {% endif %}
+                <td style="text-align:center;">
+                    {{ change.date|format_date }}
+                </td>
+                <td>
+                    {{ change.comment }}
+                </td>
+                <td style="text-align:center;">
+                    <a href="wiki-7-{{ change.id }}.html">{% trans "Page à cette date" %}</a>
+                    
+                    {% if perms.wiki.change_page %}
+                        &bull;
+                        <a href="wiki-8-{{ change.id }}.html">{% trans "Défaire" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    {% if list_pages %}
+        <div class="pagination">
+            {% for pg in list_pages %}
+                <a href="wiki-2-{{ pg }}.html">{{ pg }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

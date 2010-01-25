@@ -1,0 +1,11 @@
+{% extends "news/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Derniere nouvelles de Logram" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Derniere nouvelles de Logram" %}{% endblock %}
+
+{% block body %}
+    {{ Obj.description }}
+{% endblock %}

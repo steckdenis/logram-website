@@ -1,0 +1,61 @@
+Copyright
+=========
+
+----
+    Logram website is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+----
+
+Chaque fichier .py contient une en-tête de license. Les fichiers contenus 
+dans le dossier templates/ sont dans le domaine public.
+
+Les fichiers suivants sont sous Creative Commons Attribution-ShareAlike 3.0, 
+avec citation de «Oxygen icons http://www.oxygen-icons.org» :
+
+(ajoutez style/default/img devant chaque nom de fichier ne comportant pas de dossier)
+
+* bookmark.png
+* bullet.png
+* bullet_message.png
+* debookmark.png
+* demand_list_fr.png
+* demand_new_fr.png
+* demand_propose_fr.png
+* depublish.png
+* download.png
+* file.png
+* folder.png
+* go-up.png
+* group_*_*.png
+* last_post_read.png
+* lock.png
+* next.png
+* proposed_demand.png
+* publish.png
+* staff_group.xcf
+* upload.png
+* user_offline.png
+* user_online.png
+* style/icons/*.png
+
+Certains autres fichiers contiennt des morceaux de code sous d'autres licenses, 
+ou sont binaires et on une license particulière :
+
+* style/smilies/* : Domaine public. Logram remercie le Site du Zéro 
+  (http://www.siteduzero.com) et leur créateur Venom pour les placer sous 
+  cette licence
+
+* style/default/* : CC-by-sa Steven Le Rouzic. Ces fichiers n'incluent pas 
+  les fichiers cités plus haut, dans la liste des fichiers venant du projet 
+  Oxygen.
+
+* general/functions.py : contient une copie de la fonction slugify de Django, 
+  sous BSD
+
+* TTF/* : voir fichier LICENSE dans ce dossier
+
+Si vous êtes titulaire des droits sur un quelconque fichier dans ce dossier, 
+merci d'envoyer un mail à steckdenis@logram-project.org, en apportant la 
+preuve de ce que vous avancez.

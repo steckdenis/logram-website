@@ -1,0 +1,62 @@
+{% extends "wiki/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {{ page.title }} {% endblock %}
+
+{% block body %}
+    <h1>{{ page.title }}</h1>
+    
+    <ul id="wiki_links">
+        {% if not user.is_anonymous or not page.is_protected %}
+            <li><a href="wiki-3-{{ page.id }}-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Éditer" %}</a></li>
+            <li><a href="wiki-3-0-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Traduire" %}</a></li>
+        {% endif %}
+        <li><a href="wiki-4-{{ page.id }}.html">{% trans "Historique" %}</a></li>
+        
+        {% if perms.wiki.change_page %}
+            <li>
+                <a href="wiki-5-{{ page.id }}.html">
+                    {% if not page.is_protected %}
+                        {% trans "Protéger" %}
+                    {% else %}
+                        {% trans "Déprotéger" %}
+                    {% endif %}
+                </a>
+            </li>
+        {% endif %}
+        
+        {% if perms.wiki.private_page %}
+            <li>
+                <a href="wiki-6-{{ page.id }}.html">
+                    {% if not page.is_private %}
+                        {% trans "Rendre privée" %}
+                    {% else %}
+                        {% trans "Rendre publique" %}
+                    {% endif %}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    
+    <div id="forum_tools" style="margin-top: 0px;">
+        <strong>{% trans "Autres langues" %} :</strong>
+        {% for lang in langs %}
+            {% if not forloop.first %}
+                &bull;
+            {% endif %}
+            
+            {% ifnotequal lang.lang page.lang %}
+                <a href="wiki-{{ lang.slug }}.{{ lang.lang }}.html">{{ lang.lang }}</a>
+            {% else %}
+                {{ lang.lang }}
+            {% endifnotequal %}
+        {% endfor %}
+    </div>
+    
+    <div id="wiki_page">
+        {{ page.body|lcode }}
+    </div>
+{% endblock %}

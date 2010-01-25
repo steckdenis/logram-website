@@ -1,0 +1,53 @@
+{% extends "global/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "S'enregistrer" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "S'enregistrer" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "S'enregistrer" %}</h1>
+    
+    {% blocktrans %}
+        <p>
+            En vous enregistrant sur le site, vous bénéficierez de très nombreux avantages, tellement
+            qu'il est impossible de tous les lister :
+                
+            <ul>
+                <li>Droit de poster sur les forums</li>
+                <li>Accès en écriture à la documentation</li>
+                <li>Droit de poster et de gérer vos bugs et demandes</li>
+                <li>Personnalisation du site (changement de style, options, etc)</li>
+                <li>Espace de stockage en ligne, intégré à Logram, pour stocker vos fichiers à partager</li>
+                <li>Encore plein de choses (abonnement aux news, messagerie privée avec les membres, statistiques, etc)</li>
+            </ul>
+        </p>
+    {% endblocktrans %}
+    
+    <form action="register.html" method="post">
+        <fieldset>
+            <legend>{% trans "Enregistrement" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                    <li style="display: none;">
+                        <label for="test">{% trans "Laissez cette zone vide si vous êtes un humain" %}</label>
+                        <input type="text" id="test" name="test" />
+                    </li>
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "S'enregistrer" %}" /> {% trans "Une fois enregistré, il vous faut encore vous connecter" %}
+            </p>
+            
+            <p style="font-style: italic; font-size: 11px; color: #555; margin: 2px; line-height: 14px;">
+                {% blocktrans %}
+                    Note: une fois enregistré, vous pouvez encore modifier vos informations personnelles et changer
+                    de mot de passe. En validant ce formulaire, vous acceptez le <a href="wiki-reglement.html">Règlement de Logram</a>.
+                {% endblocktrans %}
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

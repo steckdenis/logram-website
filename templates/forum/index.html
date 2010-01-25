@@ -1,0 +1,85 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Les forums" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Les forums" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Les forums sont un endroit d'échange entre les utilisateurs. C'est ici que vous pouvez poser vos questions
+            ou répondre à d'autres membres. Pour maintenir une bonne ambiance, il y a quelques règles à respecter. Ce
+            sont celles que vous avez acceptées à votre enregistrement. Certains forums peuvent avoir un sujet
+            dédié à des règles. Vous devez les respecter en plus de celles décrites plus haut.
+        {% endblocktrans %}
+    </p>
+    
+    {% if not user.is_anonymous %}
+        <div id="forum_tools">
+            <strong>{% trans "Actions :" %}</strong>
+            
+            <a href="forum-7-0-1.html">{% trans "Sujets non-lus" %}</a> &bull;
+            <a href="forum-8-0-1.html">{% trans "Mes sujets" %}</a> &bull;
+            <a href="forum-9-0-1.html">{% trans "Sujets visités" %}</a> &bull;
+            <a href="forum-10-0-1.html">{% trans "Où j'ai posté" %}</a>
+        </div>
+    {% endif %}
+    
+    <table>
+        <tr>
+            <th style="width: 35px;"></th>
+            <th>{% trans "Forum" %}</th>
+            <th style="width: 100px;">{% trans "Sujets" %}</th>
+            <th style="width: 100px;">{% trans "Messages" %}</th>
+            <th style="width: 150px;">{% trans "Dernier message" %}</th>
+        </tr>
+        {% for cat in categories %}
+            <tr>
+                <td class="forum_category" colspan="5">
+                    <strong>{% trans cat.name %}</strong> : <span class="forum_subtitle">{% trans cat.description %}</span>
+                </td>
+            </tr>
+            
+            {# Explorer les forums de la catégorie #}
+            
+            {% for forum in forums %}
+                {% ifequal forum.category cat %}
+                    <tr>
+                        <td style="text-align: center;">
+                            {% if forum.read %}
+                                <img src="{{ style }}/img/forum_read.png" alt="{% trans "Lu" %}" />
+                            {% else %}
+                                <img src="{{ style }}/img/forum_unread.png" alt="{% trans "Non-lu" %}" />
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="forum-1-{{ forum.id }}-1-{{ forum.name|slugify }}.html">
+                                {% trans forum.name %}
+                            </a><br />
+                            <span class="forum_subtitle">{% trans forum.description %}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            {{ forum.num_topics }}
+                        </td>
+                        <td style="text-align: center;">
+                            {{ forum.num_posts }}
+                        </td>
+                        <td style="text-align: center;">
+                            {% if not forum.last_topic %}
+                                -
+                            {% else %}
+                                {% trans "Par" %} {{ forum.last_topic.last_post.author|color_pseudo }}<br />
+                                {{ forum.last_topic.last_post.date_created|format_date }}<br />
+                                {% trans "dans" %} <a href="forum-2-{{ forum.last_topic.id }}-{{ forum.last_topic.last_post_page }}-{{ forum.last_topic.title|slugify }}.html#r{{ forum.last_topic.last_post.id }}">
+                                    {{ forum.last_topic.title }}
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endifequal %}
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends "forum/viewtopic.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }}
+    <a href="demand-3-{{ demand.d_type_id }}-0-datec-1.html">
+        {% trans demand.d_type.name %}
+    </a>
+    &raquo;
+    {{ demand.title }}
+{% endblock %}
+
+{% block pagination %}
+    <div class="pagination">
+        {% for pg in list_pages %}
+            <a href="demand-5-{{ demand.id }}-{{ pg }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block embedded %}
+    <div id="demand_pane" style="border: 1px solid #{{ demand.d_type.color }};">
+        <div id="news_infos">
+            {{ demand.created_at|format_date|capfirst }}
+            {% trans "par" %} {{ demand.author|color_pseudo }},
+            <a href="#comments">{{ topic.num_posts }} {% trans "commentaires" %}</a>
+        </div>
+
+        <div id="demand_content_right">
+            <ul>
+                <li>
+                    <strong>{% trans "Mise à jour" %} :</strong>
+                    {% ifequal demand.created_at demand.updated_at %}
+                        -
+                    {% else %}
+                        {{ demand.updated_at|format_date }}
+                    {% endifequal %}
+                </li>
+                <li>
+                    <strong>{% trans "% Réalisé" %} :</strong>
+                    <div class="bar">
+                        <div class="bar_bar" style="width: {{ demand.done }}%;">
+                            {{ demand.done }}%
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    {% if demand.status.resolved %}
+                        <strong>{% trans "Note de réalisation" %} :</strong>
+                        {{ demand.work_rate }}
+                        {% if vote_allowed %}
+                            (<a href="demand-6-1-{{ demand.id }}.html">+</a>/<a href="demand-6-2-{{ demand.id }}.html">-</a>)
+                        {% endif %}
+                    {% endif %}
+                    {% if not demand.status.closed %}
+                        <strong>{% trans "Note" %} :</strong>
+                        {{ demand.demand_rate }}
+                        {% if vote_allowed %}
+                            (<a href="demand-6-3-{{ demand.id }}.html">+</a>/<a href="demand-6-4-{{ demand.id }}.html">-</a>)
+                        {% endif %}
+                    {% endif %}
+                    {% if demand.status.closed and not demand.status.resolved %}
+                        <em>{% trans "Demande fermée, vote désactivé" %}</em>
+                    {% endif %}
+                </li>
+                {% if not demand.is_bug %}
+                    <li>
+                        <strong>{% trans "Url du fichier" %} :</strong>
+                        {% if not demand.url %}
+                            -
+                        {% else %}
+                            <a href="{{ demand.url }}">{% trans "Télécharger" %}</a>
+                        {% endif %}
+                    </li>
+                {% else %}
+                    <li>
+                        <strong>{% trans "Url du bug upstream" %} :</strong>
+                        {% if not demand.upstream_url %}
+                            -
+                        {% else %}
+                            <a href="{{ demand.upstream_url }}">{% trans "Bug Upstream" %}</a>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div id="demand_content_left">
+            <ul>
+                <li>
+                    <strong>{% trans "Statut" %} :</strong>
+                    {% trans demand.status.name %}
+                </li>
+                <li>
+                    <strong>{% trans "Priorité" %} :</strong>
+                    <span
+                        title="{% trans demand.priority.description %}"
+                        style="color: rgb({{ demand.priority.red }}, 0, {{ demand.priority.blue }});">
+                            {% trans demand.priority.name %}
+                    </span>
+                </li>
+                <li>
+                    <strong>{% trans "Assigné à" %} :</strong>
+                    {% if demand.assigned_to %}
+                        {{ demand.assigned_to|color_pseudo }}, {{ demand.assigned_at|format_date }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </li>
+                <li>
+                    <strong>{% trans "Catégorie" %} :</strong>
+                    {% trans demand.category.name %}
+                </li>
+                <li>
+                    <strong>{% trans "Version cible" %} :</strong>
+                    Logram {{ demand.target_version.name }}
+                </li>
+            </ul>
+        </div>
+
+        <hr style="clear: right;" />
+
+        <div>
+            {{ demand.body|lcode }}
+        </div>
+
+        <h2>{% trans "Sous-demandes" %}</h2>
+        
+        {% ifnotequal child_len 0 %}
+            <ul>
+                {% for child in children_demands %}
+                    <li>
+                        <a href="demand-5-{{ child.id }}-1.html">
+                            {{ child.title }}
+                        </a>
+                        {% if perms.demands.change_demand %}
+                            (<a href="demand-9-1-{{ demand.id }}-{{ child.id }}.html">
+                                {% trans "Supprimer" %}
+                            </a>)
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <em>{% trans "Aucune sous-demande" %}</em>
+        {% endifnotequal %}
+
+        <h2>{% trans "Demandes liées" %}</h2>
+
+        {% ifnotequal rel_len 0 %}
+            <ul>
+                {% for rel in related_demands %}
+                    <li>
+                        <a href="demand-5-{{ rel.id }}-1.html">
+                            {{ rel.title }}
+                        </a>
+                        {% if perms.demands.change_demand %}
+                            (<a href="demand-9-2-{{ demand.id }}-{{ rel.id }}.html">
+                                {% trans "Supprimer" %}
+                            </a>)
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <em>{% trans "Aucune demande liée" %}</em>
+        {% endifnotequal %}
+
+        {% if can_edit or can_take or perms.demands.change_demand %}
+            <div style="text-align: right;">
+                {% if can_edit %}
+                    <a href="demand-2-3-{{ demand.id }}.html">{% trans "Éditer" %}</a>
+                {% endif %}
+                {% if can_take %}
+                    {% if can_edit %} &bull; {% endif %}
+                    <a href="demand-7-{{ demand.id }}.html">{% trans "Prendre" %}</a>
+                {% endif %}
+                {% if perms.demands.change_demand %}
+                    &bull;
+                    <a href="demand-8-1-{{ demand.id }}.html">{% trans "Ajouter une sous-demande" %}</a>
+                    &bull;
+                    <a href="demand-8-2-{{ demand.id }}.html">{% trans "Ajouter une demande liée" %}</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <h2 id="comments">{% trans "Commentaires" %}</h2>
+{% endblock %}

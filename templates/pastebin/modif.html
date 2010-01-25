@@ -1,0 +1,22 @@
+{% extends "pastebin/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="pastebin-3-{{ paste.uniqid }}.html">{{ title }}</a> &raquo;
+    {% trans "Modification" %}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {% blocktrans %}
+            Modification du post «{{ title }}»
+        {% endblocktrans %}
+    </h1>
+    
+    <script type="text/javascript" src="/style/lform.js"></script>
+    
+    <form action="pastebin-5-{{ paste.uniqid }}.html" method="post">
+        {% include "pastebin/edit_form.html" %}
+    </form>
+{% endblock %}

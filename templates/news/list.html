@@ -1,0 +1,90 @@
+{% extends "news/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {% if is_private %}
+        {% blocktrans %}Journaux de {{ user_name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Liste des nouvelles de Logram" %}
+    {% endif %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% if is_private %}
+        {% blocktrans %}Journaux de {{ user_name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Liste des nouvelles de Logram" %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {% if is_private %}
+            {% blocktrans %}Journaux de {{ user_name }}{% endblocktrans %}
+        {% else %}
+            {% trans "Liste des nouvelles de Logram" %}
+        {% endif %}
+    </h1>
+    
+    {% if not is_private %}
+        <p>
+            {% trans "Les catégories :" %}
+            
+            {% for c in cat_list %}
+                {% if not forloop.first %}
+                    &bull;
+                {% endif %}
+                
+                <a href="news-1-1-{{ c.id }}-0.html">
+                    {% ifequal cat_id c.id %}
+                        <strong>{% trans c.name %}</strong>
+                    {% else %}
+                        {% trans c.name %}
+                    {% endifequal %}
+                </a>
+            {% endfor %}
+            
+            &bull; <a href="news-1-1-0-0.html">
+                {% if not cat_id %}
+                    <strong>{% trans "Tout afficher" %}</strong>
+                {% else %}
+                    {% trans "Tout afficher" %}
+                {% endif %}
+            </a>
+        </p>
+    {% endif %}
+    
+    {% for news in news_list %}
+        <h3 class="news_index_title">
+            <a href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html">
+                {{ news.title }}
+            </a>
+        </h3>
+        
+        <div class="news_infos">
+            {{ news.date_published|format_date|capfirst }},
+            
+            {% if not is_private %}
+                {% trans "par" %} 
+                {{ news.author|color_pseudo }}
+                {% trans "dans" %} 
+                <a href="news-1-1-{{ news.category.id }}-0.html">{{ news.category.name }}</a>
+            {% else %}
+                {% blocktrans with news.date_modified|format_date as d %}
+                    modifié {{ d }}
+                {% endblocktrans %}
+            {% endif %}
+        </div>
+        
+        <div class="news_index_intro">
+            {{ news.intro }}
+        </div>
+    {% endfor %}
+    
+    <div class="pagination">
+        {% for pg in list_pages %}
+            <a href="news-1-{{ pg }}-{{ cat_id }}-{{ user_id }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}

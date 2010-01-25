@@ -1,0 +1,82 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Paquets" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; {% trans "Paquets" %} {% endblock %}
+
+{% block body %}
+    <h1>{% trans "Paquets" %}</h1>
+    
+    <p>
+        {% blocktrans %}
+            Voici la page qui vous permet de rechercher un paquet dans les différentes versions
+            de Logram. N'oubliez pas que vous n'avez normalement pas besoin de vous servir de cette
+            page, car les paquets sont installables dès que vous avez installé Logram, en suivant
+            la documentation <a href="wiki-install-package.html">Installer un paquet</a>. Si vous n'avez
+            pas encore Logram, <a href="downloads.html">Téléchargez-le</a>.
+        {% endblocktrans %}
+    </p>
+    
+    <h2>{% trans "Les distributions" %}</h2>
+    
+    <p>
+        {% blocktrans %}
+            Au lieu de rechercher un paquet spécifique, vous avez peut-être envie de prendre connaissance
+            de la liste de tous les paquets d'une distribution. Pour cela, la liste suivante contient
+            un lien vers les paquets de chaque version de la distribution, organisés en catégories
+        {% endblocktrans %}
+    </p>
+    
+    <ul>
+        {% for distro in distros %}
+            <li><a href="packages-2-{{ distro.id }}.html">Logram {{ distro.name }}</a></li>
+        {% endfor %}
+    </ul>
+    
+    <h2>{% trans "Recherche" %}</h2>
+    
+    <p>
+        {% blocktrans %}
+            Si vous connaissez plus ou moins le paquet que vous voulez, vous pouvez bien entendu le
+            rechercher. Ainsi, vous saurez dans quelle version il se trouve dans chaque distribution.
+        {% endblocktrans %}
+    </p>
+    
+    <form action="packages-5.html" method="post">
+        <fieldset>
+            <legend>{% trans "Rechercher un paquet" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    <li>
+                        <label for="q">{% trans "Rechercher" %} :</label>
+                        <input type="text" name="q" id="q" />
+                    </li>
+                    <li>
+                        <label for="method">{% trans "Type de recherche" %} :</label>
+                        <select name="method" id="method">
+                            <option value="match">{% trans "Nom exact du paquet" %}</option>
+                            <option value="contains">{% trans "Est contenu dans le nom" %}</option>
+                            <option value="starts">{% trans "Début du nom" %}</option>
+                            <option value="ends">{% trans "Fin du nom" %}</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="distro">{% trans "Rechercher dans la version" %} :</label>
+                        <select name="distro" id="distro">
+                            <option value="all">{% trans "Toutes" %}</option>
+                            {% for distro in distros %}
+                                <option value="{{ distro.id }}">Logram {{ distro.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Rechercher" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}
