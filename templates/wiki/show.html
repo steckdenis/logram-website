@@ -10,7 +10,7 @@
     <h1>{{ page.title }}</h1>
     
     <ul id="wiki_links">
-        {% if not user.is_anonymous or not page.is_protected %}
+        {% if not user.is_anonymous %}
             <li><a href="wiki-3-{{ page.id }}-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Éditer" %}</a></li>
             <li><a href="wiki-3-0-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Traduire" %}</a></li>
         {% endif %}

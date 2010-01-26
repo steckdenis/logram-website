@@ -91,6 +91,7 @@ def viewpagelang(request, slug, lang):
          'in_discover': slug.startswith('discover'),
          'langs': langs}, request)
 
+@login_required
 def edit(request, page_id, identifier, slug):
     # Créer une nouvelle page
     page_id = int(page_id)
@@ -235,7 +236,7 @@ def randompage(request):
     
     # 1. Prendre une page
     pages = Page.objects \
-        .filter(lang=request.LANGUAGE_CODE.split('_')[0], is_private=False) \
+        .filter(lang=request.LANGUAGE_CODE.split('-')[0], is_private=False) \
         .order_by('?')
     
     page = pages[0]
@@ -334,7 +335,7 @@ def cancelchange(request, change_id):
     
     # 3. Créer un autre changement pour cette page
     nchange = LogEntry(page=page, 
-        comment=_('Retour en arrière : %s') % change.date.strftime('%d/%m/%Y %H/%M/%S'),
+        comment=_('Retour en arrière : %s') % change.date.strftime('%d/%m/%Y %H:%M:%S'),
         body=previous_body,
         author_user=request.user.get_profile())
     
