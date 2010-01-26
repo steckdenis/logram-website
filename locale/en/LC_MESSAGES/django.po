@@ -9,7 +9,7 @@ msgstr ""
 "POT-Creation-Date: 2010-01-16 22:25+0100\n"
 "PO-Revision-Date: 2010-01-16 23:00+0100\n"
 "Last-Translator: Denis Steckelmacher <steckdenis@logram-project.org>\n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language-Team: American English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1799,12 +1799,12 @@ msgstr "Post “%s” successfully modified"
 #: templates/demands/add_child.html:7 templates/demands/add_child.html:16
 #: templates/demands/add_child.html:26 templates/demands/view.html:180
 msgid "Ajouter une sous-demande"
-msgstr "Add a sub-request"
+msgstr "Add a sub-demand"
 
 #: templates/demands/add_child.html:9 templates/demands/add_child.html:18
 #: templates/demands/add_child.html:28 templates/demands/view.html:182
 msgid "Ajouter une demande liée"
-msgstr "Add a related request"
+msgstr "Add a related demand"
 
 #: templates/demands/add_child.html:33
 #, python-format
@@ -1838,25 +1838,25 @@ msgid ""
 msgstr ""
 "\n"
 "            <p>\n"
-"               Here is the form that enables you to add a sub-request to the "
-"request «%(d)s».\n"
+"               Here is the form that enables you to add a sub-demand to the "
+"demand «%(d)s».\n"
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               A sub-request is a request that has to be finished for its "
-"parent request \n"
-"                («%(d)s» ici) to be realized.A request can have several sub-"
-"requests, as well as a sub-\n"
-"               request can have several parent requests.\n"
+"               A sub-demand is a demand that has to be finished for its "
+"parent demand\n"
+"                («%(d)s» here) to be realized. A demand can have several sub-"
+"demands, as well as a sub-\n"
+"               demands can have several parent demands.\n"
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               To propose a list of sub-requests here would be impossible."
-"Indeed, altogether, the\n"
-"            the requests are very numerous. It's thus directly "
-"the<em>identificator</em> that is t\n"
-"                required.To obtain it, go to the page that displays the "
-"desired request,and look at the \n"
+"               A list of sub-demands here would be impossible. "
+"Indeed, altogether,\n"
+"            the demands are very numerous. It's thus directly "
+"the<em>identificator</em> that is\n"
+"                required. To obtain it, go to the page that displays the "
+"desired demand, and look at the \n"
 "                url. It looks like this «demand-5-<strong>identificator</"
 "strong>-page.html». You've found\n"
 "                the identificator!\n"
@@ -1897,27 +1897,27 @@ msgid ""
 msgstr ""
 "\n"
 "            <p>\n"
-"                 Here is the form that enables you to add a linked-request "
-"to the request «%(d)s».\n"
+"                 Here is the form that enables you to add a linked-demand "
+"to the demand «%(d)s».\n"
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               A linked-request is a request that is related to another "
-"request («%(d)s» ici).\n"
-"                A request can have several linked-requests, which can "
-"themselves have linked-requests, and so on.\n"
-"                The link can be reciprocal. If the request A is linked to "
-"the request B, B B will appear\n"
+"               A linked-demand is a demand that is related to another "
+"demand («%(d)s» here).\n"
+"                A demand can have several linked-demands, which can "
+"themselves have linked-demands, and so on.\n"
+"                The link can be reciprocal. If the demand A is linked to "
+"the demand B, B will appear\n"
 "                as being also linked to A.\n"
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               To propose a list of linked-requests here would be "
+"               A list of linked-demands here would be "
 "impossible. Indeed, altogether, the\n"
-"            the requests are very numerous. It's thus directly "
-"the<em>identificator</em> that is t\n"
-"                required.To obtain it, go to the page that displays the "
-"desired request,and look at the \n"
+"            the demands are very numerous. It's thus directly "
+"the<em>identificator</em> that is\n"
+"                required. To obtain it, go to the page that displays the "
+"desired demand,and look at the \n"
 "                url. It looks like this «demand-5-<strong>identificator</"
 "strong>-page.html». You've found\n"
 "                the identificator!\n"
@@ -1926,7 +1926,7 @@ msgstr ""
 
 #: templates/demands/add_child.html:77
 msgid "Ajouter une demande"
-msgstr "Add a request"
+msgstr "Add a demand"
 
 #: templates/demands/add_child.html:82
 msgid "ID de la demande"
@@ -1935,12 +1935,12 @@ msgstr "Request's ID"
 #: templates/demands/edit.html:7 templates/demands/edit.html.py:15
 #: templates/demands/edit.html:24
 msgid "Éditer une demande"
-msgstr "Edit a request"
+msgstr "Edit a demand"
 
 #: templates/demands/edit.html:9 templates/demands/edit.html.py:17
 #: templates/demands/edit.html:26
 msgid "Nouvelle demande"
-msgstr "New request"
+msgstr "New demand"
 
 #: templates/demands/edit.html:32
 msgid ""
@@ -1954,9 +1954,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Here is the page that enables you to post a new request . "
+"                Here is the page that enables you to post a new demand . "
 "Don't forget\n"
-"                to give the largest amount of information in the request's "
+"                to give the largest amount of information in the demand's "
 "body,\n"
 "                with the best accuracy.\n"
 "                Logram's team thanks you for your participation.\n"
@@ -1972,13 +1972,13 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Here is the request's editing page«%(d)s».Here, you can\n"
-"                change different aspects of the request.\n"
+"                Here is the “%(d)s” demand's editing page. Here, you can\n"
+"                change different aspects of the demand.\n"
 "            "
 
 #: templates/demands/edit.html:60
 msgid "Édition d'une demande"
-msgstr "Editing of a request"
+msgstr "Editing of a demand"
 
 #: templates/demands/edit.html:98 templates/demands/list.html:87
 #: templates/demands/list.html.py:90 templates/demands/view.html:91
@@ -1992,7 +1992,7 @@ msgstr "% of progress"
 
 #: templates/demands/edit.html:128
 msgid "pris en compte uniquement si la demande n'a pas de sous-demandes"
-msgstr "taken into account only if the request has no sub-requests"
+msgstr "taken into account only if the demand has no sub-demands"
 
 #: templates/demands/edit.html:133
 msgid "Pièce jointe"
@@ -2037,7 +2037,7 @@ msgid ""
 msgstr ""
 "\n"
 "        <p>\n"
-"            Requests enable you to communicate in an organized manner with "
+"            Demands enable you to communicate in an organized manner with "
 "Logram's developers.\n"
 "           It's trhough them taht you will propose your ideas, add your "
 "contributions,\n"
@@ -2046,28 +2046,28 @@ msgstr ""
 "        </p>\n"
 "\n"
 "         <p>\n"
-"           Logram's request system is extremely powerful, allows you to do "
+"           Logram's demands system is extremely powerful, allows you to do "
 "many\n"
 "           things. It's here that all the project's life and organisation "
-"unfold. You can\n"
+"unfolds. You can\n"
 "            contribute in several ways :\n"
 "\n"
 "            <ul>\n"
 "                <li>By reporting bugs, or by sharing your images and files "
 "related to Logram</li>\n"
-"                <li>By realizing other's reaquests (if you're a graphist, a "
+"                <li>By realizing other's demands (if you're a graphist, a "
 "packager, a developer, etc)</li>\n"
 "                <li>When you've realised a good amount of work, you will be "
 "able to join Logram's team</li>\n"
-"                <li>By grading requests (those you like, that are well-done, "
-"etc).Thus, developers really know what interest you.</li>\n"
+"                <li>By grading demands (those you like, or are well-done, "
+"etc). Thus, developers really know in what you are interested.</li>\n"
 "            </ul>\n"
 "        </p>\n"
 "    "
 
 #: templates/demands/index.html:30
 msgid "Types de demandes"
-msgstr "Request type"
+msgstr "Demand types"
 
 #: templates/demands/index.html:33
 msgid ""
@@ -2084,13 +2084,13 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Here are the various <em>request types</em>. Indeed, requests "
+"            Here are the various <em>demand types</em>. Indeed, demands "
 "are sorted\n"
-"           by type (bugs, artworks, packets, patchs, etc).For each type, you "
+"           by type (bugs, artworks, packages, patchs, etc). For each type, you "
 "can ask\n"
 "            something, or suggest something (exept for bugs, that you "
 "cannot\n"
-"            suggest). If you found an exploit or a fault, submit a patch, or "
+"            suggest). If you found a fault, submit a patch, or "
 "a bug if you have\n"
 "           no idea of how to fix it.\n"
 "        "
@@ -2124,19 +2124,19 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Here is the page that populates the requests of type <strong>%(t)"
+"            Here is the page listing the demands of type <strong>%(t)"
 "s</strong>.This page\n"
-"            is designed to be powerful: you can filter and sort requests as "
+"            is designed to be powerful: you can filter and sort demands as "
 "you wish. \n"
 "        "
 
 #: templates/demands/list.html:23
 msgid "Afficher uniquement les demandes"
-msgstr "Display only the requests"
+msgstr "Display only the demands"
 
 #: templates/demands/list.html:118
 msgid "Demande proposée"
-msgstr "Suggested request"
+msgstr "Suggested demand"
 
 #: templates/demands/view.html:25 templates/forum/viewtopic.html:161
 #: templates/global/index.html:84 templates/global/index.html.py:102
@@ -2168,7 +2168,7 @@ msgstr "Note"
 
 #: templates/demands/view.html:63
 msgid "Demande fermée, vote désactivé"
-msgstr "Request locked, vote disabled"
+msgstr "Demand locked, vote disabled"
 
 #: templates/demands/view.html:68
 msgid "Url du fichier"
@@ -2181,7 +2181,7 @@ msgstr "Download"
 
 #: templates/demands/view.html:77
 msgid "Url du bug upstream"
-msgstr "Upstream bug 's URL"
+msgstr "Upstream bug's URL"
 
 #: templates/demands/view.html:81
 msgid "Bug Upstream"
@@ -2189,7 +2189,7 @@ msgstr "Upstream Bug"
 
 #: templates/demands/view.html:103
 msgid "Assigné à"
-msgstr "Assgnied to"
+msgstr "Assigned to"
 
 #: templates/demands/view.html:138 templates/demands/view.html.py:159
 #: templates/news/my.html:69 templates/news/my.html.py:126
@@ -2199,11 +2199,11 @@ msgstr "Delete"
 
 #: templates/demands/view.html:145
 msgid "Aucune sous-demande"
-msgstr "No sub-request"
+msgstr "No sub-demands"
 
 #: templates/demands/view.html:166
 msgid "Aucune demande liée"
-msgstr "No linked-request"
+msgstr "No linked-demands"
 
 #: templates/demands/view.html:172 templates/forum/viewtopic.html:117
 #: templates/forum/viewtopic.html.py:121 templates/mp/view.html:50
@@ -2233,7 +2233,7 @@ msgstr "Lastest journals"
 
 #: templates/feeds/index.html:11 templates/global/index.html:126
 msgid "Dernières demandes"
-msgstr "Latest requests"
+msgstr "Latest demands"
 
 #: templates/feeds/index.html:12 templates/global/index.html:77
 msgid "Derniers messages du forum"
@@ -2245,7 +2245,7 @@ msgstr "Latest Wiki created"
 
 #: templates/feeds/index.html:14
 msgid "Derniers paquets disponibles"
-msgstr "Lastest packets available"
+msgstr "Lastest packages available"
 
 #: templates/feeds/latestask_description.html:3
 #: templates/feeds/latestjournal_description.html:3
@@ -2268,7 +2268,7 @@ msgstr "Upstream version"
 #: templates/feeds/latestpackages_description.html:20
 #: templates/packages/view.html:48
 msgid "Paquet propre à Logram"
-msgstr "Logram-owned packet"
+msgstr "Logram-owned package"
 
 #: templates/feeds/latestpackages_description.html:24
 #: templates/packages/view.html:52
@@ -2283,7 +2283,7 @@ msgstr "Size of installed files"
 #: templates/feeds/latestpackages_description.html:36
 #: templates/packages/view.html:64
 msgid "Mainteneur du paquet (à contacter en cas de défaillance)"
-msgstr "Upkeeper of the packet (contact in case of failure)"
+msgstr "Maintainer of the package (contact in case of failure)"
 
 #: templates/forum/addpoll.html:5
 #, python-format
@@ -3013,7 +3013,7 @@ msgstr "Poll running"
 
 #: templates/global/index.html:164 templates/packages/index.html:77
 msgid "Derniers paquets"
-msgstr "Last packets"
+msgstr "Last packages"
 
 #: templates/global/index.html:182
 msgid "Statistiques"
@@ -3029,7 +3029,7 @@ msgstr "Last members registered"
 
 #: templates/global/index.html:194
 msgid "Nombre de demandes"
-msgstr "Number of requests"
+msgstr "Number of demands"
 
 #: templates/global/index.html:195
 #, python-format
@@ -3065,7 +3065,7 @@ msgstr "Worldwide Logram users"
 
 #: templates/global/index.html:210
 msgid "Nombre de paquets dans la distribution"
-msgstr "Number of packets in this distribution"
+msgstr "Number of packages in the distribution"
 
 #: templates/global/index.html:226
 msgid "Nouvelles en attente de validation"
@@ -3203,7 +3203,7 @@ msgstr ""
 "            <ul>\n"
 "                <li>Right to post on the forums</li>\n"
 "                <li>Writing acces to the documentation</li>\n"
-"                <li>Right to post and manage your bugs and requests</li>\n"
+"                <li>Right to post and manage your bugs and demands</li>\n"
 "                <li>Customization of the website (possibility to change your "
 "style, options, etc)</li>\n"
 "                <li>Uploading space online, included in Logram, to store "
@@ -3570,7 +3570,7 @@ msgstr "In case of refusal, reason"
 
 #: templates/packages/base.html:12
 msgid "Les paquets"
-msgstr "The packets"
+msgstr "The packages"
 
 #: templates/packages/files.html:5 templates/packages/files.html.py:7
 #: templates/packages/files.html:10
@@ -3610,10 +3610,10 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Instead of seeking for a precise packet, you maybe prefer to see "
-"some of the packet list\n"
-"            of a distribution.In order to do that, the following list "
-"contains a link to all packets of each\n"
+"            Instead of seeking for a precise package, you maybe prefer to see "
+"some of the package list\n"
+"            of a distribution. In order to do that, the following list "
+"contains a link to all packages of each\n"
 "            versions of a distribution, arranged in categories\n"
 "        "
 
@@ -3633,7 +3633,7 @@ msgstr ""
 
 #: templates/packages/home.html:48
 msgid "Rechercher un paquet"
-msgstr "Search a packet"
+msgstr "Search a package"
 
 #: templates/packages/home.html:53 templates/packages/home.html.py:78
 msgid "Rechercher"
@@ -3645,7 +3645,7 @@ msgstr "Search type"
 
 #: templates/packages/home.html:59
 msgid "Nom exact du paquet"
-msgstr "Exact name of the packet"
+msgstr "Exact name of the package"
 
 #: templates/packages/home.html:60
 msgid "Est contenu dans le nom"
@@ -3746,7 +3746,7 @@ msgstr "Date"
 
 #: templates/packages/list.html:8
 msgid "Paquets de Logram"
-msgstr "Logram's packets"
+msgstr "Logram's packages"
 
 #: templates/packages/list.html:10 templates/packages/list.html.py:23
 msgid "dans la section"
@@ -3754,7 +3754,7 @@ msgstr "in the section"
 
 #: templates/packages/list.html:21
 msgid "Paquet de Logram"
-msgstr "Logram's packets"
+msgstr "Logram's package"
 
 #: templates/packages/list.html:43
 #, python-format
@@ -3844,7 +3844,7 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Here is the page of the packet %(pkg)s-%(ver)s. You will find "
+"            Here is the page of the package %(pkg)s-%(ver)s. You will find "
 "all links to download it,\n"
 "            information on its dependancies, on its versions in the various "
 "distributions, etc. \n"
@@ -4636,7 +4636,7 @@ msgstr "Files used on the documentation pages"
 
 #: upload/models.py:32
 msgid "Fichiers utilisés avec les demandes"
-msgstr "Files used with this request"
+msgstr "Files used with this demand"
 
 #: upload/models.py:38
 msgid "Quota (octets)"

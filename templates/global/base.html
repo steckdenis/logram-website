@@ -100,7 +100,7 @@
                             <p style="text-align: center;">
                                 <select name="language">
                                     {% for lang in LANGUAGES %}
-                                        <option value="{{ lang.0 }}">{{ lang.1 }}</option>
+                                        <option value="{{ lang.0 }}">{% trans lang.1 %}</option>
                                     {% endfor %}
                                 </select>
                                 
