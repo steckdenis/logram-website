@@ -81,6 +81,7 @@ def index(request):
     
     if Poll.objects.count() != 0:
         latest_poll = Poll.objects \
+            .select_related('topic') \
             .order_by('-pub_date')[0]
             
         mpoll = get_poll(request, latest_poll)

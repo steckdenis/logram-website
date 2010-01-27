@@ -2,7 +2,13 @@
 
 <p class="poll_question">
     <img src="{{ style }}/img/question.png" alt="" />
-    {{ poll.question }}
+    {% if not topic %}
+        <a href="forum-2-{{ poll.object.topic_id }}-1-{{ poll.object.topic.title|slugify }}.html">
+            {{ poll.question }}
+        </a>
+    {% else %}
+        {{ poll.question }}
+    {% endif %}
 </p>
                     
 <form action="forum-16-{{ poll.id }}.html" method="post">

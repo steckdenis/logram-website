@@ -382,5 +382,6 @@ def get_poll(request, poll):
     rs['id'] = poll.id
     rs['can_vote'] = poll_can_vote
     rs['total'] = poll_total
+    rs['object'] = poll
     
     return rs

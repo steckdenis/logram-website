@@ -713,7 +713,7 @@ def addpoll(request, topic_id):
                     choices.append(c.strip())
             
             # Créer le sondage
-            poll = Poll(question=question)
+            poll = Poll(question=question, topic=topic)
             poll.save()
             
             # Créer les choix

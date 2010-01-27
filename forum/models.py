@@ -60,6 +60,7 @@ class Forum(models.Model):
 class Poll(models.Model):
     question = models.CharField(_('Question'), max_length=200)
     pub_date = models.DateTimeField(_('Date de publication'), auto_now=True)
+    topic = models.ForeignKey('Topic', verbose_name=_('Sujet'), related_name='polls')
     
     def __unicode__(self):
         return self.question
@@ -100,7 +101,7 @@ class Topic(models.Model):
     closed = models.BooleanField(_('Fermé'))
     resolved = models.BooleanField(_('Résolu'))
     
-    poll = models.ForeignKey(Poll, verbose_name=_('Sondage lié'), blank=True, null=True)
+    poll = models.ForeignKey(Poll, verbose_name=_('Sondage lié'), blank=True, null=True, related_name='tp')
     
     def __unicode__(self):
         return self.title
