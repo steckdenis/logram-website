@@ -53,6 +53,12 @@
             {{ package.logram_version }}
         </li>
         <li>
+            <strong>{% trans "Historique de modifications" %} :</strong>
+            <a href="packages-8-{{ package.id }}.html">
+                {% trans "Voir" %}
+            </a>
+        </li>
+        <li>
             <strong>{% trans "Taille du téléchargement" %} :</strong>
             {{ package.download_size|filesizeformat }}
         </li>

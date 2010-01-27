@@ -45,9 +45,6 @@ def view(request, user_id):
         paste = Pastebin.objects.filter(author=user_id).order_by('-created')[:1]
     except Pastebin.DoesNotExist:
         raise Http404
-
-    # Protection de l'adresse e-mail : mettre plein de spans
-    usr.user.email = ''.join(['<span>%c</span>' % c for c in usr.user.email])
     
     if paste:
         ok = True

@@ -36,20 +36,20 @@ from django.utils.encoding import smart_unicode, smart_str
 
 import os
 
-def string_of_package(package, language, type, strs):
+def string_of_package(package, language, type, strs, changelog):
     # Retourner la chaîne correspondant, ou en créer une nouvelle si elle n'existe pas
 
     for str in strs:
-        if str.type == type and str.language == language:
+        if str.type == type and str.language == language and str.changelog == changelog:
             return str
 
     # On n'a pas trouvé
-    str = String(language=language, package=package, type=type)
+    str = String(language=language, package=package, type=type, changelog=changelog)
 
     return str
 
-def str_of_package(package, language, type, strs):
-    rs = string_of_package(package, language, type, strs)
+def str_of_package(package, language, type, strs, changelog):
+    rs = string_of_package(package, language, type, strs, changelog)
 
     if rs.id == None and language != package.primarylang:
         rs = str_of_package(package, package.primarylang, type, strs)
@@ -228,9 +228,9 @@ def showpackage(request, package_id):
     # 4. Prendre les chaînes du paquet
     strings = String.objects.filter(package=package)
 
-    package.title = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 0, strings).content
-    package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings).content
-    package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings).content
+    package.title = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 0, strings, 0).content
+    package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, 0).content
+    package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, 0).content
     
     # 5. Rendre la template
     return tpl('packages/view.html', 
@@ -277,3 +277,26 @@ def viewfiles(request, package_id):
         {'files': files,
          'pkg': package.name + '-' + package.version + ' (' + package.arch.name + ')'}, request)
 
+def changelog(request, package_id):
+    # Afficher les changements d'un paquet
+    package_id = int(package_id)
+    
+    # 1. Récupérer le paquet
+    package = get_object_or_404(Package, pk=package_id)
+    
+    # 2. Récupérer les éléments de changelog de ce paquet
+    entries = ChangeLog.objects \
+                .filter(package=package_id) \
+                .select_related('distribution') \
+                .order_by('-date')
+                
+    # 3. Pour chaque entrée, récupérer la chaîne traduite
+    strings = String.objects.filter(package=package)
+    
+    for entry in entries:
+        entry.content = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 3, strings, entry).content
+        
+    # 4. Afficher dans la template
+    return tpl('packages/changelog.html',
+        {'package': package,
+         'entries': entries}, request)

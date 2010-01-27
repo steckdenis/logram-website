@@ -1,0 +1,52 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {% blocktrans with package.name|capfirst as pkg %}
+        Changements de {{ pkg }}
+    {% endblocktrans %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="packages-4-{{ package.id }}.html">
+        {{ package.name|capfirst }} {% trans "dans" %} Logram {{ package.distribution.name }}
+    </a>
+    &raquo;
+    {% trans "Changements" %}
+{% endblock %}
+    
+{% block body %}
+    <h1>
+        {% blocktrans with package.name|capfirst as pkg %}
+            Changements de {{ pkg }}
+        {% endblocktrans %}
+    </h1>
+    
+    <p>
+        {% blocktrans with package.name as pkg and package.version as ver %}
+            Voici la liste des changements apportés au paquet <strong>{{ pkg }}</strong> 
+            à la version <strong>{{ ver }}</strong>. Ces changements peuvent être propres
+            à Logram où venir de l'application empaquetée elle-même. Une description sommaire
+            du changement est disponible.
+        {% endblocktrans %}
+    </p>
+
+    {% for entry in entries %}
+        <h3 class="news_index_title">
+            {% blocktrans with package.name|capfirst as pkg and entry.version as ver %}
+                {{ pkg }} à la version {{ ver }}
+            {% endblocktrans %}
+        </h3>
+        
+        <div class="news_infos">
+            {% blocktrans with entry.distribution as distro and entry.email|obfuscate:entry.author as author and entry.date|format_date as date and entry.tt as type %}
+                par {{ author }} dans Logram {{ distro }} {{ date }}, <strong>{{ type }}</strong>
+            {% endblocktrans %}
+        </div>
+        
+        <div class="news_index_intro">
+            {{ entry.content|lcode }}
+        </div>
+    {% endfor %}
+{% endblock %}

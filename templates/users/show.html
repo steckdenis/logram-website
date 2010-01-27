@@ -61,7 +61,7 @@
                 {% if not profile.show_email %}
                     <em>{% trans "Ne souhaite pas la rendre publique" %}</em>
                 {% else %}
-                    {{ profile.user.email|safe }}
+                    {{ profile.user.email|obfuscate }}
                 {% endif %}
                 
                 <h4>{% trans "Signature" %}</h4>

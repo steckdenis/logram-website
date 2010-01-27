@@ -32,6 +32,7 @@ urlpatterns = patterns('pyv4.packages.views',
     (r'^4-(?P<package_id>\d+)\.html$', 'showpackage'),
     (r'^6-(?P<package_id>\d+)\.html$', 'viewmirrors'),
     (r'^7-(?P<package_id>\d+)\.html$', 'viewfiles'),
+    (r'^8-(?P<package_id>\d+)\.html$', 'changelog'),
     
     (r'^5\.html$', 'search'),
 )

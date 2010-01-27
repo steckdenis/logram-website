@@ -38,6 +38,14 @@ STRING_TYPE = (
     (0, _('Titre')),
     (1, _('Description courte')),
     (2, _('Description longue')),
+    (3, _('Entrée de changelog')),
+)
+
+CHANGELOG_TYPE = (
+    (1, _('Faible priorité')),
+    (2, _('Fonctionnalité')),
+    (3, _('Correction de bogue')),
+    (4, _('Correction de sécurité')),
 )
 
 class Section(models.Model):
@@ -133,8 +141,30 @@ class Package(models.Model):
         verbose_name = _('Paquet')
         verbose_name_plural = _('Paquets')
 
+class ChangeLog(models.Model):
+    version = models.CharField(_('Version'), max_length=64)
+    distribution = models.ForeignKey(Distribution, verbose_name=_('Distribution'))
+    package = models.ForeignKey(Package, verbose_name=_('Paquet'))
+    email = models.CharField(_('Email'), max_length=200)
+    author = models.CharField(_('Auteur'), max_length=200)
+    type = models.IntegerField(_('Type'), choices=CHANGELOG_TYPE)
+    date = models.DateTimeField(_('Date'))
+    
+    def __unicode__(self):
+        return self.version + ' ' + self.author + ' <' + self.email + '>'
+        
+    def tt(self):
+        for t in CHANGELOG_TYPE:
+            if t[0] == self.type:
+                return t[1]
+        
+    class Meta:
+        verbose_name = _('ChangeLog')
+        verbose_name_plural = _('ChangeLogs')
+
 class String(models.Model):
     package = models.ForeignKey(Package, verbose_name=_('Paquet'))
+    changelog = models.ForeignKey(ChangeLog, verbose_name=_('ChangeLog'), blank=True, null=True)
     language = models.CharField(_('Code ISO de langue'), max_length=2)
     type = models.IntegerField(_('Type'), choices=STRING_TYPE)
     content = models.TextField(_('Contenu'))
