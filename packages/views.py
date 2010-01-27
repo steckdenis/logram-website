@@ -40,8 +40,11 @@ def string_of_package(package, language, type, strs, changelog):
     # Retourner la chaîne correspondant, ou en créer une nouvelle si elle n'existe pas
 
     for str in strs:
-        if str.type == type and str.language == language and str.changelog == changelog:
-            return str
+        if str.type == type and str.language == language:
+            if str.type == 3 and str.changelog == changelog:
+                return str
+            elif str.type != 3:
+                return str
 
     # On n'a pas trouvé
     str = String(language=language, package=package, type=type, changelog=changelog)
