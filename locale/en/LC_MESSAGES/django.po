@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-16 22:25+0100\n"
-"PO-Revision-Date: 2010-01-16 23:00+0100\n"
+"POT-Creation-Date: 2010-01-31 10:03+0100\n"
+"PO-Revision-Date: 2010-01-31 10:00+0100\n"
 "Last-Translator: Denis Steckelmacher <steckdenis@logram-project.org>\n"
-"Language-Team: American English\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,26 +21,21 @@ msgstr ""
 msgid "Français"
 msgstr "French"
 
-#: settings.py:15
-msgid "English"
-msgstr "English"
-
-#: settings.sample.py:15
-msgid "Anglais"
-msgstr "English"
+#: settings.py:15 settings.sample.py:15
+msgid "Anglais (beta)"
+msgstr "English (beta)"
 
 #: demands/models.py:34 demands/models.py:52 demands/models.py:66
 #: demands/models.py:78 forum/models.py:32 general/models.py:62
-#: news/models.py:33 packages/models.py:46 packages/models.py:57
-#: packages/models.py:77 packages/models.py:161 packages/models.py:174
-#: packages/models.py:194 templates/websvn/showdir.html:40 upload/models.py:37
-#: upload/models.py:60
+#: news/models.py:33 packages/models.py:54 packages/models.py:65
+#: packages/models.py:85 packages/models.py:191 packages/models.py:204
+#: packages/models.py:224 upload/models.py:37 upload/models.py:60
 msgid "Nom"
 msgstr "Name"
 
 #: demands/models.py:35 demands/models.py:53 demands/models.py:67
 #: demands/models.py:79 forum/models.py:33 news/models.py:34
-#: packages/models.py:162 packages/models.py:175
+#: packages/models.py:192 packages/models.py:205
 #: templates/packages/index.html:36
 msgid "Description"
 msgstr "Description"
@@ -69,7 +64,8 @@ msgstr "The user can post a demand"
 msgid "Cette demande est un bug"
 msgstr "This demand is a bug"
 
-#: demands/models.py:48 packages/models.py:139 templates/global/search.html:22
+#: demands/models.py:48 packages/models.py:150 packages/models.py:169
+#: templates/global/search.html:22
 msgid "Type"
 msgstr "Type"
 
@@ -98,12 +94,12 @@ msgid "Type de demande dedans"
 msgstr "Type of the demands into"
 
 #: demands/models.py:74 forum/models.py:39 news/models.py:40
-#: packages/models.py:170 packages/models.py:176
+#: packages/models.py:200 packages/models.py:206
 msgid "Categorie"
 msgstr "Category"
 
 #: demands/models.py:75 forum/models.py:40 news/models.py:41
-#: packages/models.py:171
+#: packages/models.py:201
 msgid "Categories"
 msgstr "Categories"
 
@@ -119,7 +115,7 @@ msgstr "Priority"
 msgid "Priorites"
 msgstr "Priorities"
 
-#: demands/models.py:106 forum/models.py:92 mp/forms.py:27 mp/models.py:45
+#: demands/models.py:106 forum/models.py:93 mp/forms.py:27 mp/models.py:45
 #: news/forms.py:29 news/models.py:47 packages/models.py:38
 #: pastebin/models.py:32 templates/demands/edit.html:67
 #: templates/demands/list.html:69 templates/demands/list.html.py:72
@@ -131,12 +127,12 @@ msgstr "Priorities"
 msgid "Titre"
 msgstr "Title"
 
-#: demands/models.py:107 forum/models.py:120 packages/models.py:140
+#: demands/models.py:107 forum/models.py:121 packages/models.py:170
 #: pastebin/models.py:36 templates/upload/view.html:69 wiki/models.py:35
 msgid "Contenu"
 msgstr "Content"
 
-#: demands/models.py:109 forum/models.py:117 forum/models.py:138
+#: demands/models.py:109 forum/models.py:118 forum/models.py:139
 #: news/models.py:57 templates/demands/list.html:60
 #: templates/demands/list.html.py:63 wiki/models.py:58
 msgid "Date de création"
@@ -170,20 +166,19 @@ msgstr "The demand is proposed"
 msgid "Type de demande"
 msgstr "Demand type"
 
-#: demands/models.py:119 forum/models.py:89 forum/models.py:114
-#: forum/models.py:136 forum/models.py:162 mp/models.py:29 news/models.py:44
-#: pastebin/models.py:33 templates/demands/list.html:51
+#: demands/models.py:119 forum/models.py:90 forum/models.py:115
+#: forum/models.py:137 forum/models.py:163 mp/models.py:29 news/models.py:44
+#: packages/models.py:149 pastebin/models.py:33 templates/demands/list.html:51
 #: templates/demands/list.html.py:54 templates/forum/viewforum.html:76
 #: templates/forum/viewtopic.html:106 templates/mp/view.html:39
-#: templates/websvn/showdir.html:43 templates/websvn/showdir.html.py:114
-#: templates/websvn/showfile.html:51 templates/wiki/changes.html:30
+#: templates/wiki/changes.html:30
 msgid "Auteur"
 msgstr "Author"
 
-#: demands/models.py:120 forum/models.py:109 forum/models.py:113
-#: forum/models.py:149 forum/models.py:156 forum/models.py:160 mp/models.py:35
-#: mp/models.py:55 mp/models.py:60 templates/forum/viewforum.html:74
-#: templates/global/search.html:38
+#: demands/models.py:120 forum/models.py:63 forum/models.py:110
+#: forum/models.py:114 forum/models.py:150 forum/models.py:157
+#: forum/models.py:161 mp/models.py:35 mp/models.py:55 mp/models.py:60
+#: templates/forum/viewforum.html:74 templates/global/search.html:38
 msgid "Sujet"
 msgstr "Subject"
 
@@ -266,7 +261,7 @@ msgstr "Topic's Title"
 msgid "Sous-titre du sujet"
 msgstr "Topic's Subtitle"
 
-#: forum/forms.py:32 forum/models.py:90 wiki/forms.py:35
+#: forum/forms.py:32 forum/models.py:91 wiki/forms.py:35
 msgid "Code ISO de la langue"
 msgstr "Language's ISO code"
 
@@ -274,12 +269,11 @@ msgstr "Language's ISO code"
 msgid "Raison de l'alerte"
 msgstr "Alert's Reason"
 
-#: forum/forms.py:41 forum/models.py:61 polls/models.py:6
+#: forum/forms.py:41 forum/models.py:61
 msgid "Question"
 msgstr "Question"
 
-#: forum/forms.py:42 forum/models.py:77 forum/models.py:84 forum/models.py:85
-#: polls/models.py:18 polls/models.py:25 polls/models.py:26
+#: forum/forms.py:42 forum/models.py:78 forum/models.py:85 forum/models.py:86
 msgid "Choix"
 msgstr "Choice"
 
@@ -301,7 +295,7 @@ msgstr "The question cannot be composed of empty characters."
 msgid "Nom en français"
 msgstr "Name in French"
 
-#: forum/models.py:46 packages/models.py:47
+#: forum/models.py:46 packages/models.py:55
 msgid "Description en français"
 msgstr "Description in French"
 
@@ -317,125 +311,124 @@ msgstr "Number of posts"
 msgid "Dernier sujet dans lequel on posté"
 msgstr "Last subject in which we someone has posted"
 
-#: forum/models.py:57 forum/models.py:58 forum/models.py:88
+#: forum/models.py:57 forum/models.py:58 forum/models.py:89
 #: templates/forum/base.html:9 templates/forum/index.html:33
 msgid "Forum"
 msgstr "Forum"
 
-#: forum/models.py:62 news/models.py:58 polls/models.py:7
+#: forum/models.py:62 news/models.py:58
 msgid "Date de publication"
 msgstr "Date of publication"
 
-#: forum/models.py:68 forum/models.py:76 polls/models.py:13 polls/models.py:17
+#: forum/models.py:69 forum/models.py:77
 msgid "Sondage"
 msgstr "Poll"
 
-#: forum/models.py:69 polls/models.py:14
+#: forum/models.py:70
 msgid "Sondages"
 msgstr "Poll"
 
-#: forum/models.py:78 polls/models.py:19
+#: forum/models.py:79
 msgid "Votes"
 msgstr "Votes"
 
-#: forum/models.py:93 mp/forms.py:28 mp/models.py:46
+#: forum/models.py:94 mp/forms.py:28 mp/models.py:46
 msgid "Sous-titre"
 msgstr "Subtitle"
 
-#: forum/models.py:95 mp/models.py:48 templates/forum/index.html:36
+#: forum/models.py:96 mp/models.py:48 templates/forum/index.html:36
 #: templates/forum/viewforum.html:78 templates/mp/index.html:25
 msgid "Dernier message"
 msgstr "Last message"
 
-#: forum/models.py:96
+#: forum/models.py:97
 msgid "Page du dernier post dans le sujet"
 msgstr "Page of the last post in the subject"
 
-#: forum/models.py:97 mp/models.py:49
+#: forum/models.py:98 mp/models.py:49
 msgid "Nombre de messages"
 msgstr "Number of messages"
 
-#: forum/models.py:99 templates/forum/viewforum.html:84
+#: forum/models.py:100 templates/forum/viewforum.html:84
 msgid "Post-it"
 msgstr "Post-it"
 
-#: forum/models.py:100 templates/forum/viewforum.html:89
+#: forum/models.py:101 templates/forum/viewforum.html:89
 msgid "Fermé"
 msgstr "Closed"
 
-#: forum/models.py:101 templates/forum/viewforum.html:94
+#: forum/models.py:102 templates/forum/viewforum.html:94
 msgid "Résolu"
 msgstr "Solved"
 
-#: forum/models.py:103
+#: forum/models.py:104
 msgid "Sondage lié"
 msgstr "Related Poll"
 
-#: forum/models.py:110 mp/models.py:56 templates/forum/index.html:34
+#: forum/models.py:111 mp/models.py:56 templates/forum/index.html:34
 msgid "Sujets"
 msgstr "Subjects"
 
-#: forum/models.py:116
+#: forum/models.py:117
 msgid "A aidé l'auteur du sujet"
 msgstr "Has helped the subject's author"
 
-#: forum/models.py:118 news/models.py:59
+#: forum/models.py:119 news/models.py:59
 msgid "Date de dernière mise à jour"
 msgstr "Last update date"
 
-#: forum/models.py:127 mp/models.py:41 templates/forum/edit.html:19
+#: forum/models.py:128 mp/models.py:41 templates/forum/edit.html:19
 #: templates/forum/viewtopic.html:107 templates/global/search.html:52
-#: templates/mp/view.html:40 templates/websvn/showdir.html:122
-#: templates/websvn/showfile.html:59
+#: templates/mp/view.html:40
 msgid "Message"
 msgstr "Message"
 
-#: forum/models.py:128 mp/models.py:42 templates/forum/index.html:35
+#: forum/models.py:129 mp/models.py:42 templates/forum/index.html:35
 #: templates/forum/viewforum.html:77 templates/mp/index.html:24
 msgid "Messages"
 msgstr "Messages"
 
-#: forum/models.py:135
+#: forum/models.py:136
 msgid "Post"
 msgstr "Post"
 
-#: forum/models.py:139 forum/models.py:164 templates/forum/alert.html:35
+#: forum/models.py:140 forum/models.py:165 templates/forum/alert.html:35
 #: templates/pastebin/alert.html:26 templates/wiki/changes.html:35
 #: wiki/models.py:55
 msgid "Commentaire"
 msgstr "Comment"
 
-#: forum/models.py:145
+#: forum/models.py:146
 msgid "Historique de message"
 msgstr "Message history"
 
-#: forum/models.py:146
+#: forum/models.py:147
 msgid "Historiques de message"
 msgstr "Message histories"
 
-#: forum/models.py:150 forum/models.py:157 general/models.py:31
+#: forum/models.py:151 forum/models.py:158 general/models.py:31
 #: mp/models.py:59
 msgid "Utilisateur"
 msgstr "User"
 
-#: forum/models.py:152
+#: forum/models.py:153
 msgid "Page du dernier post lu"
 msgstr "Page of the last read post"
 
-#: forum/models.py:153 mp/models.py:63 templates/forum/viewforum.html:110
+#: forum/models.py:154 mp/models.py:63 templates/forum/viewforum.html:110
 #: templates/mp/index.html:39
 msgid "Dernier message lu"
 msgstr "Last read post"
 
-#: forum/models.py:161
+#: forum/models.py:162
 msgid "Paste"
 msgstr "Paste "
 
-#: forum/models.py:170
+#: forum/models.py:171
 msgid "Alerte"
 msgstr "Alert"
 
-#: forum/models.py:171
+#: forum/models.py:172
 msgid "Alertes"
 msgstr "Alerts"
 
@@ -1239,7 +1232,7 @@ msgstr "Quote"
 msgid "Texte personnel"
 msgstr "Personal text"
 
-#: general/models.py:40 general/views.py:224 templates/users/list.html:58
+#: general/models.py:40 general/views.py:225 templates/users/list.html:58
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -1271,105 +1264,105 @@ msgstr "Profile"
 msgid "Profiles"
 msgstr "Profiles"
 
-#: general/models.py:63 packages/models.py:150
+#: general/models.py:63 packages/models.py:180
 msgid "Url"
 msgstr "Url"
 
-#: general/views.py:158
+#: general/views.py:159
 msgid "Vous êtes connecté"
 msgstr "You are connected"
 
-#: general/views.py:162
+#: general/views.py:163
 msgid ""
 "Votre compte d'utilisateur est bloqué, vous ne pouvez plus vous connecter."
 msgstr "Your user account is blocked, you cannont log in."
 
-#: general/views.py:164
+#: general/views.py:165
 msgid "Nom d'utilisateur ou mot de passe incorrect."
 msgstr "Username or password incorrect."
 
-#: general/views.py:214
+#: general/views.py:215
 #, python-format
 msgid "Dossier de %s"
 msgstr "Directory if %s"
 
-#: general/views.py:216
+#: general/views.py:217
 msgid "Dossier personnel"
 msgstr "Personal directory"
 
-#: general/views.py:218
+#: general/views.py:219
 msgid "Messages du forum"
 msgstr "Forum's messages"
 
-#: general/views.py:220
+#: general/views.py:221
 msgid "Pages de documentation"
 msgstr "Documentation pages"
 
-#: general/views.py:222
+#: general/views.py:223
 msgid "Rapport de bugs et demandes"
 msgstr "Bug reports and demands"
 
-#: general/views.py:228
+#: general/views.py:229
 msgid "Heureux d'être là"
 msgstr "I'm happy to be here"
 
-#: general/templatetags/general_tags.py:27 templates/global/base.html:119
+#: general/templatetags/general_tags.py:28 templates/global/base.html:134
 #: templates/news/my.html:190
 msgid "En ligne"
 msgstr "Online"
 
-#: general/templatetags/general_tags.py:29
+#: general/templatetags/general_tags.py:30
 msgid "Hors ligne"
 msgstr "Offline"
 
-#: general/templatetags/general_tags.py:46
+#: general/templatetags/general_tags.py:47
 msgid "« Précédant"
 msgstr "« Previous"
 
-#: general/templatetags/general_tags.py:57
+#: general/templatetags/general_tags.py:58
 msgid "Suivant »"
 msgstr "Next »"
 
-#: general/templatetags/general_tags.py:73
-#: general/templatetags/general_tags.py:90
-#: general/templatetags/general_tags.py:92
+#: general/templatetags/general_tags.py:74
+#: general/templatetags/general_tags.py:91
+#: general/templatetags/general_tags.py:93
 #, python-format
 msgid "le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i"
 msgstr "on the %(d)i/%(mt)i/%(y)i at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:76
+#: general/templatetags/general_tags.py:77
 #, python-format
 msgid "il y a %i secondes"
 msgstr "%i seconds ago"
 
-#: general/templatetags/general_tags.py:78
+#: general/templatetags/general_tags.py:79
 #, python-format
 msgid "il y a %d minute"
 msgid_plural "il y a %d minutes"
 msgstr[0] "%d minute ago"
 msgstr[1] "%d minutes ago"
 
-#: general/templatetags/general_tags.py:81
+#: general/templatetags/general_tags.py:82
 #, python-format
 msgid "il y a %(h)ih%(m)02i"
 msgstr "%(h)ih%(m)02i ago"
 
-#: general/templatetags/general_tags.py:84
+#: general/templatetags/general_tags.py:85
 #, python-format
 msgid "aujourd'hui à %(h)ih%(m)02i"
 msgstr "today at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:86
+#: general/templatetags/general_tags.py:87
 #, python-format
 msgid "hier à %(h)ih%(m)02i"
 msgstr "tomorrow at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:88
+#: general/templatetags/general_tags.py:89
 #, python-format
 msgid "demain à %(h)ih%(m)02i"
 msgstr "tomorrow at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:115
+#: general/templatetags/general_tags.py:116
 msgid "Erreur lors de la lecture du format !"
 msgstr "Failed to read the format!"
 
@@ -1565,183 +1558,220 @@ msgstr "Short description"
 msgid "Description longue"
 msgstr "Long description"
 
-#: packages/models.py:44
+#: packages/models.py:41
+msgid "Entrée de changelog"
+msgstr ""
+
+#: packages/models.py:45
+msgid "Faible priorité"
+msgstr "Weak priority"
+
+#: packages/models.py:46
+msgid "Fonctionnalité"
+msgstr ""
+
+#: packages/models.py:47
+msgid "Correction de bogue"
+msgstr "Bug fix"
+
+#: packages/models.py:48
+msgid "Correction de sécurité"
+msgstr ""
+
+#: packages/models.py:52
 msgid "Nom générique pour la création de paquets"
 msgstr "Generic name for paquet creation"
 
-#: packages/models.py:53 packages/models.py:80
+#: packages/models.py:61 packages/models.py:88
 msgid "Section"
 msgstr "Section"
 
-#: packages/models.py:54
+#: packages/models.py:62
 msgid "Sections"
 msgstr "Sections"
 
-#: packages/models.py:63 packages/models.py:83
-#: templates/packages/view.html:126
+#: packages/models.py:71 packages/models.py:91
+#: templates/packages/view.html:132
 msgid "Architecture"
 msgstr "Architecture"
 
-#: packages/models.py:64
+#: packages/models.py:72
 msgid "Architectures"
 msgstr "Architectures"
 
-#: packages/models.py:67
+#: packages/models.py:75
 msgid "Nom de la version"
 msgstr "Version's name"
 
-#: packages/models.py:73 packages/models.py:84
-#: templates/packages/index.html:107 templates/packages/view.html:124
+#: packages/models.py:81 packages/models.py:92 packages/models.py:146
+#: templates/packages/index.html:107 templates/packages/view.html:130
 msgid "Distribution"
 msgstr "Distribution"
 
-#: packages/models.py:74
+#: packages/models.py:82
 msgid "Distributions"
 msgstr "Distributions"
 
-#: packages/models.py:79 templates/packages/index.html:108
+#: packages/models.py:87 templates/packages/index.html:108
 msgid "Mainteneur"
 msgstr "Upkeeper"
 
-#: packages/models.py:82 templates/packages/index.html:106
-#: templates/packages/view.html:125
+#: packages/models.py:90 packages/models.py:145
+#: templates/packages/index.html:106 templates/packages/view.html:131
 msgid "Version"
 msgstr "Version"
 
-#: packages/models.py:85
+#: packages/models.py:93
 msgid "Langue principale de l'empaquetage"
 msgstr "Main  language of the paquet"
 
-#: packages/models.py:86 templates/feeds/latestpackages_description.html:28
-#: templates/packages/view.html:56
+#: packages/models.py:94 templates/feeds/latestpackages_description.html:28
+#: templates/packages/view.html:62
 msgid "Taille du téléchargement"
 msgstr "Download size"
 
-#: packages/models.py:87
+#: packages/models.py:95
 msgid "Taille d'installation"
 msgstr "Installation size"
 
-#: packages/models.py:89
+#: packages/models.py:97
 msgid "Url de téléchargement"
 msgstr "Download link"
 
-#: packages/models.py:90
+#: packages/models.py:98
 msgid "Date de création/modification"
 msgstr "Creation/Modification date"
 
-#: packages/models.py:92 templates/packages/view.html:73
+#: packages/models.py:100 templates/packages/view.html:79
 msgid "Dépendances"
 msgstr "Dependencies"
 
-#: packages/models.py:93
+#: packages/models.py:101
 msgid "Suggestions"
 msgstr "Suggestions"
 
-#: packages/models.py:94
+#: packages/models.py:102
 msgid "Conflits"
 msgstr "Conflicts"
 
-#: packages/models.py:95
+#: packages/models.py:103
 msgid "Fournitures"
 msgstr "Supplies"
 
-#: packages/models.py:96
+#: packages/models.py:104
 msgid "Remplacements"
 msgstr "Remplacements"
 
-#: packages/models.py:98
+#: packages/models.py:106
 msgid "Paquet source"
 msgstr "Source package"
 
-#: packages/models.py:99
+#: packages/models.py:107
 msgid "Licence"
 msgstr "License"
 
-#: packages/models.py:100
+#: packages/models.py:108
 msgid "Flags"
 msgstr "Flags"
 
-#: packages/models.py:101
+#: packages/models.py:109
 msgid "Hash SHA1 du paquet"
 msgstr "SHA1 hash of the package"
 
-#: packages/models.py:102
+#: packages/models.py:110
 msgid "Hash SHA1 des métadonnées"
 msgstr "SHA1 hash of the metadatas"
 
-#: packages/models.py:103
+#: packages/models.py:111
 msgid "Adresse upstream"
 msgstr "Upstream address"
 
-#: packages/models.py:133 packages/models.py:137
-#: templates/packages/index.html:105 templates/packages/view.html:148
+#: packages/models.py:141 packages/models.py:147 packages/models.py:166
+#: templates/packages/index.html:105 templates/packages/view.html:154
 msgid "Paquet"
 msgstr "Packet"
 
-#: packages/models.py:134 templates/packages/home.html:4
+#: packages/models.py:142 templates/packages/home.html:4
 #: templates/packages/home.html.py:6 templates/packages/home.html:9
 #: templates/packages/list.html:4 templates/packages/list.html.py:13
 #: templates/packages/list.html:27
 msgid "Paquets"
 msgstr "Packets"
 
-#: packages/models.py:138
+#: packages/models.py:148
+msgid "Email"
+msgstr ""
+
+#: packages/models.py:151 templates/packages/index.html:109
+#: templates/wiki/changes.html:34
+msgid "Date"
+msgstr "Date"
+
+#: packages/models.py:162 packages/models.py:167
+msgid "ChangeLog"
+msgstr "ChangeLog"
+
+#: packages/models.py:163
+msgid "ChangeLogs"
+msgstr "ChangeLogs"
+
+#: packages/models.py:168
 msgid "Code ISO de langue"
 msgstr "Language's ISO code"
 
-#: packages/models.py:146
+#: packages/models.py:176
 msgid "Chaine"
 msgstr "String"
 
-#: packages/models.py:147
+#: packages/models.py:177
 msgid "Chaines"
 msgstr "Strings"
 
-#: packages/models.py:151
+#: packages/models.py:181
 msgid "Emplacement"
 msgstr "Location"
 
-#: packages/models.py:157
+#: packages/models.py:187
 msgid "Mirroir"
 msgstr "Mirror"
 
-#: packages/models.py:158
+#: packages/models.py:188
 msgid "Mirroirs"
 msgstr "Mirrors"
 
-#: packages/models.py:164 packages/models.py:181
+#: packages/models.py:194 packages/models.py:211
 msgid "Poids, pour classer"
 msgstr "Weight, used for sorting"
 
-#: packages/models.py:178
+#: packages/models.py:208
 msgid "Capture d'écran"
 msgstr "Screenshot"
 
-#: packages/models.py:179
+#: packages/models.py:209
 msgid "Miniature de la capture"
 msgstr "Screeshot's miniature"
 
-#: packages/models.py:187
+#: packages/models.py:217
 msgid "Telechargement"
 msgstr "Download"
 
-#: packages/models.py:188
+#: packages/models.py:218
 msgid "Telechargements"
 msgstr "Downloads"
 
-#: packages/models.py:191
+#: packages/models.py:221
 msgid "Telechargement parent"
 msgstr "Related download"
 
-#: packages/models.py:192 upload/models.py:61
+#: packages/models.py:222 upload/models.py:61
 msgid "Chemin d'accès"
 msgstr "Access path"
 
-#: packages/models.py:200
+#: packages/models.py:230
 msgid "Variante"
 msgstr "Variant"
 
-#: packages/models.py:201
+#: packages/models.py:231
 msgid "Variantes"
 msgstr "Variants"
 
@@ -1774,7 +1804,7 @@ msgid "Format inconnu"
 msgstr ""
 
 #: pastebin/models.py:51 pastebin/models.py:52
-#: templates/global/devcorner.html:49 templates/global/devcorner_menu.html:7
+#: templates/global/devcorner.html:55 templates/global/devcorner_menu.html:7
 #: templates/pastebin/base.html:17
 msgid "Pastebin"
 msgstr ""
@@ -1851,8 +1881,8 @@ msgstr ""
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               A list of sub-demands here would be impossible. "
-"Indeed, altogether,\n"
+"               A list of sub-demands here would be impossible. Indeed, "
+"altogether,\n"
 "            the demands are very numerous. It's thus directly "
 "the<em>identificator</em> that is\n"
 "                required. To obtain it, go to the page that displays the "
@@ -1897,23 +1927,23 @@ msgid ""
 msgstr ""
 "\n"
 "            <p>\n"
-"                 Here is the form that enables you to add a linked-demand "
-"to the demand «%(d)s».\n"
+"                 Here is the form that enables you to add a linked-demand to "
+"the demand «%(d)s».\n"
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               A linked-demand is a demand that is related to another "
-"demand («%(d)s» here).\n"
+"               A linked-demand is a demand that is related to another demand "
+"(«%(d)s» here).\n"
 "                A demand can have several linked-demands, which can "
 "themselves have linked-demands, and so on.\n"
-"                The link can be reciprocal. If the demand A is linked to "
-"the demand B, B will appear\n"
+"                The link can be reciprocal. If the demand A is linked to the "
+"demand B, B will appear\n"
 "                as being also linked to A.\n"
 "            </p>\n"
 "\n"
 "            <p>\n"
-"               A list of linked-demands here would be "
-"impossible. Indeed, altogether, the\n"
+"               A list of linked-demands here would be impossible. Indeed, "
+"altogether, the\n"
 "            the demands are very numerous. It's thus directly "
 "the<em>identificator</em> that is\n"
 "                required. To obtain it, go to the page that displays the "
@@ -2084,14 +2114,14 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Here are the various <em>demand types</em>. Indeed, demands "
-"are sorted\n"
-"           by type (bugs, artworks, packages, patchs, etc). For each type, you "
-"can ask\n"
+"            Here are the various <em>demand types</em>. Indeed, demands are "
+"sorted\n"
+"           by type (bugs, artworks, packages, patchs, etc). For each type, "
+"you can ask\n"
 "            something, or suggest something (exept for bugs, that you "
 "cannot\n"
-"            suggest). If you found a fault, submit a patch, or "
-"a bug if you have\n"
+"            suggest). If you found a fault, submit a patch, or a bug if you "
+"have\n"
 "           no idea of how to fix it.\n"
 "        "
 
@@ -2124,8 +2154,8 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Here is the page listing the demands of type <strong>%(t)"
-"s</strong>.This page\n"
+"            Here is the page listing the demands of type <strong>%(t)s</"
+"strong>.This page\n"
 "            is designed to be powerful: you can filter and sort demands as "
 "you wish. \n"
 "        "
@@ -2142,7 +2172,7 @@ msgstr "Suggested demand"
 #: templates/global/index.html:84 templates/global/index.html.py:102
 #: templates/global/index.html:133 templates/global/index.html.py:154
 #: templates/mp/index.html:71 templates/news/list.html:69
-#: templates/news/view.html:30 templates/websvn/showlog.html:38
+#: templates/news/view.html:30
 msgid "par"
 msgstr "by"
 
@@ -2174,7 +2204,7 @@ msgstr "Demand locked, vote disabled"
 msgid "Url du fichier"
 msgstr "File's URL"
 
-#: templates/demands/view.html:72 templates/packages/view.html:152
+#: templates/demands/view.html:72 templates/packages/view.html:158
 #: templates/pastebin/view.html:37
 msgid "Télécharger"
 msgstr "Download"
@@ -2276,12 +2306,12 @@ msgid "Version Logram"
 msgstr "Logram version"
 
 #: templates/feeds/latestpackages_description.html:32
-#: templates/packages/view.html:60
+#: templates/packages/view.html:66
 msgid "Taille des fichiers installés"
 msgstr "Size of installed files"
 
 #: templates/feeds/latestpackages_description.html:36
-#: templates/packages/view.html:64
+#: templates/packages/view.html:70
 msgid "Mainteneur du paquet (à contacter en cas de défaillance)"
 msgstr "Maintainer of the package (contact in case of failure)"
 
@@ -2480,8 +2510,8 @@ msgid "Par"
 msgstr "By"
 
 #: templates/forum/index.html:75 templates/news/list.html:71
-#: templates/news/view.html:33 templates/packages/view.html:8
-#: templates/packages/view.html.py:12
+#: templates/news/view.html:33 templates/packages/changelog.html:13
+#: templates/packages/view.html:8 templates/packages/view.html.py:12
 msgid "dans"
 msgstr "in"
 
@@ -2548,7 +2578,7 @@ msgstr "Not filter anymore"
 msgid "Pages"
 msgstr "Pages"
 
-#: templates/forum/viewpoll.html:19
+#: templates/forum/viewpoll.html:25
 #, python-format
 msgid ""
 "\n"
@@ -2559,7 +2589,7 @@ msgstr ""
 "                        (%(votes)s votes for %(total)s)\n"
 "                    "
 
-#: templates/forum/viewpoll.html:35
+#: templates/forum/viewpoll.html:41
 msgid "Voter"
 msgstr "Vote"
 
@@ -2647,12 +2677,12 @@ msgstr "Do not follow anymore"
 msgid "Répondre"
 msgstr "Answer"
 
-#: templates/global/base.html:31 templates/global/base.html.py:100
-#: templates/global/base.html:161 templates/global/index.html:5
+#: templates/global/base.html:31 templates/global/base.html.py:114
+#: templates/global/base.html:176 templates/global/index.html:5
 msgid "Accueil"
 msgstr "Home"
 
-#: templates/global/base.html:39 templates/global/base.html.py:103
+#: templates/global/base.html:39 templates/global/base.html.py:117
 msgid "Découvrir Logram"
 msgstr "Discover Logram"
 
@@ -2667,85 +2697,94 @@ msgstr "Development"
 #: templates/global/base.html:79 templates/packages/base.html:4
 #: templates/packages/base.html.py:8 templates/packages/base.html:11
 #: templates/packages/index.html:5 templates/packages/index.html.py:8
-#: templates/packages/index.html:31 templates/packages/view.html:110
+#: templates/packages/index.html:31 templates/packages/view.html:116
 msgid "Téléchargements"
 msgstr "Downloads"
 
-#: templates/global/base.html:104
+#: templates/global/base.html:93 templates/packages/home.html:53
+#: templates/packages/home.html.py:78
+msgid "Rechercher"
+msgstr "Search"
+
+#: templates/global/base.html:118
 msgid "Spécifications"
 msgstr "Specifications"
 
-#: templates/global/base.html:105
+#: templates/global/base.html:119
 msgid "Philosophie"
 msgstr "Philosophy"
 
-#: templates/global/base.html:106
+#: templates/global/base.html:120
 msgid "Pourquoi Logram ?"
 msgstr "Why Logram?"
 
-#: templates/global/base.html:107
+#: templates/global/base.html:121
 msgid "Télécharger Logram"
 msgstr "Download Logram"
 
-#: templates/global/base.html:114
+#: templates/global/base.html:122
+msgid "Chat IRC"
+msgstr ""
+
+#: templates/global/base.html:129
 msgid "Communauté"
 msgstr "Community"
 
-#: templates/global/base.html:117
+#: templates/global/base.html:132
 msgid "Les membres"
 msgstr "The members"
 
-#: templates/global/base.html:118
+#: templates/global/base.html:133
 msgid "L'équipe"
 msgstr "The team"
 
-#: templates/global/base.html:125
+#: templates/global/base.html:140
 msgid "Mon compte"
 msgstr "My account"
 
-#: templates/global/base.html:128 templates/users/base.html:4
+#: templates/global/base.html:143 templates/users/base.html:4
 #: templates/users/base.html.py:7 templates/users/opts_index.html:4
 #: templates/users/opts_index.html.py:9
 msgid "Mes options"
 msgstr "My options"
 
-#: templates/global/base.html:129
+#: templates/global/base.html:144
 msgid "Mes messages"
 msgstr "My messages"
 
-#: templates/global/base.html:130 templates/news/base.html:10
+#: templates/global/base.html:145 templates/news/base.html:10
 #: templates/news/my.html:5 templates/news/my.html.py:7
 #: templates/news/my.html:10
 msgid "Mes nouvelles"
 msgstr "My news"
 
-#: templates/global/base.html:131
+#: templates/global/base.html:146
 msgid "Envoi de fichiers"
 msgstr "Send a file"
 
-#: templates/global/base.html:133
+#: templates/global/base.html:148
 msgid "Déconnexion"
 msgstr "Log out"
 
-#: templates/global/base.html:136
+#: templates/global/base.html:151
 msgid "Visiteur"
 msgstr "Visitor"
 
-#: templates/global/base.html:139 templates/global/login.html:44
+#: templates/global/base.html:154 templates/global/login.html:44
 msgid "Se connecter"
 msgstr "Log in"
 
-#: templates/global/base.html:140 templates/global/register.html:4
+#: templates/global/base.html:155 templates/global/register.html:4
 #: templates/global/register.html.py:6 templates/global/register.html:9
 #: templates/global/register.html.py:42
 msgid "S'enregistrer"
 msgstr "Register"
 
-#: templates/global/base.html:158
+#: templates/global/base.html:173
 msgid "Vous êtes ici"
 msgstr "You are here"
 
-#: templates/global/base.html:169
+#: templates/global/base.html:184
 msgid ""
 "\n"
 "                            La documentation de ce site est disponible sous "
@@ -2781,17 +2820,16 @@ msgstr ""
 "\">Django</a></span>\n"
 "                        "
 
-#: templates/global/base.html:179
+#: templates/global/base.html:194
 msgid "Requête"
 msgstr "Request"
 
-#: templates/global/base.html:180
+#: templates/global/base.html:195
 msgid "Durée"
 msgstr "Duration"
 
 #: templates/global/devcorner.html:4 templates/global/devcorner.html.py:9
 #: templates/global/devcorner.html:17 templates/pastebin/base.html:10
-#: templates/websvn/base.html:5
 msgid "Le coin du développeur"
 msgstr "Developer Corner"
 
@@ -2820,19 +2858,15 @@ msgstr ""
 "    \n"
 "    <p>\n"
 "        This page contains the online tools used by the Logram developers, "
-"and also available to you. "
-"As Logram will advance, some tools will be added to this page. So, nothing is "
-"hidden, and the rest of the website remains clean, "
-"adapted to a growing community.\n"
+"and also available to you. As Logram will advance, some tools will be added "
+"to this page. So, nothing is hidden, and the rest of the website remains "
+"clean, adapted to a growing community.\n"
 "    </p>\n"
 "  "
 
-#: templates/global/devcorner.html:30 templates/websvn/base.html:6
-#: templates/websvn/showdir.html:6 templates/websvn/showdir.html.py:19
-#: templates/websvn/showfile.html:6 templates/websvn/showfile.html.py:25
-#: templates/websvn/showlog.html:6 templates/websvn/showlog.html.py:25
-msgid "WebSVN"
-msgstr "WebSVN"
+#: templates/global/devcorner.html:30
+msgid "WebGIT"
+msgstr ""
 
 #: templates/global/devcorner.html:33
 msgid "Code source en ligne"
@@ -2841,15 +2875,15 @@ msgstr "Online source code"
 #: templates/global/devcorner.html:36
 msgid ""
 "\n"
-"                Logram utilise le système de gestion des sources Subversion, "
-"qui permet aux développeurs de travailler ensemble, en même temps, et de "
-"gérer les changements faits par tout le monde.\n"
+"                Logram utilise le système de gestion des sources Git, qui "
+"permet aux développeurs de travailler ensemble, en même temps, et de gérer "
+"les changements faits par tout le monde.\n"
 "            "
 msgstr ""
 "\n"
-"        Logram uses the Subversion version control system, wich enables the "
-"developers to work "
-"together, at the same time, and to manage the changes made by everyone.\n"
+"        Logram uses the Git version control system, wich enables the "
+"developers to work together, at the same time, and to manage the changes "
+"made by everyone.\n"
 "        "
 
 #: templates/global/devcorner.html:42
@@ -2862,16 +2896,32 @@ msgid ""
 msgstr ""
 "\n"
 "        This module allows you to navigate in the latest version of the "
-"Logram sources, "
-"and to fetch them. So, you are always up to date and can post more relevant "
-"bug reports.\n"
+"Logram sources, and to fetch them. So, you are always up to date and can "
+"post more relevant bug reports.\n"
 "        "
 
-#: templates/global/devcorner.html:52
+#: templates/global/devcorner.html:48
+msgid ""
+"\n"
+"                Le dépôt Git de Logram étant hébergé chez <a href=\"http://"
+"gitorious.org\">Gitorious</a>, vous bénéficiez également de toutes les "
+"fonctionnalités de cette forge, comme la possibilité de clôner le dépôt, le "
+"modifier directement, puis demander que vos changements soient <em>mergés</"
+"em> dans le dépôt officiel.\n"
+"            "
+msgstr ""
+"\n"
+"The Logram's Git repository being hosted at <a href=\"http://gitorious.org"
+"\">Gitorious</a>, you also get full functionality of this forge, such as the "
+"ability to clone the repository, to change it directly, and then request "
+"that your changes are <em>merged</em> in the official repository.\n"
+"            "
+
+#: templates/global/devcorner.html:58
 msgid "Morceaux de code"
 msgstr "Code pastes"
 
-#: templates/global/devcorner.html:55
+#: templates/global/devcorner.html:61
 msgid ""
 "\n"
 "                Quelques fois, au hasard de discussions sur IRC ou par mail, "
@@ -2881,14 +2931,13 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"        Sometimes, while discussing on IRC or by mail, or in the forum, "
-"the developers have to show little pieces of code, and possibly to edit them "
-"later. "
-"These pieces of code are temporary, they don't go on the Subversion "
+"        Sometimes, while discussing on IRC or by mail, or in the forum, the "
+"developers have to show little pieces of code, and possibly to edit them "
+"later. These pieces of code are temporary, they don't go on the Subversion "
 "repository.\n"
 "        "
 
-#: templates/global/devcorner.html:61
+#: templates/global/devcorner.html:67
 msgid ""
 "\n"
 "                Ce module vous permet de poster vos propres morceaux de "
@@ -2898,10 +2947,10 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"        This module enables you to post you own code snippets, "
-"deleted after a certain amount of time, and to edit them. So you can easily "
-"share ideas, "
-"with all the necessary comfort (code highlighting, modifcation logs, diffs).\n"
+"        This module enables you to post you own code snippets, deleted after "
+"a certain amount of time, and to edit them. So you can easily share ideas, "
+"with all the necessary comfort (code highlighting, modifcation logs, "
+"diffs).\n"
 "        "
 
 #: templates/global/devcorner_menu.html:6
@@ -2981,15 +3030,15 @@ msgid ""
 "                    <a href=\"register.html\">Enregistrez-vous</a>, puis <a "
 "href=\"forum.html\">posez vos questions</a>, <a href=\"wiki.html"
 "\">documentez-vous</a>, <a href=\"demand-1.html\">proposez des idées</a>, "
-"voire même <a href=\"websvn-1.html\">participez</a> à l'élaboration du futur "
-"de Logram !\n"
+"voire même <a href=\"devcorner.html\">participez</a> à l'élaboration du "
+"futur de Logram !\n"
 "                "
 msgstr ""
 "\n"
 "                    <a href=\"register.html\">Register</a>, then <a href="
 "\"forum.html\">ask your questions</a>, <a href=\"wiki.html\">document "
 "youeself</a>, <a href=\"demand-1.html\">suggest ideas</a>, or even <a href="
-"\"websvn-1.html\">participate</a> to the building of Logram's future !\n"
+"\"devcorner.html\">participate</a> to the building of Logram's future !\n"
 "                "
 
 #: templates/global/index.html:63 templates/global/index.html.py:233
@@ -3572,6 +3621,70 @@ msgstr "In case of refusal, reason"
 msgid "Les paquets"
 msgstr "The packages"
 
+#: templates/packages/changelog.html:6
+#, python-format
+msgid ""
+"\n"
+"        Changements de %(pkg)s\n"
+"    "
+msgstr ""
+"\n"
+"        %(pkg)s changes\n"
+"    "
+
+#: templates/packages/changelog.html:16 templates/wiki/base.html:18
+msgid "Changements"
+msgstr "Modify"
+
+#: templates/packages/changelog.html:21
+#, python-format
+msgid ""
+"\n"
+"            Changements de %(pkg)s\n"
+"        "
+msgstr ""
+"\n"
+"               %(pkg)s changes\n"
+"            "
+
+#: templates/packages/changelog.html:27
+#, python-format
+msgid ""
+"\n"
+"            Voici la liste des changements apportés au paquet <strong>%(pkg)"
+"s</strong> \n"
+"            à la version <strong>%(ver)s</strong>. Ces changements peuvent "
+"être propres\n"
+"            à Logram où venir de l'application empaquetée elle-même. Une "
+"description sommaire\n"
+"            du changement est disponible.\n"
+"        "
+msgstr ""
+
+#: templates/packages/changelog.html:37
+#, python-format
+msgid ""
+"\n"
+"                %(pkg)s à la version %(ver)s\n"
+"            "
+msgstr ""
+"\n"
+"                %(pkg)s at the version %(ver)s\n"
+"            "
+
+#: templates/packages/changelog.html:43
+#, python-format
+msgid ""
+"\n"
+"                par %(author)s dans Logram %(distro)s %(date)s, <strong>%"
+"(type)s</strong>\n"
+"            "
+msgstr ""
+"\n"
+"                    by %(author)s in Logram %(distro)s %(date)s, <strong>%"
+"(type)s</strong>\n"
+"                "
+
 #: templates/packages/files.html:5 templates/packages/files.html.py:7
 #: templates/packages/files.html:10
 #, python-format
@@ -3610,8 +3723,8 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Instead of seeking for a precise package, you maybe prefer to see "
-"some of the package list\n"
+"            Instead of seeking for a precise package, you maybe prefer to "
+"see some of the package list\n"
 "            of a distribution. In order to do that, the following list "
 "contains a link to all packages of each\n"
 "            versions of a distribution, arranged in categories\n"
@@ -3634,10 +3747,6 @@ msgstr ""
 #: templates/packages/home.html:48
 msgid "Rechercher un paquet"
 msgstr "Search a package"
-
-#: templates/packages/home.html:53 templates/packages/home.html.py:78
-msgid "Rechercher"
-msgstr "Search"
 
 #: templates/packages/home.html:57
 msgid "Type de recherche"
@@ -3737,12 +3846,6 @@ msgid ""
 "        </p>\n"
 "    "
 msgstr ""
-
-#: templates/packages/index.html:109 templates/websvn/showdir.html:44
-#: templates/websvn/showdir.html.py:118 templates/websvn/showfile.html:55
-#: templates/wiki/changes.html:34
-msgid "Date"
-msgstr "Date"
 
 #: templates/packages/list.html:8
 msgid "Paquets de Logram"
@@ -3854,32 +3957,40 @@ msgstr ""
 msgid "Site web de l'auteur"
 msgstr "Author's website"
 
-#: templates/packages/view.html:75 templates/pastebin/view.html:66
+#: templates/packages/view.html:56
+msgid "Historique de modifications"
+msgstr "Modifications history"
+
+#: templates/packages/view.html:58 templates/packages/view.html.py:133
+msgid "Voir"
+msgstr "See"
+
+#: templates/packages/view.html:81 templates/pastebin/view.html:66
 #: templates/pastebin/view.html.py:68
 msgid "Légende"
 msgstr "Caption "
 
-#: templates/packages/view.html:76
+#: templates/packages/view.html:82
 msgid "Dépend de"
 msgstr "Depending on"
 
-#: templates/packages/view.html:77
+#: templates/packages/view.html:83
 msgid "Suggère"
 msgstr "Suggest"
 
-#: templates/packages/view.html:78
+#: templates/packages/view.html:84
 msgid "Est en conflit avec"
 msgstr "Is conflicting with"
 
-#: templates/packages/view.html:79
+#: templates/packages/view.html:85
 msgid "Fourni"
 msgstr "Supplies"
 
-#: templates/packages/view.html:80
+#: templates/packages/view.html:86
 msgid "Remplace"
 msgstr "Substitutes"
 
-#: templates/packages/view.html:113
+#: templates/packages/view.html:119
 #, python-format
 msgid ""
 "\n"
@@ -3894,10 +4005,6 @@ msgid ""
 "            affiché sur cette page.\n"
 "        "
 msgstr ""
-
-#: templates/packages/view.html:127
-msgid "Voir"
-msgstr "See"
 
 #: templates/pastebin/alert.html:9
 msgid ""
@@ -3992,8 +4099,7 @@ msgid ""
 msgstr ""
 "\n"
 "            Here are the list of your pastes, ordered by posting order\n"
-"    "
-"        "
+"            "
 
 #: templates/pastebin/liste.html:27
 msgid "expires"
@@ -4331,7 +4437,8 @@ msgid ""
 msgstr ""
 
 #: templates/users/opts_pseudo.html:20
-msgid "* Toute ressemblance avec une personne réelle n'est que pure coincidence"
+msgid ""
+"* Toute ressemblance avec une personne réelle n'est que pure coincidence"
 msgstr "*All resemblance to a real person is only a pure coincidence"
 
 #: templates/users/opts_pseudo.html:25 users/forms.py:30
@@ -4388,92 +4495,6 @@ msgstr "Does not wish to make it public"
 msgid "Dernier paste"
 msgstr "Last paste"
 
-#: templates/websvn/showdir.html:21
-#, python-format
-msgid ""
-"\n"
-"        <p>\n"
-"            Voici le contenu du dossier <strong>%(path)s</strong> à la "
-"révision <strong>%(rev)s</strong>.\n"
-"            Vous pouvez consulter, pour chaque fichier ou dossier, le "
-"<em>log</em> de cet élément, ainsi que le\n"
-"            voir à une certaine révision.\n"
-"        </p>\n"
-"\n"
-"        <p>\n"
-"            Pour récupérer le contenu de ce dossier sur votre ordinateur, <a "
-"href=\"http://v4dev.logram-project.org/wiki-install-package.html"
-"\">installez</a> Subversion\n"
-"            et entrez ceci dans une <a href=\"wiki-console.html\">console</"
-"a> :\n"
-"\n"
-"            <code class=\"console\">\n"
-"                svn co %(svnparam)s %(url)s\n"
-"            </code>\n"
-"        </p>\n"
-"    "
-msgstr ""
-
-#: templates/websvn/showdir.html:41 upload/models.py:63
-msgid "Taille"
-msgstr "Size"
-
-#: templates/websvn/showdir.html:42
-msgid "Révision"
-msgstr "Revision"
-
-#: templates/websvn/showdir.html:45 templates/websvn/showdir.html.py:81
-msgid "Log"
-msgstr "Log"
-
-#: templates/websvn/showdir.html:110 templates/websvn/showfile.html:47
-msgid "Dernière révision"
-msgstr "Last revision"
-
-#: templates/websvn/showfile.html:17
-#, python-format
-msgid ""
-"\n"
-"                Contenu de %(file)s\n"
-"            "
-msgstr ""
-"\n"
-"               %(file)s's content\n"
-"            "
-
-#: templates/websvn/showfile.html:27
-#, python-format
-msgid ""
-"\n"
-"        <p>\n"
-"            Voici le contenu du fichier <strong>%(path)s</strong> à la "
-"révision <strong>%(rev)s</strong>.\n"
-"        </p>\n"
-"\n"
-"        <p>\n"
-"            Pour récupérer le contenu de ce fichier sur votre ordinateur, "
-"installez Subversion\n"
-"            et entrez ceci dans une <a href=\"wiki-console.html\">console</"
-"a> :\n"
-"\n"
-"            <code class=\"console\">\n"
-"                svn co %(svnparam)s %(url)s\n"
-"            </code>\n"
-"        </p>\n"
-"    "
-msgstr ""
-
-#: templates/websvn/showlog.html:17
-#, python-format
-msgid ""
-"\n"
-"                Historique de %(file)s\n"
-"            "
-msgstr ""
-"\n"
-"                %(file)s's history\n"
-"            "
-
 #: templates/wiki/base.html:16
 msgid "Accueil du wiki"
 msgstr "Wiki homepage"
@@ -4481,10 +4502,6 @@ msgstr "Wiki homepage"
 #: templates/wiki/base.html:17
 msgid "Une page au hasard"
 msgstr "Ramdom page"
-
-#: templates/wiki/base.html:18
-msgid "Changements"
-msgstr "Modify"
 
 #: templates/wiki/changes.html:5 templates/wiki/changes.html.py:14
 #: templates/wiki/changes.html:18 templates/wiki/show.html:17
@@ -4589,6 +4606,9 @@ msgid ""
 "recherche dans le menu de\n"
 "            gauche."
 msgstr ""
+"If you think this page could be useful for others, you can <a href=\"wiki-3-"
+"0-0-%(slug)s.html\">create it</a>. If you absolutely need the information "
+"contained in this page, you can try the Search function in the left menu."
 
 #: templates/wiki/notfound.html:25
 msgid ""
@@ -4670,6 +4690,10 @@ msgstr "Folder"
 msgid "Dossiers"
 msgstr "Folders"
 
+#: upload/models.py:63
+msgid "Taille"
+msgstr "Size"
+
 #: upload/models.py:69
 msgid "Fichier"
 msgstr "File"
@@ -4738,19 +4762,19 @@ msgstr "Your avatar's URL"
 msgid "Utilisez «Envoi de fichiers» pour envoyer votre avatar sur internet"
 msgstr "Use \"Send a file\" to upload your avatar"
 
-#: users/views.py:158
+#: users/views.py:155
 msgid "Profil modifié avec succès"
 msgstr "Profile successfully edited"
 
-#: users/views.py:189
+#: users/views.py:186
 msgid "Pseudonyme et e-mail modifiés avec succès"
 msgstr "Nickname and e-mail successfully modified"
 
-#: users/views.py:216
+#: users/views.py:213
 msgid "Mot de passe changé avec succès"
 msgstr "Password successfully modified"
 
-#: users/views.py:246
+#: users/views.py:243
 msgid "Design changé"
 msgstr "Design changed"
 
@@ -4794,31 +4818,31 @@ msgstr "Author (user)"
 msgid "Auteur (adresse IP)"
 msgstr "Author (IP adress)"
 
-#: wiki/views.py:134
+#: wiki/views.py:135
 msgid "Page créée avec succès"
 msgstr "Page successfully created"
 
-#: wiki/views.py:173
+#: wiki/views.py:174
 msgid "Page éditée avec succès"
 msgstr "Page succesfully edited"
 
-#: wiki/views.py:198
+#: wiki/views.py:199
 msgid "rouges"
 msgstr "red"
 
-#: wiki/views.py:199
+#: wiki/views.py:200
 msgid "verts"
 msgstr "green"
 
-#: wiki/views.py:200
+#: wiki/views.py:201
 msgid "bleus"
 msgstr "blue"
 
-#: wiki/views.py:201
+#: wiki/views.py:202
 msgid "noirs"
 msgstr "black"
 
-#: wiki/views.py:214
+#: wiki/views.py:215
 #, python-format
 msgid ""
 "Saissez les caractères <span style=\"color: %(color)s;\">%(name)s</span> de "
@@ -4827,34 +4851,70 @@ msgstr ""
 "Type the <span style=\"color: %(color)s;\">%(name)s</span> characters of the "
 "above image"
 
-#: wiki/views.py:276
+#: wiki/views.py:277
 msgid "Le wiki"
 msgstr "Wiki"
 
-#: wiki/views.py:337
+#: wiki/views.py:338
 #, python-format
 msgid "Retour en arrière : %s"
 msgstr "Go back : %s"
 
-#: wiki/views.py:344
+#: wiki/views.py:345
 msgid "Changement défait"
 msgstr "Change undone"
 
-#: wiki/views.py:375
+#: wiki/views.py:376
 msgid "La page a été dé-protégée"
 msgstr "The page has been unlocked"
 
-#: wiki/views.py:378
+#: wiki/views.py:379
 msgid "La page a été protégée"
 msgstr "The page has been locked"
 
-#: wiki/views.py:395
+#: wiki/views.py:396
 msgid "La page n'est plus privée"
 msgstr "The page is not private anymore"
 
-#: wiki/views.py:398
+#: wiki/views.py:399
 msgid "La page est maintenant privée"
 msgstr "The page is now private"
+
+#~ msgid "Anglais"
+#~ msgstr "English"
+
+#~ msgid "WebSVN"
+#~ msgstr "WebSVN"
+
+#~ msgid "Révision"
+#~ msgstr "Revision"
+
+#~ msgid "Log"
+#~ msgstr "Log"
+
+#~ msgid "Dernière révision"
+#~ msgstr "Last revision"
+
+#~ msgid ""
+#~ "\n"
+#~ "                Contenu de %(file)s\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "               %(file)s's content\n"
+#~ "            "
+
+#~ msgid ""
+#~ "\n"
+#~ "                Historique de %(file)s\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "                %(file)s's history\n"
+#~ "            "
+
+#~ msgid "English"
+#~ msgstr "English"
 
 #~ msgid "Liste des fichiers"
 #~ msgstr "Files list"

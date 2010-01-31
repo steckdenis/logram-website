@@ -26,21 +26,27 @@
         </p>
     {% endblocktrans %}
     
-    <a href="websvn-1.html">
-        <img src="{{ style }}/img/websvn_icon.png" alt="{% trans "WebSVN" %}" class="devcorner_img_left" />
+    <a href="http://gitorious.org/logram">
+        <img src="{{ style }}/img/websvn_icon.png" alt="{% trans "WebGIT" %}" class="devcorner_img_left" />
     </a>
     <div class="devcorner_desc_left">
-        <h2><a href="websvn-1.html">{% trans "Code source en ligne" %}</a></h2>
+    <h2><a href="http://gitorious.org/logram">{% trans "Code source en ligne" %}</a></h2>
         
         <p>
             {% blocktrans %}
-                Logram utilise le système de gestion des sources Subversion, qui permet aux développeurs de travailler ensemble, en même temps, et de gérer les changements faits par tout le monde.
+                Logram utilise le système de gestion des sources Git, qui permet aux développeurs de travailler ensemble, en même temps, et de gérer les changements faits par tout le monde.
             {% endblocktrans %}
         </p>
         
         <p>
             {% blocktrans %}
                 Ce module vous permet de naviger dans la toute dernière version des sources de Logram, et de les récupérer. Ainsi, vous êtes toujours à jour et pouvez poster des rapports de bugs plus pertinents.
+            {% endblocktrans %}
+        </p>
+        
+        <p>
+            {% blocktrans %}
+                Le dépôt Git de Logram étant hébergé chez <a href="http://gitorious.org">Gitorious</a>, vous bénéficiez également de toutes les fonctionnalités de cette forge, comme la possibilité de clôner le dépôt, le modifier directement, puis demander que vos changements soient <em>mergés</em> dans le dépôt officiel.
             {% endblocktrans %}
         </p>
     </div>

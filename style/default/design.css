@@ -836,7 +836,7 @@ hr
     background-color: #afa;
 }
 
-/* WebSVN */
+/* Code */
 
 code {
     display: block;
@@ -853,33 +853,6 @@ code.console {
     background-color: #000;
     font-weight: bold;
     color: #ddd;
-}
-
-.websvn_dir_log {
-    border: 1px solid #888;
-    background-color: #eef;
-    margin-top: 20px;
-}
-
-.websvn_dir_log h3 {
-    border-bottom: 1px dashed #888;
-    margin: 0px;
-    padding: 1px;
-    font-size: 16px;
-    text-align: center;
-    background: url("img/index_block_title_bg.png") left repeat-x;
-    height: 19px;
-    line-height: 19px;
-}
-
-.websvn_log_message {
-    border: 1px dashed #aaa;
-    margin: 5px;
-    padding: 2px;
-}
-
-.websvn_log_message p {
-    margin: 0px;
 }
 
 /* Téléchargements */

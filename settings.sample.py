@@ -12,7 +12,7 @@ ugettext = lambda s: s
 
 LANGUAGES = (
     ('fr', ugettext('Français')),
-    ('en', ugettext('Anglais')),
+    ('en', ugettext('Anglais (beta)')),
 )
 
 MANAGERS = ADMINS
@@ -112,7 +112,6 @@ INSTALLED_APPS = (
     'pyv4.wiki',
     'pyv4.packages',
     'pyv4.demands',
-    'pyv4.websvn',
     'pyv4.mp',
     'pyv4.feeds',
     'pyv4.pastebin',
