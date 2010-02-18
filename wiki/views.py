@@ -274,11 +274,11 @@ def changes(request, page):
         pg = paginator.page(paginator.num_pages)
         
     # 3. Construire manuellement une page pour la template (ok, c'est sale, mais quand-même plus propre que des hacks dans la template)
-    page = {'title': _('Le wiki'), 'ignore_breadcrumb': True}
+    dict_page = {'title': _('Le wiki'), 'ignore_breadcrumb': True}
     
     # 4. Afficher
     return tpl('wiki/changes.html',
-        {'page': page,
+        {'page': dict_page,
          'list_pages': get_list_page(page, paginator.num_pages, 4),
          'global_changes': True,
          'changes': pg.object_list}, request)
