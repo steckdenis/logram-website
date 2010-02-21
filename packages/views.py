@@ -55,7 +55,7 @@ def str_of_package(package, language, type, strs, changelog):
     rs = string_of_package(package, language, type, strs, changelog)
 
     if rs.id == None and language != package.primarylang:
-        rs = str_of_package(package, package.primarylang, type, strs)
+        rs = str_of_package(package, package.primarylang, type, strs, changelog)
     elif rs.id == None:
         return String()
 
@@ -231,9 +231,9 @@ def showpackage(request, package_id):
     # 4. Prendre les chaînes du paquet
     strings = String.objects.filter(package=package)
 
-    package.title = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 0, strings, 0).content
-    package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, 0).content
-    package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, 0).content
+    package.title = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 0, strings, None).content
+    package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, None).content
+    package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, None).content
     
     # 5. Rendre la template
     return tpl('packages/view.html', 
