@@ -23,6 +23,7 @@
 
 from django.contrib.syndication.feeds import Feed
 from django.utils.cache import cache
+from django.utils.translation import gettext as _
 
 from pyv4.news.models import News
 from pyv4.demands.models import Demand
@@ -33,9 +34,9 @@ from pyv4.general.functions import *
 
 
 class LatestNews(Feed):
-    title = "Logram-Project: News"
+    title = _("Logram-Project: News")
     link = "/"
-    description = "Dix dernières nouvelles de logram-project.org"
+    description = _("Dix dernières nouvelles")
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
@@ -55,9 +56,9 @@ class LatestNews(Feed):
     
     
 class LatestJournal(Feed):
-    title = "Logram-Project: Journal"
+    title = _("Logram-Project: Journal")
     link = "/"
-    description = "Dix derniers journaux de logram-project.org"
+    description = _("Dix derniers journaux")
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
@@ -77,9 +78,9 @@ class LatestJournal(Feed):
     
 
 class LatestAsk(Feed):
-    title = "Logram-Project: Demandes"
+    title = _("Logram-Project: Demandes")
     link = "/"
-    description = "Dix dernières demandes de logram-project.org"
+    description = _("Dix dernières demandes")
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
@@ -99,9 +100,9 @@ class LatestAsk(Feed):
     
     
 class LatestMessage(Feed):
-    title = "Logram-Project: Messages forum"
+    title = _("Logram-Project: Messages forum")
     link = "/"
-    description = "Dix dernières messages du forum logram-project.org"
+    description = _("Dix derniers messages")
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
@@ -109,7 +110,7 @@ class LatestMessage(Feed):
         MList = False
         if not MList:
             MList = Topic.objects.select_related('last_post', 'last_post__author') \
-                    .extra(select={'date_created': 'forum_post.date_created', 'contents': 'forum_post.contents'},where=['forum_topic.forum_id IS NOT NULL']) \
+                    .extra(select={'date_created': 'forum_post.date_created', 'contents': 'forum_post.contents'},where=['forum_topic.p_type=0']) \
                     .order_by('-last_post__date_created')[:10]
             
             # Ecris le cache du RSS Message du forum de 30min
@@ -125,9 +126,9 @@ def index(request):
 
 
 class LatestWiki(Feed):
-    title = "Logram-Project: Wiki"
+    title = _("Logram-Project: Wiki")
     link = "/"
-    description = "Dix derniers Wiki crée logram-project.org"
+    description = _("Dix dernières pages de wiki")
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
@@ -146,9 +147,9 @@ class LatestWiki(Feed):
 
 		
 class LatestPackages(Feed):
-    title = "Logram-Project: Packages"
+    title = _("Logram-Project: Packages")
     link = "/"
-    description = "Dix derniers paquets disponibles sur logram-project.org"
+    description = _("Dix derniers paquets disponibles")
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
@@ -164,7 +165,3 @@ class LatestPackages(Feed):
     
     def item_link(self, Package):
         return '/packages-4-%d.html' % (Package.id)
-
-    
-def index(request):
-    return tpl('feeds/index.html',"", request)
