@@ -55,6 +55,10 @@
             <div id="index_block_news">
                 <h3>{% trans "Dernières nouvelles" %}</h3>
                 
+                <a href="/feeds/latestnews/" class="next_link">
+                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
+                </a>
+                
                 <ul>
                     {% for news in latest_news %}
                         <li>
@@ -73,13 +77,14 @@
                 <a href="news-1-1-0-0.html" class="next_link">
                     <img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" />
                 </a>
-                <a href="/feeds/latestnews/" class="next_link">
-                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
-                </a>
             </div>
             
             <div id="index_block_message">
                 <h3>{% trans "Derniers messages du forum" %}</h3>
+                
+                <a href="/feeds/latestmsg/" class="next_link">
+                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
+                </a>
                 
                 <ul>
                     {% for topic in latest_topics %}
@@ -96,13 +101,14 @@
                 <a href="forum.html" class="next_link">
                     <img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" />
                 </a>
-                <a href="/feeds/latestmsg/" class="next_link">
-                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
-                </a>
             </div>
             
             <div id="index_block_wiki">
                 <h3>{% trans "Pages de documentation modifiées" %}</h3>
+                
+                <a href="/feeds/latestwiki/" class="next_link">
+                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
+                </a>
                 
                 <ul>
                     {% for change in latest_wiki %}
@@ -122,9 +128,6 @@
                 <a href="wiki.html" class="next_link">
                     <img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" />
                 </a>
-                <a href="/feeds/latestwiki/" class="next_link">
-                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
-                </a>
             </div>
         </div>
             
@@ -139,6 +142,10 @@
             
             <div id="index_block_bugs">
                 <h3>{% trans "Dernières demandes" %}</h3>
+                
+                <a href="/feeds/latestask/" class="next_link">
+                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
+                </a>
                 
                 <ul>
                     {% for d in latest_demands %}
@@ -155,13 +162,14 @@
                 <a href="demand-1.html" class="next_link">
                     <img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" />
                 </a>
-                <a href="/feeds/latestask/" class="next_link">
-                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
-                </a>
             </div>
             
             <div id="index_block_privnews">
                 <h3>{% trans "Derniers journaux" %}</h3>
+                
+                <a href="/feeds/latestjournal/" class="next_link">
+                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
+                </a>
                 
                 <ul>
                     {% for news in latest_journals %}
@@ -178,14 +186,14 @@
                         </li>
                     {% endfor %}
                 </ul>
-                
-                <a href="/feeds/latestjournal/" class="next_link">
-                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
-                </a>
             </div>
             
              <div id="index_block_packages">
                 <h3>{% trans "Derniers paquets" %}</h3>
+                
+                <a href="/feeds/latestpackages/" class="next_link">
+                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
+                </a>
                 
                 <ul>
                     {% for package in latest_packages %}
@@ -201,9 +209,6 @@
                 
                 <a href="packages-1.html" class="next_link">
                     <img src="{{ style }}/img/next.png" alt="{% trans "Plus..." %}" />
-                </a>
-                <a href="/feeds/latestpackages/" class="next_link">
-                    <img src="{{ style }}/img/feed.png" alt="{% trans "Flux RSS" %}" />
                 </a>
             </div>
             
