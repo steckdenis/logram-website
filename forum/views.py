@@ -23,6 +23,7 @@
 from pyv4.forum.models import *
 from pyv4.forum.forms import *
 from pyv4.general.functions import *
+from pyv4.news.models import News
 
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.shortcuts import get_object_or_404
@@ -32,6 +33,29 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template import Context, Template
+
+def return_page(topic, msg_id):
+    rs = ''
+    if topic.p_type == 0:
+        rs = 'forum-2-%i-%i-%s.html' % (
+            topic.id, 
+            topic.last_post_page, 
+            slugify(topic.title))
+    elif topic.p_type == 1:
+        news = get_object_or_404(News, pk=topic.parent_id)
+        rs = 'news-2-%i-%i-%s.html' % (
+            topic.parent_id,
+            topic.last_post_page,
+            slugify(news.title))
+    elif topic.p_type == 2:
+        rs = 'demand-5-%i-%i.html' % (
+            topic.parent_id,
+            topic.last_post.page)
+            
+    if msg_id != 0:
+        rs += '#r%i' % msg_id
+        
+    return rs
 
 def index(request):
     # Afficher la liste des forums dans leurs catégories. La fonction est complexe, mais j'explique ;-)
@@ -112,22 +136,16 @@ def viewforum(request, forum_id, page):
     forum = get_object_or_404(Forum, pk=forum_id)
     
     # 2. Récupérer les topics de ce forum TODO: filtrer les langues que l'utilisateur veut
-    topics = Topic.objects.select_related('last_post', 'author', 'last_post__author').filter(forum=forum).order_by('-stick', '-last_post__date_created')
+    topics = Topic.objects.select_related('last_post', 'author', 'last_post__author').filter(p_type=0, parent_id=forum_id).order_by('-stick', '-last_post__date_created')
     
     # 3. Plein de fonctions affichent des topics, donc tout est regroupé
     return list_topics(request, topics, page, 
-        {'forum': forum,
-         'isnt_a_forum': False})
+        {'forum': forum})
 
 # Equivalent de viewtopic, mais peut etre réutilisée pour afficher les commentaires de bugs, wiki et autres
-def list_posts(request, topic_id, page, config, template):
-    if type(topic_id).__name__ != 'Topic':
-        topic = get_object_or_404(Topic, pk=topic_id)
-    else:
-        topic = topic_id
-    
+def list_posts(request, topic, page, config, template):
     # 1. Récupérer la liste des messages du topic
-    posts = Post.objects.select_related('author', 'topic', 'topic__author', 'author__user').filter(topic=topic_id).order_by('date_created')
+    posts = Post.objects.select_related('author', 'topic', 'topic__author', 'author__user').filter(topic=topic).order_by('date_created')
     
     # 2. Paginer tout ça
     paginator = Paginator(posts, 20)        #20 posts par page
@@ -171,7 +189,7 @@ def list_posts(request, topic_id, page, config, template):
             ut.save()
     
     # 6. Si modo (ou autre), afficher la liste des forums dans lequel le topic peut être déplacé
-    if not config.get('is_comments', False):
+    if topic.p_type == 0:
         forums = {}
         if request.user.has_perm('forum.can_change_topic'):
             forums = Forum.objects.all()
@@ -195,7 +213,6 @@ def list_posts(request, topic_id, page, config, template):
     config['posts'] = posts
     config['topic'] = topic
     config['poll'] = poll
-    config['is_fr'] = request.LANGUAGE_CODE.startswith('fr')
     config['list_pages'] = get_list_page(page, paginator.num_pages, 4)
     config['watch'] = watch
 
@@ -206,13 +223,15 @@ def list_posts(request, topic_id, page, config, template):
 
 def viewtopic(request, topic_id, page):
     # Afficher un topic
+    # 1. Prendre le sujet
+    topic = get_object_or_404(Topic, pk=topic_id)
     
-    # NOTE: Quand on poste un message ou qu'on en édite un, il faut savoir sur quelle page on va
-    # revenir (viewtopic, news, bug, etc). Cette variable de session nous informe de ce qu'on doit faire
-    request.session['forum_post_return_url'] = 'forum-2-%i-PAGE-TOPIC.html' % int(topic_id)
+    # 2. Prendre le forum
+    forum = get_object_or_404(Forum, pk=topic.parent_id)
     
-    # On a fini
-    return list_posts(request, topic_id, page, {'extends': 'forum/base.html'}, 'forum/viewtopic.html')
+    # 3. Afficher les posts
+    return list_posts(request, topic, page, {
+        'forum': forum}, 'forum/viewtopic.html')
 
 @permission_required('forum.add_post')
 def post(request, topic_id):
@@ -221,10 +240,7 @@ def post(request, topic_id):
         raise Http404
     
     # 1. Vérifier que le topic n'est pas fermé
-    try:
-        topic = Topic.objects.select_related('forum').get(pk=topic_id)
-    except Topic.DoesNotExist:
-        raise Http404
+    topic = get_object_or_404(Topic, pk=topic_id)
     
     if topic.closed:
         raise Http404
@@ -238,19 +254,18 @@ def post(request, topic_id):
     topic.num_posts += 1
     topic.last_post_page = (topic.num_posts / 20) + 1
     
-    if topic.forum:
+    if topic.p_type == 0:
         # Les topics de commentaire n'ont pas de forum parent
-        topic.forum.num_posts += 1
-        topic.forum.last_topic = topic
-        topic.forum.save()
+        forum = get_object_or_404(Forum, pk=topic.parent_id)
+        
+        forum.num_posts += 1
+        forum.last_topic = topic
+        forum.save()
         
     topic.save()
     
-    # 4. Trouver la redirection
-    # NOTE: On poste dans un topic, mais aussi dans des commentaires, donc on doit savoir sur quelle
-    # page on retourne
-    redirect_url = request.session['forum_post_return_url']
-    redirect_url = redirect_url.replace('PAGE', str(topic.last_post_page)).replace('TOPIC', slugify(topic.title))
+    # 4. Trouver l'url de redirection
+    redirect_url = return_page(topic, msg.id)
     
     # 5. Envoyer un mail à tous ceux qui surveillent ce topic
     bookmarks = Bookmark.objects \
@@ -268,7 +283,7 @@ def post(request, topic_id):
     c = Context({
         'topic': topic.title,
         'body': request.POST['body'],
-        'url': '%s#r%i' % (redirect_url, msg.id),
+        'url': redirect_url,
         'user': request.user.username})
         
     mailmsg = tpl.render(c)
@@ -285,7 +300,7 @@ def post(request, topic_id):
     
     # 6. On a fini
     request.user.message_set.create(message=_('Message posté avec succès'))
-    return HttpResponseRedirect('%s#r%i' % (redirect_url, msg.id))
+    return HttpResponseRedirect(redirect_url)
 
 @permission_required('forum.change_post')
 def edit(request, post_id):
@@ -300,7 +315,7 @@ def edit(request, post_id):
     if post.author != request.user.get_profile() and not request.user.has_perm('forum.edit_all_posts'):
         raise Http404
     
-    can_change_topic = ((request.user.get_profile() == post.topic.author and post.topic.forum) or request.user.has_perm('form.change_topic'))
+    can_change_topic = ((request.user.get_profile() == post.topic.author and post.topic.p_type == 0) or request.user.has_perm('form.change_topic'))
     
     if request.method == 'POST':
         if can_change_topic:
@@ -327,8 +342,7 @@ def edit(request, post_id):
         
             # NOTE: On poste dans un topic, mais aussi dans des commentaires, donc on doit savoir sur quelle
             # page on retourne
-            redirect_url = request.session['forum_post_return_url']
-            redirect_url = redirect_url.replace('PAGE', str(post.topic.last_post_page)).replace('TOPIC', slugify(post.topic.title))
+            redirect_url = return_page(post.topic, post.id)
             
             # On a vraiment fini
             return HttpResponseRedirect(redirect_url)
@@ -383,7 +397,7 @@ def toggle_helped(request, post_id):
     
     # On a fini
     request.user.message_set.create(message=message)
-    return HttpResponseRedirect('forum-2-%i-1-%s.html' % (post.topic.id, slugify(post.topic.title)))
+    return HttpResponseRedirect(return_page(post.topic, post.id))
 
 @permission_required('forum.add_topic')
 def newtopic(request, forum_id):
@@ -399,7 +413,8 @@ def newtopic(request, forum_id):
             forum = get_object_or_404(Forum, pk=forum_id)
             
             # Créer le sujet
-            topic = Topic(forum=forum,
+            topic = Topic(parent_id=forum_id,
+                          p_type=0,
                           author=request.user.get_profile(),
                           lang=form.cleaned_data['lang'],
                           title=form.cleaned_data['title'],
@@ -426,7 +441,7 @@ def newtopic(request, forum_id):
             forum.save()
             
             request.user.message_set.create(message=_('Nouveau sujet créé avec succès'))
-            return HttpResponseRedirect('forum-2-%i-1-%s.html' % (topic.id, slugify(topic.title)))
+            return HttpResponseRedirect(return_page(topic, message.id))
     else:
         form = NewTopicForm({'lang': request.LANGUAGE_CODE.split('_')[0]})
     
@@ -443,17 +458,18 @@ def unread(request, forum_id, page):
     
     # On reprend la liste des topics lus
     if forum_id == 0:
+        forum = {'id': 0}
         read_topics = UserTopic.objects \
             .select_related('topic') \
             .extra(where=['forum_usertopic.last_read_post_id=forum_topic.last_post_id', 'forum_topic.id=forum_usertopic.topic_id'], tables=['forum_topic']) \
-            .filter(user=request.user.get_profile()) \
+            .filter(user=request.user.get_profile(), topic__p_type=0) \
             .values('topic')
     else:
         forum = get_object_or_404(Forum, pk=forum_id)
         read_topics = UserTopic.objects \
             .select_related('topic', 'topic__forum') \
             .extra(where=['forum_usertopic.last_read_post_id=forum_topic.last_post_id']) \
-            .filter(user=request.user.get_profile(), topic__forum=forum) \
+            .filter(user=request.user.get_profile(), topic__parent_id=forum_id, topic__p_type=0) \
             .values('topic')
     
     if len(read_topics) != 0:
@@ -462,19 +478,20 @@ def unread(request, forum_id, page):
         unread_topics = Topic.objects \
             .select_related('last_post', 'author', 'last_post__author') \
             .extra(where=['forum_topic.id NOT IN (%s)' % ft]) \
-            .filter(forum__isnull=False) \
+            .filter(p_type=0) \
             .order_by('-stick', '-last_post__date_created')
     
         if forum_id != 0:
-            unread_topics = unread_topics.filter(forum=forum)
+            unread_topics = unread_topics.filter(parent_id=forum_id)
     else:
         unread_topics = Topic.objects.none()
         
     # Rendre la liste
     return list_topics(request, unread_topics, page,
-        {'forum': {'id': forum_id},
+        {'forum': forum,
          'isnt_a_forum': True,
          'title': _('Sujets non-lus'),
+         'func': 7,
          'on_unread_topics': True})
 
 @login_required
@@ -484,17 +501,21 @@ def mytopics(request, forum_id, page):
     
     my_topics = Topic.objects \
         .select_related('last_post', 'author', 'last_post__author') \
-        .filter(author=request.user.get_profile(), forum__isnull=False) \
+        .filter(author=request.user.get_profile(), p_type=0) \
         .order_by('-stick', '-last_post__date_created')
     
     if forum_id != 0:
         my_topics = my_topics.filter(forum__id=forum_id)
+        forum = get_object_or_404(Forum, pk=forum_id)
+    else:
+        forum = {'id': 0}
        
     # C'est fini, on peut rendre
     return list_topics(request, my_topics, page,
-        {'forum': {'id': forum_id},
+        {'forum': forum,
          'isnt_a_forum': True,
          'title': _('Sujets que j\'ai créés'),
+         'func': 8,
          'on_my_topics': True})
 
 @login_required
@@ -505,7 +526,7 @@ def visited(request, forum_id, page):
     visited_topics = Topic.objects \
         .select_related('last_post', 'author', 'last_post__author') \
         .extra(tables=['forum_usertopic'], where=['forum_usertopic.topic_id=forum_topic.id']) \
-        .filter(usertopic__user=request.user.get_profile(), forum__isnull=False) \
+        .filter(usertopic__user=request.user.get_profile(), p_type=0) \
         .order_by('-stick', '-last_post__date_created')
 
     if forum_id != 0:
@@ -515,6 +536,7 @@ def visited(request, forum_id, page):
         {'forum': {'id': forum_id},
          'isnt_a_forum': True,
          'title': _('Sujets que j\'ai visités'),
+         'func': 9,
          'on_visited_topics': True})
 
 @login_required
@@ -525,7 +547,7 @@ def posted(request, forum_id, page):
     # Récupérer nos messages et leurs topics
     my_messages = Post.objects \
         .select_related('topic') \
-        .filter(author=request.user.get_profile(), topic__forum__isnull=False)
+        .filter(author=request.user.get_profile(), topic__p_type=0)
     
     # Filter par forum si nécessaire
     if forum_id != 0:
@@ -543,6 +565,7 @@ def posted(request, forum_id, page):
         {'forum': {'id': forum_id},
          'isnt_a_forum': True,
          'title': _('Sujets auxquels j\'ai participé'),
+         'func': 10,
          'on_posted_topics': True})
 
 @login_required
@@ -560,7 +583,7 @@ def toggle_solve(request, topic_id):
     
     # On a fini
     request.user.message_set.create(message=_('Résolution du sujet mise à jour'))
-    return HttpResponseRedirect('forum-2-%i-1-%s.html' % (topic.id, slugify(topic.title)))
+    return HttpResponseRedirect(return_page(topic, 0))
 
 @permission_required('forum.add_alert')
 def alert(request, topic_id):
@@ -580,7 +603,7 @@ def alert(request, topic_id):
             
             # On a fini
             request.user.message_set.create(message=_('Modérateurs alertés'))
-            return HttpResponseRedirect('forum-2-%i-1-%s.html' % (topic_id, slugify(topic.title)))
+            return HttpResponseRedirect(return_page(topic, 0))
     else:
         form = AlertForm()
             
@@ -630,14 +653,18 @@ def moderate(request, topic_id):
     elif action == 'move':
         forum_id = request.POST['forum']
         
+        if topic.p_type != 0:
+            raise Http404
+        
         # Décompter les messages du sujet à son ancien forum
-        topic.forum.num_topics -= 1
-        topic.forum.num_posts -= topic.num_posts
-        topic.forum.save()
+        old_forum = get_object_or_404(Forum, pk=topic.parent_id)
+        old_forum.num_topics -= 1
+        old_forum.num_posts -= topic.num_posts
+        old_forum.save()
         
         # Déplacer le sujet
         frm = get_object_or_404(Forum, pk=forum_id)
-        topic.forum = frm
+        topic.parent_id = forum_id
         topic.save()
         
         # Ajouter au nouveau forum les messages du sujet
@@ -653,19 +680,16 @@ def moderate(request, topic_id):
         # On a fini
         request.user.message_set.create(message=_('Sujet déplacé avec succès'))
         
-        if request.LANGUAGE_CODE.startswith('fr'):
-            nforum = topic.forum.name_fr
-        else:
-            nforum = topic.forum.name_en
+        nforum = _(frm.name)
         
-        return HttpResponseRedirect('forum-1-%i-1-%s.html' % (topic.forum.id, slugify(nforum)))
+        return HttpResponseRedirect('forum-1-%i-1-%s.html' % (frm.id, slugify(nforum)))
     else:
         raise Http404
     
     topic.save()
     
     request.user.message_set.create(message=message)
-    return HttpResponseRedirect('forum-2-%i-1-%s.html' % (topic.id, slugify(topic.title)))
+    return HttpResponseRedirect(return_page(topic, 0))
 
 @permission_required('forum.delete_alert')
 def rmalert(request, alert_id):
@@ -727,7 +751,7 @@ def addpoll(request, topic_id):
             
             # On a fini
             request.user.message_set.create(message=_(u'Sondage ajouté'))
-            return HttpResponseRedirect('forum-2-%i-1-%s.html' % (topic.id, slugify(topic.title)))
+            return HttpResponseRedirect(return_page(topic, 0))
     else:
         form = PollForm()
     
@@ -772,7 +796,7 @@ def vote(request, poll_id):
     if not request.user.is_anonymous:
         request.user.message_set.create(message=_(u'Votre vote a été pris en compte'))
         
-    return HttpResponseRedirect('forum-2-%i-1-%s.html' % (topic.id, slugify(topic.title)))
+    return HttpResponseRedirect(return_page(topic, 0))
 
 @login_required
 def toggle_watch(request, topic_id):
@@ -798,6 +822,6 @@ def toggle_watch(request, topic_id):
         
         message = _(u'Vous n\'êtes plus abonné au sujet «%s»') % topic.title
     
-    # 4. Retourner à la page précédante (pas calculé avec l'ID du topic, ce topic pouvant être une news, etc)
+    # 4. Retourner au sujet
     request.user.message_set.create(message=message)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    return HttpResponseRedirect(return_page(topic, 0))

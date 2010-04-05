@@ -252,7 +252,7 @@
                             {% for alert in moderator_alerts %}
                                 <li>
                                     {% if alert.topic %}
-                                        <a href="forum-2-{{ alert.topic.id }}-0-{{ alert.topic.title|slugify }}.html">
+                                        <a href="{{ alert.topic|topic_url }}">
                                                 {{ alert.topic.title }}
                                         </a>
                                         ({{ alert.author|color_pseudo }}, 

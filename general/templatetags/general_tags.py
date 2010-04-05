@@ -14,6 +14,7 @@ import re
 
 from pyv4.general.functions import lcode as lc, get_list_page, list_languages, highlight_code
 from pyv4.mp.models import UserTopic
+from pyv4.forum.views import return_page
 
 register = template.Library()
 
@@ -35,29 +36,10 @@ def mkcolorpseudo(pseudo, id, attr, uid):
 def color_pseudo(profile):
     # Colorie un pseudo et renvoie un lien vers son profil
     return mkcolorpseudo(profile.uname, profile.id, profile.main_group_name.lower(), profile.user_id)
-
+    
 @register.filter
-def pagination(page, url):
-    #page = Paginator.Page. L'url est de la forme "news-1-%i.html", %i est remplacé par les n° de page
-    mlist = get_list_page(page.number, page.paginator.num_pages, 4)
-    
-    pagination = ''
-    
-    if page.has_previous():
-        pagination += '<a href="%s">%s</a>' % (url % page.previous_page_number(), _('« Précédant'))
-    
-    for num in mlist:
-        if num == page.number:
-            pagination += '%i ' % num
-        elif num == '...':
-            pagination += num + ' '
-        else:
-            pagination += '<a href="%s">%i</a>' + (url % num, num)
-    
-    if page.has_next():
-        pagination += '<a href="%s">%s</a>' % (url % page.next_page_number(), _('Suivant »'))
-    
-    return pagination
+def topic_url(topic):
+    return return_page(topic, 0)
 
 @register.filter
 def format_date(date):

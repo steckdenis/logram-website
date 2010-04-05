@@ -12,12 +12,21 @@
     {% endif %}
 {% endblock %}
 
-{% block FAriane %}{{ block.super }} &raquo; 
-    {% if not isnt_a_forum %}
-        {% trans forum.name %}
-    {% else %}
+{% block FAriane %}{{ block.super }}
+    {% if forum.id %}
+        &raquo; 
+        {% if title %}
+            <a href="forum-1-{{ forum.id }}-1-{{ forum.name|slugify }}.html">
+                {% trans forum.name %}
+            </a>
+        {% else %}
+            {% trans forum.name %}
+        {% endif %}
+    {% endif %}
+    
+    {% if title %}
         {# Quand la template est utilisée pour les derniers sujets, etc #}
-        {{ title }}
+        &raquo; {{ title }}
     {% endif %}
 {% endblock %}
 
@@ -41,7 +50,7 @@
                 {% ifequal forum.id 0 %}
                     <a href="forum.html">{% trans "Ne plus filtrer" %}</a> &bull;
                 {% else %}
-                    <a href="forum-1-{{ forum.id }}-0-forum.html">{% trans "Ne plus filtrer" %}</a> &bull;
+                    <a href="forum-1-{{ forum.id }}-1-{{ forum.name|slugify }}.html">{% trans "Ne plus filtrer" %}</a> &bull;
                 {% endifequal %}
             {% endif %}
             
@@ -138,7 +147,11 @@
     
     <div class="pagination">
         {% for pg in list_pages %}
-            <a href="forum-1-{{ forum.id }}-{{ pg }}-{{ forum.name|slugify }}.html">{{ pg }}</a>
+            {% if not isnt_a_forum %}
+                <a href="forum-1-{{ forum.id }}-{{ pg }}-{{ forum.name|slugify }}.html">{{ pg }}</a>
+            {% else %}
+                <a href="forum-{{ func }}-{{ forum.id }}-{{ pg }}.html">{{ pg }}</a>
+            {% endif %}
         {% endfor %}
     </div>
 {% endblock %}

@@ -84,7 +84,7 @@ def index(request, page, cat_id, user_id):
          'cat_id': cat_id}, request)
 
 def view(request, page, news_id):
-    #Récupérer la news et l'affiche.
+    #Récupérer la news et l'afficher.
     try:
         news = News.objects.select_related('category', 'author', 'topic').get(pk=news_id)
     except News.DoesNotExist:
@@ -234,14 +234,16 @@ def edit(request, news_id):
                 return HttpResponseRedirect('/news-3.html')
             else:
                 topic = Topic(author=request.user.get_profile(),
-                            lang=request.LANGUAGE_CODE.split('_')[0],
-                            title=form.cleaned_data['title'],
-                            subtitle='',
-                            last_post_page=1,
-                            num_posts=0,
-                            stick=False,
-                            closed=False,
-                            resolved=False)
+                             parent_id=0,
+                             p_type=1,
+                             lang=request.LANGUAGE_CODE.split('_')[0],
+                             title=form.cleaned_data['title'],
+                             subtitle='',
+                             last_post_page=1,
+                             num_posts=0,
+                             stick=False,
+                             closed=False,
+                             resolved=False)
 
                 topic.save()
                 
@@ -262,6 +264,9 @@ def edit(request, news_id):
                             topic=topic)
                             
                 news.save()
+                
+                topic.parent_id = news.id
+                topic.save()
 
                 request.user.message_set.create(message= _(u'Nouvelle "%s" créée avec succès') % news.title)
                 return HttpResponseRedirect('/news-3.html')

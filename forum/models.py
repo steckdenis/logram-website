@@ -27,6 +27,12 @@ from pyv4.general.models import Profile
 from pyv4.pastebin.models import Pastebin
 from django.contrib.auth.models import User
 
+TOPIC_PARENT_TYPE = (
+    (0, _('Forum')),
+    (1, _('News')),
+    (2, _('Demande')),
+)
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
@@ -86,7 +92,8 @@ class Choice(models.Model):
         verbose_name_plural = _('Choix')
         
 class Topic(models.Model):
-    forum = models.ForeignKey(Forum, verbose_name=_('Forum'), blank=True, null=True)
+    parent_id = models.IntegerField(_('ID du parent (forum, news, etc)'))
+    p_type = models.IntegerField(_('Type'), choices=TOPIC_PARENT_TYPE)
     author = models.ForeignKey(Profile, verbose_name=_('Auteur'))
     lang = models.CharField(_('Code ISO de la langue'), max_length=2)
     

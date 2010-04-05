@@ -57,7 +57,7 @@ def index(request):
     # Messages du forum
     latest_topics = Topic.objects \
         .select_related('last_post', 'last_post__author') \
-        .extra(where=['forum_topic.forum_id IS NOT NULL']) \
+        .filter(p_type=0) \
         .order_by('-last_post__date_created')[:5]
     
     # Pages de wiki modifiées
@@ -99,7 +99,7 @@ def index(request):
         stats['open_demands'] = Demand.objects.filter(status__closed=False).count()
         stats['demands'] = Demand.objects.count()
         stats['forums'] = Forum.objects.count()
-        stats['topics'] = Topic.objects.filter(forum__isnull=False).count()
+        stats['topics'] = Topic.objects.filter(p_type=0).count()
         stats['messages'] = Post.objects.count()
         stats['packages'] = Package.objects.count()
 
