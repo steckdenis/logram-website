@@ -34,7 +34,7 @@ d_types = [
 
 # Create your models here.
 class Directory(models.Model):
-    name = models.CharField(_('Nom'), max_length=32)
+    name = models.CharField(_('Nom'), max_length=200)
     quota = models.IntegerField(_('Quota (octets)'), default=0)
     used = models.IntegerField(_('Octets utilisés'), default=0)
     
