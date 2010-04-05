@@ -1,4 +1,4 @@
-{% extends "forum/viewtopic.html" %}
+{% extends "news/base.html" %}
 {% load i18n %}
 {% load general_tags %}
 
@@ -16,15 +16,9 @@
     {{ news.title }}
 {% endblock %}
 
-{% block pagination %}
-    <div class="pagination">
-        {% for pg in list_pages %}
-            <a href="news-2-{{ news.id }}-{{ pg }}-{{ news.title|slugify }}.html">{{ pg }}</a>
-        {% endfor %}
-    </div>
-{% endblock %}
-
-{% block embedded %}
+{% block body %}
+    <h1>{{ title }}</h1>
+    
     <div id="news_pane">
         <div id="news_infos">
             {{ news.date_published|format_date|capfirst }} {% trans "par" %} {{ news.author|color_pseudo }},
@@ -71,4 +65,6 @@
     {% endif %}
     
     <h2 id="comments">{% trans "Commentaires" %}</h2>
+    
+    {% include "forum/posts_list.html" %}
 {% endblock %}

@@ -1,9 +1,10 @@
 {% load i18n %}
+{% load general_tags %}
 
 <p class="poll_question">
     <img src="{{ style }}/img/question.png" alt="" />
     {% if not topic %}
-        <a href="forum-2-{{ poll.object.topic_id }}-1-{{ poll.object.topic.title|slugify }}.html">
+        <a href="{{ poll.object.topic|topic_url }}">
             {{ poll.question }}
         </a>
     {% else %}

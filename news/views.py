@@ -100,7 +100,6 @@ def view(request, page, news_id):
     config = {'news': news,
               'cat': cat,
               'catid': catid,
-              'extends': 'news/base.html',
               'title': news.title,
               'is_comments': True}
     
@@ -112,7 +111,7 @@ def view(request, page, news_id):
     request.session['forum_post_return_url'] = 'news-2-%i-PAGE-%s.html' % (int(news_id), slugify(news.title))
     
     # On a fini
-    return list_posts(request, news.topic.id, page, config, 'news/view.html')
+    return list_posts(request, news.topic, page, config, 'news/view.html')
 
 @login_required
 def my(request):
