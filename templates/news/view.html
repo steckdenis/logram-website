@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load general_tags %}
 
+{% block title %}{{ title }}{% endblock %}
+
 {% block FAriane %}{{ block.super }}
     {% if not news.is_private %}
         <a href="news-1-1-{{ catid }}-0.html">{{ cat }}</a>
