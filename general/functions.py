@@ -249,7 +249,9 @@ def tpl(name, args, request):
             style = request.user.get_profile().style
             request.session['style'] = style
 
-    return render_to_response(name, args, context_instance=RequestContext(request, {'style': style}))
+    return render_to_response(name, args, context_instance=RequestContext(request, {
+        'style': style,
+        'settings': settings}))
 
 def lcode(text):
     h = hash(text)
