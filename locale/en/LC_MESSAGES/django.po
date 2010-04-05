@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-31 10:03+0100\n"
-"PO-Revision-Date: 2010-01-31 10:00+0100\n"
+"POT-Creation-Date: 2010-04-05 16:18+0200\n"
+"PO-Revision-Date: 2010-04-05 16:35+0200\n"
 "Last-Translator: Denis Steckelmacher <steckdenis@logram-project.org>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid "Anglais (beta)"
 msgstr "English (beta)"
 
 #: demands/models.py:34 demands/models.py:52 demands/models.py:66
-#: demands/models.py:78 forum/models.py:32 general/models.py:62
+#: demands/models.py:78 forum/models.py:38 general/models.py:62
 #: news/models.py:33 packages/models.py:54 packages/models.py:65
 #: packages/models.py:85 packages/models.py:191 packages/models.py:204
 #: packages/models.py:224 upload/models.py:37 upload/models.py:60
@@ -34,7 +34,7 @@ msgid "Nom"
 msgstr "Name"
 
 #: demands/models.py:35 demands/models.py:53 demands/models.py:67
-#: demands/models.py:79 forum/models.py:33 news/models.py:34
+#: demands/models.py:79 forum/models.py:39 news/models.py:34
 #: packages/models.py:192 packages/models.py:205
 #: templates/packages/index.html:36
 msgid "Description"
@@ -64,8 +64,8 @@ msgstr "The user can post a demand"
 msgid "Cette demande est un bug"
 msgstr "This demand is a bug"
 
-#: demands/models.py:48 packages/models.py:150 packages/models.py:169
-#: templates/global/search.html:22
+#: demands/models.py:48 forum/models.py:96 packages/models.py:150
+#: packages/models.py:169 templates/global/search.html:22
 msgid "Type"
 msgstr "Type"
 
@@ -93,12 +93,12 @@ msgstr "Status"
 msgid "Type de demande dedans"
 msgstr "Type of the demands into"
 
-#: demands/models.py:74 forum/models.py:39 news/models.py:40
+#: demands/models.py:74 forum/models.py:45 news/models.py:40
 #: packages/models.py:200 packages/models.py:206
 msgid "Categorie"
 msgstr "Category"
 
-#: demands/models.py:75 forum/models.py:40 news/models.py:41
+#: demands/models.py:75 forum/models.py:46 news/models.py:41
 #: packages/models.py:201
 msgid "Categories"
 msgstr "Categories"
@@ -115,7 +115,7 @@ msgstr "Priority"
 msgid "Priorites"
 msgstr "Priorities"
 
-#: demands/models.py:106 forum/models.py:93 mp/forms.py:27 mp/models.py:45
+#: demands/models.py:106 forum/models.py:100 mp/forms.py:27 mp/models.py:45
 #: news/forms.py:29 news/models.py:47 packages/models.py:38
 #: pastebin/models.py:32 templates/demands/edit.html:67
 #: templates/demands/list.html:69 templates/demands/list.html.py:72
@@ -127,12 +127,12 @@ msgstr "Priorities"
 msgid "Titre"
 msgstr "Title"
 
-#: demands/models.py:107 forum/models.py:121 packages/models.py:170
+#: demands/models.py:107 forum/models.py:128 packages/models.py:170
 #: pastebin/models.py:36 templates/upload/view.html:69 wiki/models.py:35
 msgid "Contenu"
 msgstr "Content"
 
-#: demands/models.py:109 forum/models.py:118 forum/models.py:139
+#: demands/models.py:109 forum/models.py:125 forum/models.py:146
 #: news/models.py:57 templates/demands/list.html:60
 #: templates/demands/list.html.py:63 wiki/models.py:58
 msgid "Date de création"
@@ -166,36 +166,36 @@ msgstr "The demand is proposed"
 msgid "Type de demande"
 msgstr "Demand type"
 
-#: demands/models.py:119 forum/models.py:90 forum/models.py:115
-#: forum/models.py:137 forum/models.py:163 mp/models.py:29 news/models.py:44
+#: demands/models.py:119 forum/models.py:97 forum/models.py:122
+#: forum/models.py:144 forum/models.py:170 mp/models.py:29 news/models.py:44
 #: packages/models.py:149 pastebin/models.py:33 templates/demands/list.html:51
-#: templates/demands/list.html.py:54 templates/forum/viewforum.html:76
-#: templates/forum/viewtopic.html:106 templates/mp/view.html:39
+#: templates/demands/list.html.py:54 templates/forum/posts_list.html:78
+#: templates/forum/viewforum.html:85 templates/mp/view.html:39
 #: templates/wiki/changes.html:30
 msgid "Auteur"
 msgstr "Author"
 
-#: demands/models.py:120 forum/models.py:63 forum/models.py:110
-#: forum/models.py:114 forum/models.py:150 forum/models.py:157
-#: forum/models.py:161 mp/models.py:35 mp/models.py:55 mp/models.py:60
-#: templates/forum/viewforum.html:74 templates/global/search.html:38
+#: demands/models.py:120 forum/models.py:69 forum/models.py:117
+#: forum/models.py:121 forum/models.py:157 forum/models.py:164
+#: forum/models.py:168 mp/models.py:35 mp/models.py:55 mp/models.py:60
+#: templates/forum/viewforum.html:83 templates/global/search.html:38
 msgid "Sujet"
 msgstr "Subject"
 
-#: demands/models.py:122 forum/models.py:43 news/forms.py:30 news/models.py:45
+#: demands/models.py:122 forum/models.py:49 news/forms.py:30 news/models.py:45
 #: templates/demands/edit.html:71 templates/demands/list.html:78
-#: templates/demands/list.html.py:81 templates/demands/view.html:111
+#: templates/demands/list.html.py:81 templates/demands/view.html:109
 msgid "Catégorie"
 msgstr "Category"
 
 #: demands/models.py:123 templates/demands/edit.html:85
 #: templates/demands/list.html:96 templates/demands/list.html.py:99
-#: templates/demands/view.html:95
+#: templates/demands/view.html:93
 msgid "Priorité"
 msgstr "Priority"
 
 #: demands/models.py:124 templates/demands/edit.html:111
-#: templates/demands/view.html:115
+#: templates/demands/view.html:113
 msgid "Version cible"
 msgstr "Target version"
 
@@ -211,15 +211,15 @@ msgstr "Url of a file"
 msgid "Url du bug upstream, si existant"
 msgstr "Upstream bug's url, if any"
 
-#: demands/models.py:130 templates/demands/view.html:127
+#: demands/models.py:130 templates/demands/view.html:125
 msgid "Sous-demandes"
 msgstr "Subdemands"
 
-#: demands/models.py:131 templates/demands/view.html:148
+#: demands/models.py:131 templates/demands/view.html:146
 msgid "Demandes liées"
 msgstr "Related demands"
 
-#: demands/models.py:137 demands/views.py:214
+#: demands/models.py:137 demands/views.py:229 forum/models.py:33
 msgid "Demande"
 msgstr "Demand"
 
@@ -229,25 +229,73 @@ msgstr "Demand"
 msgid "Demandes"
 msgstr "Demands"
 
-#: demands/views.py:201
+#: demands/views.py:216
 msgid "La demande a été éxécutée avec succès"
 msgstr "The demand was successfully executed"
 
-#: demands/views.py:340 forum/views.py:773
+#: demands/views.py:350 forum/views.py:797
 msgid "Votre vote a été pris en compte"
 msgstr "Your vote has been taken in account"
 
-#: demands/views.py:357
+#: demands/views.py:367
 msgid "La demande vous a bien été attribuée"
 msgstr "The demand has been attributed to you"
 
-#: demands/views.py:377
+#: demands/views.py:387
 msgid "Sous-demande ajoutée"
 msgstr "Subdemand rejected"
 
-#: demands/views.py:406
+#: demands/views.py:416
 msgid "La demande enfant a été retirée de la liste"
 msgstr "The child demand has been removed"
+
+#: feeds/views.py:37
+msgid "Logram-Project: News"
+msgstr "Logram-Project: News"
+
+#: feeds/views.py:39
+msgid "Dix dernières nouvelles"
+msgstr "Lastest ten news"
+
+#: feeds/views.py:59
+msgid "Logram-Project: Journal"
+msgstr "Logram-Project: Journals"
+
+#: feeds/views.py:61
+msgid "Dix derniers journaux"
+msgstr "Lastest ten journals"
+
+#: feeds/views.py:81
+msgid "Logram-Project: Demandes"
+msgstr "Logram-Project: demands"
+
+#: feeds/views.py:83
+msgid "Dix dernières demandes"
+msgstr "Latest ten demands"
+
+#: feeds/views.py:103
+msgid "Logram-Project: Messages forum"
+msgstr "Logram-Project: Forum Messages"
+
+#: feeds/views.py:105
+msgid "Dix derniers messages"
+msgstr "Latest ten messages"
+
+#: feeds/views.py:129
+msgid "Logram-Project: Wiki"
+msgstr "Logram-Project: Wiki"
+
+#: feeds/views.py:131
+msgid "Dix dernières pages de wiki"
+msgstr "Last ten wiki pages"
+
+#: feeds/views.py:150
+msgid "Logram-Project: Packages"
+msgstr "Logram-Project: Packages"
+
+#: feeds/views.py:152
+msgid "Dix derniers paquets disponibles"
+msgstr "Lastest ten available packages"
 
 #: forum/forms.py:27 wiki/forms.py:32
 msgid "Commentaire d'édition"
@@ -261,7 +309,7 @@ msgstr "Topic's Title"
 msgid "Sous-titre du sujet"
 msgstr "Topic's Subtitle"
 
-#: forum/forms.py:32 forum/models.py:91 wiki/forms.py:35
+#: forum/forms.py:32 forum/models.py:98 wiki/forms.py:35
 msgid "Code ISO de la langue"
 msgstr "Language's ISO code"
 
@@ -269,11 +317,11 @@ msgstr "Language's ISO code"
 msgid "Raison de l'alerte"
 msgstr "Alert's Reason"
 
-#: forum/forms.py:41 forum/models.py:61
+#: forum/forms.py:41 forum/models.py:67
 msgid "Question"
 msgstr "Question"
 
-#: forum/forms.py:42 forum/models.py:78 forum/models.py:85 forum/models.py:86
+#: forum/forms.py:42 forum/models.py:84 forum/models.py:91 forum/models.py:92
 msgid "Choix"
 msgstr "Choice"
 
@@ -291,240 +339,248 @@ msgstr "At least two complete questions, separated by linebreaks"
 msgid "La question ne peut pas être composée de caractères vides"
 msgstr "The question cannot be composed of empty characters."
 
-#: forum/models.py:45
-msgid "Nom en français"
-msgstr "Name in French"
-
-#: forum/models.py:46 packages/models.py:55
-msgid "Description en français"
-msgstr "Description in French"
-
-#: forum/models.py:48
-msgid "Nombre de sujets"
-msgstr "Number of subjects"
-
-#: forum/models.py:49
-msgid "Nombre de posts"
-msgstr "Number of posts"
-
-#: forum/models.py:51
-msgid "Dernier sujet dans lequel on posté"
-msgstr "Last subject in which we someone has posted"
-
-#: forum/models.py:57 forum/models.py:58 forum/models.py:89
+#: forum/models.py:31 forum/models.py:63 forum/models.py:64
 #: templates/forum/base.html:9 templates/forum/index.html:33
 msgid "Forum"
 msgstr "Forum"
 
-#: forum/models.py:62 news/models.py:58
+#: forum/models.py:32
+msgid "News"
+msgstr "News"
+
+#: forum/models.py:51
+msgid "Nom en français"
+msgstr "Name in French"
+
+#: forum/models.py:52 packages/models.py:55
+msgid "Description en français"
+msgstr "Description in French"
+
+#: forum/models.py:54
+msgid "Nombre de sujets"
+msgstr "Number of subjects"
+
+#: forum/models.py:55
+msgid "Nombre de posts"
+msgstr "Number of posts"
+
+#: forum/models.py:57
+msgid "Dernier sujet dans lequel on posté"
+msgstr "Last subject in which we someone has posted"
+
+#: forum/models.py:68 news/models.py:58
 msgid "Date de publication"
 msgstr "Date of publication"
 
-#: forum/models.py:69 forum/models.py:77
+#: forum/models.py:75 forum/models.py:83
 msgid "Sondage"
 msgstr "Poll"
 
-#: forum/models.py:70
+#: forum/models.py:76
 msgid "Sondages"
 msgstr "Poll"
 
-#: forum/models.py:79
+#: forum/models.py:85
 msgid "Votes"
 msgstr "Votes"
 
-#: forum/models.py:94 mp/forms.py:28 mp/models.py:46
+#: forum/models.py:95
+msgid "ID du parent (forum, news, etc)"
+msgstr "ID of the parent (forum, news, etc)"
+
+#: forum/models.py:101 mp/forms.py:28 mp/models.py:46
 msgid "Sous-titre"
 msgstr "Subtitle"
 
-#: forum/models.py:96 mp/models.py:48 templates/forum/index.html:36
-#: templates/forum/viewforum.html:78 templates/mp/index.html:25
+#: forum/models.py:103 mp/models.py:48 templates/forum/index.html:36
+#: templates/forum/viewforum.html:87 templates/mp/index.html:25
 msgid "Dernier message"
 msgstr "Last message"
 
-#: forum/models.py:97
+#: forum/models.py:104
 msgid "Page du dernier post dans le sujet"
 msgstr "Page of the last post in the subject"
 
-#: forum/models.py:98 mp/models.py:49
+#: forum/models.py:105 mp/models.py:49
 msgid "Nombre de messages"
 msgstr "Number of messages"
 
-#: forum/models.py:100 templates/forum/viewforum.html:84
+#: forum/models.py:107 templates/forum/viewforum.html:93
 msgid "Post-it"
 msgstr "Post-it"
 
-#: forum/models.py:101 templates/forum/viewforum.html:89
+#: forum/models.py:108 templates/forum/viewforum.html:98
 msgid "Fermé"
 msgstr "Closed"
 
-#: forum/models.py:102 templates/forum/viewforum.html:94
+#: forum/models.py:109 templates/forum/viewforum.html:103
 msgid "Résolu"
 msgstr "Solved"
 
-#: forum/models.py:104
+#: forum/models.py:111
 msgid "Sondage lié"
 msgstr "Related Poll"
 
-#: forum/models.py:111 mp/models.py:56 templates/forum/index.html:34
+#: forum/models.py:118 mp/models.py:56 templates/forum/index.html:34
 msgid "Sujets"
 msgstr "Subjects"
 
-#: forum/models.py:117
+#: forum/models.py:124
 msgid "A aidé l'auteur du sujet"
 msgstr "Has helped the subject's author"
 
-#: forum/models.py:119 news/models.py:59
+#: forum/models.py:126 news/models.py:59
 msgid "Date de dernière mise à jour"
 msgstr "Last update date"
 
-#: forum/models.py:128 mp/models.py:41 templates/forum/edit.html:19
-#: templates/forum/viewtopic.html:107 templates/global/search.html:52
+#: forum/models.py:135 mp/models.py:41 templates/forum/edit.html:19
+#: templates/forum/posts_list.html:79 templates/global/search.html:52
 #: templates/mp/view.html:40
 msgid "Message"
 msgstr "Message"
 
-#: forum/models.py:129 mp/models.py:42 templates/forum/index.html:35
-#: templates/forum/viewforum.html:77 templates/mp/index.html:24
+#: forum/models.py:136 mp/models.py:42 templates/forum/index.html:35
+#: templates/forum/viewforum.html:86 templates/mp/index.html:24
 msgid "Messages"
 msgstr "Messages"
 
-#: forum/models.py:136
+#: forum/models.py:143
 msgid "Post"
 msgstr "Post"
 
-#: forum/models.py:140 forum/models.py:165 templates/forum/alert.html:35
+#: forum/models.py:147 forum/models.py:172 templates/forum/alert.html:35
 #: templates/pastebin/alert.html:26 templates/wiki/changes.html:35
 #: wiki/models.py:55
 msgid "Commentaire"
 msgstr "Comment"
 
-#: forum/models.py:146
+#: forum/models.py:153
 msgid "Historique de message"
 msgstr "Message history"
 
-#: forum/models.py:147
+#: forum/models.py:154
 msgid "Historiques de message"
 msgstr "Message histories"
 
-#: forum/models.py:151 forum/models.py:158 general/models.py:31
+#: forum/models.py:158 forum/models.py:165 general/models.py:31
 #: mp/models.py:59
 msgid "Utilisateur"
 msgstr "User"
 
-#: forum/models.py:153
+#: forum/models.py:160
 msgid "Page du dernier post lu"
 msgstr "Page of the last read post"
 
-#: forum/models.py:154 mp/models.py:63 templates/forum/viewforum.html:110
+#: forum/models.py:161 mp/models.py:63 templates/forum/viewforum.html:119
 #: templates/mp/index.html:39
 msgid "Dernier message lu"
 msgstr "Last read post"
 
-#: forum/models.py:162
+#: forum/models.py:169
 msgid "Paste"
 msgstr "Paste "
 
-#: forum/models.py:171
+#: forum/models.py:178
 msgid "Alerte"
 msgstr "Alert"
 
-#: forum/models.py:172
+#: forum/models.py:179
 msgid "Alertes"
 msgstr "Alerts"
 
-#: forum/views.py:278
+#: forum/views.py:293
 #, python-format
 msgid "%(user)s a posté un message dans «%(topic)s»"
 msgstr "%(user)s posted a message in s «%(topic)s»"
 
-#: forum/views.py:287
+#: forum/views.py:302
 msgid "Message posté avec succès"
 msgstr "Message successfully posted"
 
-#: forum/views.py:326
+#: forum/views.py:341
 msgid "Message édité avec succès"
 msgstr "Message successfully edited"
 
-#: forum/views.py:377
+#: forum/views.py:391
 msgid "Le message ne vous a pas aidé"
 msgstr "The message hasn't helped you"
 
-#: forum/views.py:380
+#: forum/views.py:394
 msgid "Le message vous a aidé"
 msgstr "The message has helped you"
 
-#: forum/views.py:428
+#: forum/views.py:443
 msgid "Nouveau sujet créé avec succès"
 msgstr "New subject successfully created"
 
-#: forum/views.py:477 templates/forum/base.html:13
-#: templates/forum/index.html:23 templates/forum/viewforum.html:49
-#: templates/forum/viewforum.html.py:51
+#: forum/views.py:493 templates/forum/base.html:13
+#: templates/forum/index.html:23 templates/forum/viewforum.html:58
+#: templates/forum/viewforum.html.py:60
 msgid "Sujets non-lus"
 msgstr "Unread subjects"
 
-#: forum/views.py:497
+#: forum/views.py:517
 msgid "Sujets que j'ai créés"
 msgstr "Subjects I created"
 
-#: forum/views.py:517
+#: forum/views.py:538
 msgid "Sujets que j'ai visités"
 msgstr "Subjects I visited"
 
-#: forum/views.py:545
+#: forum/views.py:567
 msgid "Sujets auxquels j'ai participé"
 msgstr "Subject on which I participated"
 
-#: forum/views.py:562
+#: forum/views.py:585
 msgid "Résolution du sujet mise à jour"
 msgstr "Solving of the subject updated"
 
-#: forum/views.py:582 pastebin/views.py:246
+#: forum/views.py:605 pastebin/views.py:246
 msgid "Modérateurs alertés"
 msgstr "Moderators alerted"
 
-#: forum/views.py:608
+#: forum/views.py:631
 msgid "Sujet fermé"
 msgstr "Subject closed"
 
-#: forum/views.py:612
+#: forum/views.py:635
 msgid "Sujet réouvert"
 msgstr "Subject re-opened"
 
-#: forum/views.py:616
+#: forum/views.py:639
 msgid "Sujet résolu"
 msgstr "Subject solved"
 
-#: forum/views.py:620
+#: forum/views.py:643
 msgid "Sujet plus résolu"
 msgstr "Subject not solved"
 
-#: forum/views.py:624
+#: forum/views.py:647
 msgid "Sujet mis en post-it"
 msgstr "Subject set to post-it"
 
-#: forum/views.py:628
+#: forum/views.py:651
 msgid "Sujet plus en post-it"
 msgstr "Subject not a post-it"
 
-#: forum/views.py:654
+#: forum/views.py:681
 msgid "Sujet déplacé avec succès"
 msgstr "Subject successfully moved"
 
-#: forum/views.py:677
+#: forum/views.py:701
 msgid "Alerte modérateur supprimée"
 msgstr "Moderator alert deleted"
 
-#: forum/views.py:729
+#: forum/views.py:753
 msgid "Sondage ajouté"
 msgstr "Poll added"
 
-#: forum/views.py:792
+#: forum/views.py:816
 #, python-format
 msgid "Vous êtes abonné au sujet «%s»"
 msgstr "You subsribed to the topic «%s»"
 
-#: forum/views.py:799
+#: forum/views.py:823
 #, python-format
 msgid "Vous n'êtes plus abonné au sujet «%s»"
 msgstr "You no longer are subscribed to the topic «%s»"
@@ -1232,7 +1288,7 @@ msgstr "Quote"
 msgid "Texte personnel"
 msgstr "Personal text"
 
-#: general/models.py:40 general/views.py:225 templates/users/list.html:58
+#: general/models.py:40 general/views.py:265 templates/users/list.html:58
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -1268,101 +1324,93 @@ msgstr "Profiles"
 msgid "Url"
 msgstr "Url"
 
-#: general/views.py:159
+#: general/views.py:199
 msgid "Vous êtes connecté"
 msgstr "You are connected"
 
-#: general/views.py:163
+#: general/views.py:203
 msgid ""
 "Votre compte d'utilisateur est bloqué, vous ne pouvez plus vous connecter."
 msgstr "Your user account is blocked, you cannont log in."
 
-#: general/views.py:165
+#: general/views.py:205
 msgid "Nom d'utilisateur ou mot de passe incorrect."
 msgstr "Username or password incorrect."
 
-#: general/views.py:215
+#: general/views.py:255
 #, python-format
 msgid "Dossier de %s"
 msgstr "Directory if %s"
 
-#: general/views.py:217
+#: general/views.py:257
 msgid "Dossier personnel"
 msgstr "Personal directory"
 
-#: general/views.py:219
+#: general/views.py:259
 msgid "Messages du forum"
 msgstr "Forum's messages"
 
-#: general/views.py:221
+#: general/views.py:261
 msgid "Pages de documentation"
 msgstr "Documentation pages"
 
-#: general/views.py:223
+#: general/views.py:263
 msgid "Rapport de bugs et demandes"
 msgstr "Bug reports and demands"
 
-#: general/views.py:229
+#: general/views.py:269
 msgid "Heureux d'être là"
 msgstr "I'm happy to be here"
 
-#: general/templatetags/general_tags.py:28 templates/global/base.html:134
+#: general/templatetags/general_tags.py:29 templates/global/base.html:134
 #: templates/news/my.html:190
 msgid "En ligne"
 msgstr "Online"
 
-#: general/templatetags/general_tags.py:30
+#: general/templatetags/general_tags.py:31
 msgid "Hors ligne"
 msgstr "Offline"
 
-#: general/templatetags/general_tags.py:47
-msgid "« Précédant"
-msgstr "« Previous"
-
-#: general/templatetags/general_tags.py:58
-msgid "Suivant »"
-msgstr "Next »"
-
-#: general/templatetags/general_tags.py:74
-#: general/templatetags/general_tags.py:91
-#: general/templatetags/general_tags.py:93
+#: general/templatetags/general_tags.py:60
+#: general/templatetags/general_tags.py:77
+#: general/templatetags/general_tags.py:79
 #, python-format
 msgid "le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i"
 msgstr "on the %(d)i/%(mt)i/%(y)i at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:77
+#: general/templatetags/general_tags.py:63
 #, python-format
 msgid "il y a %i secondes"
 msgstr "%i seconds ago"
 
-#: general/templatetags/general_tags.py:79
+#: general/templatetags/general_tags.py:65
 #, python-format
 msgid "il y a %d minute"
 msgid_plural "il y a %d minutes"
 msgstr[0] "%d minute ago"
 msgstr[1] "%d minutes ago"
 
-#: general/templatetags/general_tags.py:82
+#: general/templatetags/general_tags.py:68
 #, python-format
 msgid "il y a %(h)ih%(m)02i"
 msgstr "%(h)ih%(m)02i ago"
 
-#: general/templatetags/general_tags.py:85
+#: general/templatetags/general_tags.py:71
 #, python-format
 msgid "aujourd'hui à %(h)ih%(m)02i"
 msgstr "today at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:87
+#: general/templatetags/general_tags.py:73
 #, python-format
 msgid "hier à %(h)ih%(m)02i"
 msgstr "tomorrow at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:89
+#: general/templatetags/general_tags.py:75
 #, python-format
 msgid "demain à %(h)ih%(m)02i"
 msgstr "tomorrow at %(h)ih%(m)02i"
 
-#: general/templatetags/general_tags.py:116
+#: general/templatetags/general_tags.py:102
 msgid "Erreur lors de la lecture du format !"
 msgstr "Failed to read the format!"
 
@@ -1480,47 +1528,47 @@ msgstr "News"
 msgid "Nouvelles"
 msgstr "News"
 
-#: news/views.py:142
+#: news/views.py:141
 #, python-format
 msgid "Nouvelle \"%s\" supprimée"
 msgstr "News \"%s\" deleted"
 
-#: news/views.py:148
+#: news/views.py:147
 #, python-format
 msgid "Nouvelle \"%s\" mise en attente de validation"
 msgstr "News \"%s\" is now queuing for validation"
 
-#: news/views.py:151
+#: news/views.py:150
 #, python-format
 msgid "La nouvelle \"%s\" n'est plus en attente de validation"
 msgstr "The news \"%s\" is no more queuing for validation"
 
-#: news/views.py:163
+#: news/views.py:162
 #, python-format
 msgid "Nouvelle \"%s\" publiée"
 msgstr "News \"%s\" published"
 
-#: news/views.py:166
+#: news/views.py:165
 #, python-format
 msgid "Nouvelle \"%s\" dépubliée"
 msgstr "News \"%s\" un-published"
 
-#: news/views.py:186
+#: news/views.py:185
 #, python-format
 msgid "La nouvelle «%s» est validée"
 msgstr "The news «%s» has been validated"
 
-#: news/views.py:194
+#: news/views.py:193
 #, python-format
 msgid "La nouvelle %s est rejetée"
 msgstr "The news %s has been rejected"
 
-#: news/views.py:233
+#: news/views.py:232
 #, python-format
 msgid "Nouvelle \"%s\" éditée avec succès"
 msgstr "News \"%s\" succesfully edited"
 
-#: news/views.py:266
+#: news/views.py:270
 #, python-format
 msgid "Nouvelle \"%s\" créée avec succès"
 msgstr "News \"%s\" succesfully created"
@@ -1560,7 +1608,7 @@ msgstr "Long description"
 
 #: packages/models.py:41
 msgid "Entrée de changelog"
-msgstr ""
+msgstr "ChangeLog entry"
 
 #: packages/models.py:45
 msgid "Faible priorité"
@@ -1568,7 +1616,7 @@ msgstr "Weak priority"
 
 #: packages/models.py:46
 msgid "Fonctionnalité"
-msgstr ""
+msgstr "Feature"
 
 #: packages/models.py:47
 msgid "Correction de bogue"
@@ -1576,7 +1624,7 @@ msgstr "Bug fix"
 
 #: packages/models.py:48
 msgid "Correction de sécurité"
-msgstr ""
+msgstr "Security fix"
 
 #: packages/models.py:52
 msgid "Nom générique pour la création de paquets"
@@ -1700,7 +1748,7 @@ msgstr "Packets"
 
 #: packages/models.py:148
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: packages/models.py:151 templates/packages/index.html:109
 #: templates/wiki/changes.html:34
@@ -1789,11 +1837,11 @@ msgstr "Ending date"
 
 #: pastebin/models.py:38
 msgid "Unique ID"
-msgstr ""
+msgstr "Uniq ID"
 
 #: pastebin/models.py:40
 msgid "Auteur Modifié"
-msgstr ""
+msgstr "Modified Author"
 
 #: pastebin/models.py:42
 msgid "Contenu Modifié"
@@ -1801,13 +1849,13 @@ msgstr "Modified Contents"
 
 #: pastebin/models.py:48
 msgid "Format inconnu"
-msgstr ""
+msgstr "Unknown format"
 
 #: pastebin/models.py:51 pastebin/models.py:52
 #: templates/global/devcorner.html:55 templates/global/devcorner_menu.html:7
 #: templates/pastebin/base.html:17
 msgid "Pastebin"
-msgstr ""
+msgstr "Pastebin"
 
 #: pastebin/views.py:84
 msgid "Sans titre"
@@ -1815,7 +1863,7 @@ msgstr "Unnamed"
 
 #: pastebin/views.py:138
 msgid "Ancienne version"
-msgstr ""
+msgstr "Old version"
 
 #: pastebin/views.py:138
 msgid "Nouvelle version"
@@ -1827,12 +1875,12 @@ msgid "Post «%s» modifié avec succès"
 msgstr "Post “%s” successfully modified"
 
 #: templates/demands/add_child.html:7 templates/demands/add_child.html:16
-#: templates/demands/add_child.html:26 templates/demands/view.html:180
+#: templates/demands/add_child.html:26 templates/demands/view.html:178
 msgid "Ajouter une sous-demande"
 msgstr "Add a sub-demand"
 
 #: templates/demands/add_child.html:9 templates/demands/add_child.html:18
-#: templates/demands/add_child.html:28 templates/demands/view.html:182
+#: templates/demands/add_child.html:28 templates/demands/view.html:180
 msgid "Ajouter une demande liée"
 msgstr "Add a related demand"
 
@@ -2011,7 +2059,7 @@ msgid "Édition d'une demande"
 msgstr "Editing of a demand"
 
 #: templates/demands/edit.html:98 templates/demands/list.html:87
-#: templates/demands/list.html.py:90 templates/demands/view.html:91
+#: templates/demands/list.html.py:90 templates/demands/view.html:89
 msgid "Statut"
 msgstr "Status"
 
@@ -2168,84 +2216,84 @@ msgstr "Display only the demands"
 msgid "Demande proposée"
 msgstr "Suggested demand"
 
-#: templates/demands/view.html:25 templates/forum/viewtopic.html:161
-#: templates/global/index.html:84 templates/global/index.html.py:102
-#: templates/global/index.html:133 templates/global/index.html.py:154
+#: templates/demands/view.html:23 templates/forum/posts_list.html:133
+#: templates/global/index.html:89 templates/global/index.html.py:112
+#: templates/global/index.html:148 templates/global/index.html.py:174
 #: templates/mp/index.html:71 templates/news/list.html:69
-#: templates/news/view.html:30
+#: templates/news/view.html:24
 msgid "par"
 msgstr "by"
 
-#: templates/demands/view.html:26 templates/news/view.html:39
+#: templates/demands/view.html:24 templates/news/view.html:33
 msgid "commentaires"
 msgstr "commentaries"
 
-#: templates/demands/view.html:32
+#: templates/demands/view.html:30
 msgid "Mise à jour"
 msgstr "Update"
 
-#: templates/demands/view.html:40
+#: templates/demands/view.html:38
 msgid "% Réalisé"
 msgstr "% finished"
 
-#: templates/demands/view.html:49
+#: templates/demands/view.html:47
 msgid "Note de réalisation"
 msgstr "Realisation notes"
 
-#: templates/demands/view.html:56
+#: templates/demands/view.html:54
 msgid "Note"
 msgstr "Note"
 
-#: templates/demands/view.html:63
+#: templates/demands/view.html:61
 msgid "Demande fermée, vote désactivé"
 msgstr "Demand locked, vote disabled"
 
-#: templates/demands/view.html:68
+#: templates/demands/view.html:66
 msgid "Url du fichier"
 msgstr "File's URL"
 
-#: templates/demands/view.html:72 templates/packages/view.html:158
+#: templates/demands/view.html:70 templates/packages/view.html:158
 #: templates/pastebin/view.html:37
 msgid "Télécharger"
 msgstr "Download"
 
-#: templates/demands/view.html:77
+#: templates/demands/view.html:75
 msgid "Url du bug upstream"
 msgstr "Upstream bug's URL"
 
-#: templates/demands/view.html:81
+#: templates/demands/view.html:79
 msgid "Bug Upstream"
 msgstr "Upstream Bug"
 
-#: templates/demands/view.html:103
+#: templates/demands/view.html:101
 msgid "Assigné à"
 msgstr "Assigned to"
 
-#: templates/demands/view.html:138 templates/demands/view.html.py:159
+#: templates/demands/view.html:136 templates/demands/view.html.py:157
 #: templates/news/my.html:69 templates/news/my.html.py:126
 #: templates/news/my.html:200 templates/upload/view.html:86
 msgid "Supprimer"
 msgstr "Delete"
 
-#: templates/demands/view.html:145
+#: templates/demands/view.html:143
 msgid "Aucune sous-demande"
 msgstr "No sub-demands"
 
-#: templates/demands/view.html:166
+#: templates/demands/view.html:164
 msgid "Aucune demande liée"
 msgstr "No linked-demands"
 
-#: templates/demands/view.html:172 templates/forum/viewtopic.html:117
-#: templates/forum/viewtopic.html.py:121 templates/mp/view.html:50
+#: templates/demands/view.html:170 templates/forum/posts_list.html:89
+#: templates/forum/posts_list.html.py:93 templates/mp/view.html:50
 #: templates/wiki/show.html:14
 msgid "Éditer"
 msgstr "Edit"
 
-#: templates/demands/view.html:176
+#: templates/demands/view.html:174
 msgid "Prendre"
 msgstr "Take"
 
-#: templates/demands/view.html:188 templates/news/view.html:73
+#: templates/demands/view.html:186 templates/news/view.html:67
 msgid "Commentaires"
 msgstr "Commentaries"
 
@@ -2257,15 +2305,15 @@ msgstr "List of all available RSS feeds"
 msgid "Dernières nouvelles"
 msgstr "Lastest news"
 
-#: templates/feeds/index.html:10 templates/global/index.html:144
+#: templates/feeds/index.html:10 templates/global/index.html:164
 msgid "Derniers journaux"
 msgstr "Lastest journals"
 
-#: templates/feeds/index.html:11 templates/global/index.html:126
+#: templates/feeds/index.html:11 templates/global/index.html:141
 msgid "Dernières demandes"
 msgstr "Latest demands"
 
-#: templates/feeds/index.html:12 templates/global/index.html:77
+#: templates/feeds/index.html:12 templates/global/index.html:82
 msgid "Derniers messages du forum"
 msgstr "Latest forum messages"
 
@@ -2337,8 +2385,8 @@ msgstr ""
 "           Topic's poll «%(title)s»\n"
 "        "
 
-#: templates/forum/addpoll.html:19 templates/forum/viewtopic.html:54
-#: templates/forum/viewtopic.html.py:61
+#: templates/forum/addpoll.html:19 templates/forum/posts_list.html:19
+#: templates/forum/posts_list.html.py:25
 msgid "Ajouter un sondage"
 msgstr "Add a poll"
 
@@ -2445,17 +2493,17 @@ msgid "Accueil des forums"
 msgstr "Forums's Homepage"
 
 #: templates/forum/base.html:14 templates/forum/index.html:24
-#: templates/forum/viewforum.html:54 templates/forum/viewforum.html.py:56
+#: templates/forum/viewforum.html:63 templates/forum/viewforum.html.py:65
 msgid "Mes sujets"
 msgstr "My Topics"
 
 #: templates/forum/base.html:15 templates/forum/index.html:25
-#: templates/forum/viewforum.html:59 templates/forum/viewforum.html.py:61
+#: templates/forum/viewforum.html:68 templates/forum/viewforum.html.py:70
 msgid "Sujets visités"
 msgstr "Visited topics"
 
 #: templates/forum/base.html:16 templates/forum/index.html:26
-#: templates/forum/viewforum.html:64 templates/forum/viewforum.html.py:66
+#: templates/forum/viewforum.html:73 templates/forum/viewforum.html.py:75
 msgid "Où j'ai posté"
 msgstr "Where I posted"
 
@@ -2492,25 +2540,25 @@ msgstr ""
 "to the above.\n"
 "        "
 
-#: templates/forum/index.html:21 templates/forum/viewforum.html:34
-#: templates/forum/viewtopic.html:37 templates/pastebin/view.html:35
+#: templates/forum/index.html:21 templates/forum/posts_list.html:6
+#: templates/forum/viewforum.html:43 templates/pastebin/view.html:35
 msgid "Actions :"
 msgstr "Actions :"
 
-#: templates/forum/index.html:52 templates/forum/viewforum.html:99
+#: templates/forum/index.html:52 templates/forum/viewforum.html:108
 msgid "Lu"
 msgstr "Read"
 
-#: templates/forum/index.html:54 templates/forum/viewforum.html:101
+#: templates/forum/index.html:54 templates/forum/viewforum.html:110
 msgid "Non-lu"
 msgstr "Not read"
 
-#: templates/forum/index.html:73 templates/forum/viewforum.html:129
+#: templates/forum/index.html:73 templates/forum/viewforum.html:138
 msgid "Par"
 msgstr "By"
 
 #: templates/forum/index.html:75 templates/news/list.html:71
-#: templates/news/view.html:33 templates/packages/changelog.html:13
+#: templates/news/view.html:27 templates/packages/changelog.html:13
 #: templates/packages/view.html:8 templates/packages/view.html.py:12
 msgid "dans"
 msgstr "in"
@@ -2565,20 +2613,104 @@ msgstr ""
 "topic.If you wish to stop receiving mails on this topic, click on the link "
 "given above in the mais, and click «Not follow anymore».\n"
 
-#: templates/forum/viewforum.html:38
+#: templates/forum/posts_list.html:11
+msgid "Mon problème est résolu"
+msgstr "My problem has been solved"
+
+#: templates/forum/posts_list.html:13
+msgid "Mon problème n'est plus résolu"
+msgstr "My problem has not been solved"
+
+#: templates/forum/posts_list.html:31 templates/pastebin/view.html:43
+msgid "Avertir les modérateurs"
+msgstr "Alert the moderators"
+
+#: templates/forum/posts_list.html:36
+msgid "Modération :"
+msgstr "Moedration :"
+
+#: templates/forum/posts_list.html:39
+msgid "Fermer"
+msgstr "Close"
+
+#: templates/forum/posts_list.html:40
+msgid "Rouvrir"
+msgstr "Open again"
+
+#: templates/forum/posts_list.html:42
+msgid "Résoudre"
+msgstr "Solve"
+
+#: templates/forum/posts_list.html:43
+msgid "Dé-résoudre"
+msgstr "Unsolve"
+
+#: templates/forum/posts_list.html:44
+msgid "Mettre en post-it"
+msgstr "Clip as a post-it"
+
+#: templates/forum/posts_list.html:45
+msgid "Dé-postiter"
+msgstr "Un-clip as a post-it"
+
+#: templates/forum/posts_list.html:46
+msgid "Déplacer dans ..."
+msgstr "Move in..."
+
+#: templates/forum/posts_list.html:51
+msgid "Si déplacement : forum"
+msgstr "If move there is : to forum"
+
+#: templates/forum/posts_list.html:64
+msgid "Avancé"
+msgstr "Advanced"
+
+#: templates/forum/posts_list.html:99
+msgid "Ce message m'a aidé"
+msgstr "This message helped me"
+
+#: templates/forum/posts_list.html:101
+msgid "Ce message ne m'a pas aidé"
+msgstr "This message did not help me"
+
+#: templates/forum/posts_list.html:105
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/forum/posts_list.html:121
+msgid "Ce message a aidé l'auteur du sujet"
+msgstr "This message helped the topic's author"
+
+#: templates/forum/posts_list.html:129
+msgid "Éditions"
+msgstr "Editing"
+
+#: templates/forum/posts_list.html:166
+msgid "Surveiller"
+msgstr "Follow"
+
+#: templates/forum/posts_list.html:171
+msgid "Ne plus surveiller"
+msgstr "Do not follow anymore"
+
+#: templates/forum/posts_list.html:180 templates/mp/view.html:95
+msgid "Répondre"
+msgstr "Answer"
+
+#: templates/forum/viewforum.html:47
 msgid "Nouveau sujet"
 msgstr "New topic"
 
-#: templates/forum/viewforum.html:42 templates/forum/viewforum.html.py:44
+#: templates/forum/viewforum.html:51 templates/forum/viewforum.html.py:53
 msgid "Ne plus filtrer"
 msgstr "Not filter anymore"
 
-#: templates/forum/viewforum.html:75 templates/mp/index.html:22
+#: templates/forum/viewforum.html:84 templates/mp/index.html:22
 #: wiki/models.py:45
 msgid "Pages"
 msgstr "Pages"
 
-#: templates/forum/viewpoll.html:25
+#: templates/forum/viewpoll.html:26
 #, python-format
 msgid ""
 "\n"
@@ -2589,93 +2721,9 @@ msgstr ""
 "                        (%(votes)s votes for %(total)s)\n"
 "                    "
 
-#: templates/forum/viewpoll.html:41
+#: templates/forum/viewpoll.html:42
 msgid "Voter"
 msgstr "Vote"
-
-#: templates/forum/viewtopic.html:41
-msgid "Mon problème est résolu"
-msgstr "My problem has been solved"
-
-#: templates/forum/viewtopic.html:43
-msgid "Mon problème n'est plus résolu"
-msgstr "My problem has not been solved"
-
-#: templates/forum/viewtopic.html:48 templates/pastebin/view.html:43
-msgid "Avertir les modérateurs"
-msgstr "Alert the moderators"
-
-#: templates/forum/viewtopic.html:68
-msgid "Modération :"
-msgstr "Moedration :"
-
-#: templates/forum/viewtopic.html:71
-msgid "Fermer"
-msgstr "Close"
-
-#: templates/forum/viewtopic.html:72
-msgid "Rouvrir"
-msgstr "Open again"
-
-#: templates/forum/viewtopic.html:73
-msgid "Résoudre"
-msgstr "Solve"
-
-#: templates/forum/viewtopic.html:74
-msgid "Dé-résoudre"
-msgstr "Unsolve"
-
-#: templates/forum/viewtopic.html:75
-msgid "Mettre en post-it"
-msgstr "Clip as a post-it"
-
-#: templates/forum/viewtopic.html:76
-msgid "Dé-postiter"
-msgstr "Un-clip as a post-it"
-
-#: templates/forum/viewtopic.html:77
-msgid "Déplacer dans ..."
-msgstr "Move in..."
-
-#: templates/forum/viewtopic.html:80
-msgid "Si déplacement : forum"
-msgstr "If move there is : to forum"
-
-#: templates/forum/viewtopic.html:92
-msgid "Avancé"
-msgstr "Advanced"
-
-#: templates/forum/viewtopic.html:127
-msgid "Ce message m'a aidé"
-msgstr "This message helped me"
-
-#: templates/forum/viewtopic.html:129
-msgid "Ce message ne m'a pas aidé"
-msgstr "This message did not help me"
-
-#: templates/forum/viewtopic.html:133
-msgid "Admin"
-msgstr "Admin"
-
-#: templates/forum/viewtopic.html:149
-msgid "Ce message a aidé l'auteur du sujet"
-msgstr "This message helped the topic's author"
-
-#: templates/forum/viewtopic.html:157
-msgid "Éditions"
-msgstr "Editing"
-
-#: templates/forum/viewtopic.html:189
-msgid "Surveiller"
-msgstr "Follow"
-
-#: templates/forum/viewtopic.html:194
-msgid "Ne plus surveiller"
-msgstr "Do not follow anymore"
-
-#: templates/forum/viewtopic.html:203 templates/mp/view.html:95
-msgid "Répondre"
-msgstr "Answer"
 
 #: templates/global/base.html:31 templates/global/base.html.py:114
 #: templates/global/base.html:176 templates/global/index.html:5
@@ -2724,7 +2772,7 @@ msgstr "Download Logram"
 
 #: templates/global/base.html:122
 msgid "Chat IRC"
-msgstr ""
+msgstr "IRC Chat"
 
 #: templates/global/base.html:129
 msgid "Communauté"
@@ -2820,11 +2868,15 @@ msgstr ""
 "\">Django</a></span>\n"
 "                        "
 
-#: templates/global/base.html:194
+#: templates/global/base.html:195
+msgid "Nombre de requêtes :"
+msgstr "Number of queries"
+
+#: templates/global/base.html:200
 msgid "Requête"
 msgstr "Request"
 
-#: templates/global/base.html:195
+#: templates/global/base.html:201
 msgid "Durée"
 msgstr "Duration"
 
@@ -2866,7 +2918,7 @@ msgstr ""
 
 #: templates/global/devcorner.html:30
 msgid "WebGIT"
-msgstr ""
+msgstr "WebGIT"
 
 #: templates/global/devcorner.html:33
 msgid "Code source en ligne"
@@ -2969,8 +3021,8 @@ msgid ""
 "Elle regroupe\n"
 "            tout le nécessaire à une distribution de qualité agréable à "
 "utiliser, et à la pointe de la\n"
-"            technologie : un système basé sur Debian, KDE dans sa dernière "
-"version, des outils\n"
+"            technologie : un gestionnaire de paquets fait maison et très "
+"performant, KDE dans sa dernière version, des outils\n"
 "            simples et puissants, et plein d'applications 100% Libres.\n"
 "        "
 msgstr ""
@@ -2979,9 +3031,10 @@ msgstr ""
 "distribution. It gathers\n"
 "            everything you need for a quality easy-to-use  distribution, up-"
 "to-date with the last \n"
-"            technologies : a system based on Debian, KDE in its last version,"
+"            technologies : a very powerful home-made package manager, KDE in "
+"its latest version,"
 "simple and powerful \n"
-"            tools,and lots of other 100% open applications.\n"
+"            tools, and lots of other 100% open applications.\n"
 "        "
 
 #: templates/global/index.html:23
@@ -3041,46 +3094,52 @@ msgstr ""
 "\"devcorner.html\">participate</a> to the building of Logram's future !\n"
 "                "
 
-#: templates/global/index.html:63 templates/global/index.html.py:233
+#: templates/global/index.html:63 templates/global/index.html.py:262
 #, python-format
 msgid "par %(uname)s %(dt)s"
 msgstr "by %(uname)s %(dt)s"
 
-#: templates/global/index.html:73 templates/global/index.html.py:91
-#: templates/global/index.html:112 templates/global/index.html.py:140
-#: templates/global/index.html:178
+#: templates/global/index.html:74 templates/global/index.html.py:97
+#: templates/global/index.html:123 templates/global/index.html.py:156
+#: templates/global/index.html:203
 msgid "Plus..."
 msgstr "More..."
 
-#: templates/global/index.html:95
+#: templates/global/index.html:77 templates/global/index.html.py:100
+#: templates/global/index.html:126 templates/global/index.html.py:159
+#: templates/global/index.html:183 templates/global/index.html.py:206
+msgid "Flux RSS"
+msgstr "RSS feed"
+
+#: templates/global/index.html:105
 msgid "Pages de documentation modifiées"
 msgstr "Documentation pages modified"
 
-#: templates/global/index.html:119
+#: templates/global/index.html:134
 msgid "Sondage en cours"
 msgstr "Poll running"
 
-#: templates/global/index.html:164 templates/packages/index.html:77
+#: templates/global/index.html:188 templates/packages/index.html:77
 msgid "Derniers paquets"
 msgstr "Last packages"
 
-#: templates/global/index.html:182
+#: templates/global/index.html:211
 msgid "Statistiques"
 msgstr "Stats"
 
-#: templates/global/index.html:186
+#: templates/global/index.html:215
 msgid "Utilisateurs enregistrés"
 msgstr "Registered users"
 
-#: templates/global/index.html:190
+#: templates/global/index.html:219
 msgid "Dernier membre enregistré"
 msgstr "Last members registered"
 
-#: templates/global/index.html:194
+#: templates/global/index.html:223
 msgid "Nombre de demandes"
 msgstr "Number of demands"
 
-#: templates/global/index.html:195
+#: templates/global/index.html:224
 #, python-format
 msgid ""
 "\n"
@@ -3091,11 +3150,11 @@ msgstr ""
 "                            %(open)s opened (for %(demands)s)\n"
 "                        "
 
-#: templates/global/index.html:200
+#: templates/global/index.html:229
 msgid "Statistiques du forum"
 msgstr "The forums's Stats"
 
-#: templates/global/index.html:201
+#: templates/global/index.html:230
 #, python-format
 msgid ""
 "\n"
@@ -3108,19 +3167,19 @@ msgstr ""
 "(messages)s messages\n"
 "                        "
 
-#: templates/global/index.html:206
+#: templates/global/index.html:235
 msgid "Utilisateurs de Logram dans le monde"
 msgstr "Worldwide Logram users"
 
-#: templates/global/index.html:210
+#: templates/global/index.html:239
 msgid "Nombre de paquets dans la distribution"
 msgstr "Number of packages in the distribution"
 
-#: templates/global/index.html:226
+#: templates/global/index.html:255
 msgid "Nouvelles en attente de validation"
 msgstr "News waiting to get validated"
 
-#: templates/global/index.html:249
+#: templates/global/index.html:278
 msgid "Alertes aux modérateurs"
 msgstr "Alerts sent to the moderators"
 
@@ -3557,6 +3616,15 @@ msgid ""
 "    </p>\n"
 "    "
 msgstr ""
+"\n"
+"<p>If one of your news has been rejected, it will be shown here. Simply click "
+"on its name, and modify it taking into account the comments given by the "
+"validator who rejected the news. When it's done, click on the «Validate» "
+"button. Don't try too many times, because a nervous validator can delete your "
+"news if you post it too often.</p> "
+"<p>If you don't want to edit this news, and you want to abandon it, then "
+"click on the «Delete» button.</p>\n"
+"    "
 
 #: templates/news/my.html:105
 msgid "Raison du refus"
@@ -3593,27 +3661,27 @@ msgstr ""
 "                %(uname)s's journals\n"
 "            "
 
-#: templates/news/view.html:36
+#: templates/news/view.html:30
 msgid "voir les journaux"
 msgstr "See the Journals"
 
-#: templates/news/view.html:50
+#: templates/news/view.html:44
 msgid "Validation"
 msgstr "Validation"
 
-#: templates/news/view.html:54
+#: templates/news/view.html:48
 msgid "Action"
 msgstr "Action"
 
-#: templates/news/view.html:56
+#: templates/news/view.html:50
 msgid "Valider"
 msgstr "Validate"
 
-#: templates/news/view.html:57
+#: templates/news/view.html:51
 msgid "Rejeter"
 msgstr "Reject"
 
-#: templates/news/view.html:61
+#: templates/news/view.html:55
 msgid "En cas de refus, raison"
 msgstr "In case of refusal, reason"
 
@@ -3660,6 +3728,12 @@ msgid ""
 "            du changement est disponible.\n"
 "        "
 msgstr ""
+"\n"
+"Here are the changes made in the <strong>%(pkg)s</strong> page at the version "
+"<strong>%(ver)s</strong>. These changes can be made by Logram or by the team "
+"who makes the application itself. A short summary of the change as also "
+"available.\n"
+"        "
 
 #: templates/packages/changelog.html:37
 #, python-format
@@ -3706,6 +3780,14 @@ msgid ""
 "a>.\n"
 "        "
 msgstr ""
+"\n"
+"Here is the pages enabling you to search a package in the different "
+"repositories of Logram. Don't forget that you normally don't have to use this "
+"pages, the packages being installable after you installed Logram, following "
+"the <a href=\"wiki-install-package.html\">Installing a package</a> "
+"documentation. If you have not yet Logram, <a href=\"downloads.html\">"
+"Download it</a>.\n"
+"        "
 
 #: templates/packages/home.html:21
 msgid "Les distributions"
@@ -3743,6 +3825,10 @@ msgid ""
 "dans chaque distribution.\n"
 "        "
 msgstr ""
+"\n"
+"If you known the packages you are looking for, you can directly search it. "
+"You will so know at what version it is in every repository.\n"
+"        "
 
 #: templates/packages/home.html:48
 msgid "Rechercher un paquet"
@@ -4437,8 +4523,7 @@ msgid ""
 msgstr ""
 
 #: templates/users/opts_pseudo.html:20
-msgid ""
-"* Toute ressemblance avec une personne réelle n'est que pure coincidence"
+msgid "* Toute ressemblance avec une personne réelle n'est que pure coincidence"
 msgstr "*All resemblance to a real person is only a pure coincidence"
 
 #: templates/users/opts_pseudo.html:25 users/forms.py:30
@@ -4879,6 +4964,12 @@ msgstr "The page is not private anymore"
 #: wiki/views.py:399
 msgid "La page est maintenant privée"
 msgstr "The page is now private"
+
+#~ msgid "« Précédant"
+#~ msgstr "« Previous"
+
+#~ msgid "Suivant »"
+#~ msgstr "Next »"
 
 #~ msgid "Anglais"
 #~ msgstr "English"
