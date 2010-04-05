@@ -40,6 +40,10 @@ def color_pseudo(profile):
 @register.filter
 def topic_url(topic):
     return return_page(topic, 0)
+    
+@register.filter
+def count(l):
+    return len(l)
 
 @register.filter
 def format_date(date):

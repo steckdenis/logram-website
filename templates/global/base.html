@@ -189,7 +189,13 @@
 			    <span style="font-size: 0.9em;">Smileys du <a href="http://www.siteduzero.com">Site du zéro</a>, design par <a href="http://steven-lerouzic.1s.fr">Steven Le Rouzic</a>, <a href="wiki-oxyicons.html">certaines icônes</a> viennent du projet <a href="http://oxygen-icons.org">Oxygen</a> sous GPL, site réalisé grâce à <a href="http://djangoproject.org">Django</a></span>
                         {% endblocktrans %}
                         
-                            {% comment %}<table>
+                            <table>
+                                <tr>
+                                    <th colspan="2">
+                                        {% trans "Nombre de requêtes :" %}
+                                        {{ sql_queries|count }}
+                                    </th>
+                                </tr>
                                 <tr>
                                     <th>{% trans "Requête" %}</th>
                                     <th>{% trans "Durée" %}</th>
@@ -200,7 +206,7 @@
                                         <td>{{ query.time }}</td>
                                     </tr>
                                 {% endfor %}
-                            </table>{% endcomment %}
+                            </table>
                     </div>
                     
                 </div>

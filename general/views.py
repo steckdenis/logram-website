@@ -43,52 +43,92 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 def index(request):
     # Nouvelles
-    latest_news = News.objects \
-        .select_related('author') \
-        .filter(published=True, is_private=False) \
-        .order_by('-date_published')[:5]
+    latest_news = cache.get('index_last_news', None)
+    
+    if not latest_news:
+        latest_news = News.objects \
+            .select_related('author') \
+            .filter(published=True, is_private=False) \
+            .order_by('-date_published')[:5]
+            
+        latest_news = list(latest_news)
+        cache.set('index_last_news', latest_news, 60)
         
     # Journaux
-    latest_journals = News.objects \
-        .select_related('author') \
-        .filter(published=True, is_private=True) \
-        .order_by('-date_published')[:5]
+    latest_journals = cache.get('index_last_journals', None)
+    
+    if not latest_journals:
+        latest_journals = News.objects \
+            .select_related('author') \
+            .filter(published=True, is_private=True) \
+            .order_by('-date_published')[:5]
+            
+        latest_journals = list(latest_journals)
+        cache.set('index_last_journals', latest_journals, 60)
     
     # Messages du forum
-    latest_topics = Topic.objects \
-        .select_related('last_post', 'last_post__author') \
-        .filter(p_type=0) \
-        .order_by('-last_post__date_created')[:5]
+    latest_topics = cache.get('index_last_topics', None)
+    
+    if not latest_topics:
+        latest_topics = Topic.objects \
+            .select_related('last_post', 'last_post__author') \
+            .filter(p_type=0) \
+            .order_by('-last_post__date_created')[:5]
+            
+        latest_topics = list(latest_topics)
+        cache.set('index_last_topics', latest_topics, 30)
     
     # Pages de wiki modifiées
-    latest_wiki_changes = LogEntry.objects \
-        .select_related('page', 'author_user') \
-        .filter(page__is_private=False) \
-        .order_by('-date')[:5]
+    latest_wiki_changes = cache.get('index_last_wiki', None)
+    
+    if not latest_wiki_changes:
+        latest_wiki_changes = LogEntry.objects \
+            .select_related('page', 'author_user') \
+            .filter(page__is_private=False) \
+            .order_by('-date')[:5]
+        
+        latest_wiki_changes = list(latest_wiki_changes)
+        cache.set('index_last_wiki', latest_wiki_changes, 60)
     
     # Derniers paquets
-    latest_packages = Package.objects \
-        .select_related('arch') \
-        .order_by('-date')[:5]
+    latest_packages = cache.get('index_last_packages', None)
+    
+    if not latest_packages:
+        latest_packages = Package.objects \
+            .select_related('arch') \
+            .order_by('-date')[:5]
+            
+        latest_packages = list(latest_packages)
+        cache.set('index_last_packages', latest_packages, 300)
 
     # Dernières demandes
-    latest_demands = Demand.objects \
-        .select_related('author', 'd_type') \
-        .order_by('-created_at')[:5]
+    latest_demands = cache.get('index_last_demands', None)
+    
+    if not latest_demands:
+        latest_demands = Demand.objects \
+            .select_related('author', 'd_type') \
+            .order_by('-created_at')[:5]
+            
+        latest_demands = list(latest_demands)
+        cache.set('index_last_demands', latest_demands, 60)
         
     # Sondage en cours
-    mpoll = False
+    mpoll = cache.get('index_last_poll', -1)
     
-    if Poll.objects.count() != 0:
-        latest_poll = Poll.objects \
-            .select_related('topic') \
-            .order_by('-pub_date')[0]
+    if mpoll == -1:
+        mpoll = Poll.objects \
+                .select_related('topic') \
+                .order_by('-pub_date')[:1]
+        
+        if len(mpoll) == 1:
+            mpoll = get_poll(request, mpoll[0])
+        else:
+            mpoll = None
             
-        mpoll = get_poll(request, latest_poll)
+        cache.set('index_last_poll', mpoll, 60)
     
     #Statistique
     stats = cache.get('index_stats', False)
-    stats = False
     if not stats:
         # Prendre les statistiques
         stats = {}
