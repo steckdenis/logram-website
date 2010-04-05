@@ -1,4 +1,4 @@
-{% extends "forum/viewtopic.html" %}
+{% extends "demands/base.html" %}
 {% load i18n %}
 {% load general_tags %}
 
@@ -10,15 +10,13 @@
     {{ demand.title }}
 {% endblock %}
 
-{% block pagination %}
-    <div class="pagination">
-        {% for pg in list_pages %}
-            <a href="demand-5-{{ demand.id }}-{{ pg }}.html">{{ pg }}</a>
-        {% endfor %}
-    </div>
+{% block title %}
+    {{ title }}
 {% endblock %}
 
-{% block embedded %}
+{% block body %}
+    <h1>{{ title }}</h1>
+    
     <div id="demand_pane" style="border: 1px solid #{{ demand.d_type.color }};">
         <div id="news_infos">
             {{ demand.created_at|format_date|capfirst }}
@@ -186,4 +184,6 @@
     </div>
 
     <h2 id="comments">{% trans "Commentaires" %}</h2>
+    
+    {% include "forum/posts_list.html" %}
 {% endblock %}

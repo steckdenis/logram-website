@@ -50,7 +50,7 @@ def return_page(topic, msg_id):
     elif topic.p_type == 2:
         rs = 'demand-5-%i-%i.html' % (
             topic.parent_id,
-            topic.last_post.page)
+            topic.last_post_page)
             
     if msg_id != 0:
         rs += '#r%i' % msg_id

@@ -170,7 +170,17 @@ def post(request, action, type_or_demand_id):
             
         if action == 1 or action == 2:
             # Créer un sujet
-            topic = Topic(author=request.user.get_profile(), title=title, subtitle='', last_post_page=1, num_posts=0, stick=False, closed=False, resolved=False)
+            topic = Topic(author=request.user.get_profile(), 
+                          title=title, 
+                          subtitle='', 
+                          lang=request.LANGUAGE_CODE.split('_')[0],
+                          last_post_page=1, 
+                          num_posts=0, 
+                          stick=False, 
+                          closed=False, 
+                          resolved=False, 
+                          p_type=2, 
+                          parent_id=0)
             topic.save()
             
             demand = Demand(topic=topic, d_type=t, author=request.user.get_profile())
@@ -196,6 +206,11 @@ def post(request, action, type_or_demand_id):
 
         # Sauvegarder la demande
         demand.save()
+        
+        # Mettre à jour le sujet
+        if action == 1 or action == 2:
+            topic.parent_id = demand.id
+            topic.save()
 
         # On a fini
         request.user.message_set.create(message=_("La demande a été éxécutée avec succès"))
@@ -295,12 +310,7 @@ def view(request, demand_id, page):
               'children_demands': children_demands,
               'rel_len': len(related_demands),
               'child_len': len(children_demands),
-              'title': demand.title,
-              'is_comments': True}
-
-    # NOTE: Quand on poste un message ou qu'on en édite un, il faut savoir sur quelle page on va
-    # revenir (viewtopic, news, bug, etc). Cette variable de session nous informe de ce qu'on doit faire
-    request.session['forum_post_return_url'] = 'demand-5-%i-PAGE.html' % demand_id
+              'title': demand.title}
 
     # On a fini
     return list_posts(request, demand.topic, page, config, 'demands/view.html')
