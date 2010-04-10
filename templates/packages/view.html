@@ -53,6 +53,10 @@
             {{ package.logram_version }}
         </li>
         <li>
+            <strong>{% trans "Dernière mise à jour" %} :</strong>
+            {{ changelog.date|format_date }}
+        </li>
+        <li>
             <strong>{% trans "Historique de modifications" %} :</strong>
             <a href="packages-8-{{ package.id }}.html">
                 {% trans "Voir" %}

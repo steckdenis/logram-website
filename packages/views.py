@@ -235,9 +235,15 @@ def showpackage(request, package_id):
     package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, None).content
     package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, None).content
     
-    # 5. Rendre la template
+    # 5. Prendre la dernière entrée de changelog
+    changelog = ChangeLog.objects \
+                    .filter(package=package) \
+                    .order_by('-date')[0]
+    
+    # 6. Rendre la template
     return tpl('packages/view.html', 
         {'package': package,
+         'changelog': changelog,
          'pkgs': pkgs}, request)
 
 def viewmirrors(request, package_id):
