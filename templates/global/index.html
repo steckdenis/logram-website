@@ -90,7 +90,7 @@
                     {% for topic in latest_topics %}
                         <li>
                             <a
-                                href="forum-2-{{ topic.id }}-{{ topic.last_post_page }}-{{ topic.title|slugify }}.html#r{{ topic.last_post.id }}"
+                                href="{{ topic|topic_url }}#r{{ topic.last_post.id }}"
                                 title="{% trans "par" %} {{ topic.last_post.author.uname }} {{ topic.last_post.date_created|format_date }}">
                                     {{ topic.title }}
                             </a>

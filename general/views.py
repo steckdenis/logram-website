@@ -72,7 +72,6 @@ def index(request):
     if not latest_topics:
         latest_topics = Topic.objects \
             .select_related('last_post', 'last_post__author') \
-            .filter(p_type=0) \
             .order_by('-last_post__date_created')[:5]
             
         latest_topics = list(latest_topics)
