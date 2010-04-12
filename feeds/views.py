@@ -31,6 +31,7 @@ from pyv4.forum.models import Topic
 from pyv4.wiki.models import Page
 from pyv4.packages.models import Package
 from pyv4.general.functions import *
+from pyv4.forum.views import return_page
 
 
 class LatestNews(Feed):
@@ -100,7 +101,7 @@ class LatestAsk(Feed):
     
     
 class LatestMessage(Feed):
-    title = _("Logram-Project: Messages forum")
+    title = _("Logram-Project: Messages")
     link = "/"
     description = _("Dix derniers messages")
     
@@ -110,7 +111,7 @@ class LatestMessage(Feed):
         MList = False
         if not MList:
             MList = Topic.objects.select_related('last_post', 'last_post__author') \
-                    .extra(select={'date_created': 'forum_post.date_created', 'contents': 'forum_post.contents'},where=['forum_topic.p_type=0']) \
+                    .extra(select={'date_created': 'forum_post.date_created', 'contents': 'forum_post.contents'}) \
                     .order_by('-last_post__date_created')[:10]
             
             # Ecris le cache du RSS Message du forum de 30min
@@ -119,7 +120,7 @@ class LatestMessage(Feed):
     
     
     def item_link(self, Topic):
-        return '/forum-2-%d-1-%s.html#r%d' % (int(Topic.id), slugify(Topic.title), int(Topic.last_post_id))
+        return '/' + return_page(Topic, Topic.last_post_id)
 
 def index(request):
     return tpl('feeds/index.html',"", request)
