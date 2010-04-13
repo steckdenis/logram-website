@@ -49,4 +49,10 @@
             {{ entry.content|lcode }}
         </div>
     {% endfor %}
+    
+    <div class="pagination">
+        {% for pg in list_pages %}
+            <a href="packages-8-{{ package.id }}-{{ pg }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
 {% endblock %}

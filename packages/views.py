@@ -21,7 +21,7 @@
 # Boston, MA  02110-1301  USA
 #
 from pyv4.packages.models import *
-from pyv4.general.functions import tpl, slugify
+from pyv4.general.functions import tpl, slugify, get_list_page
 from pyv4.general.templatetags.general_tags import format_date
 from pyv4.general.models import Profile
 
@@ -137,7 +137,7 @@ def sections(request, distro_id):
         {'distro': distro,
          'sections': sections}, request)
 
-def listsection(request, distro_id, section_id):
+def listsection(request, distro_id, section_id, page):
     # Affichage des paquets d'une section
     distro_id = int(distro_id)
     section_id = int(section_id)
@@ -153,32 +153,42 @@ def listsection(request, distro_id, section_id):
         .select_related('arch') \
         .filter(distribution=distro, section=section) \
         .order_by('name')
+        
+    # 4. Paginer
+    paginator = Paginator(packages, 20)
     
-    # 4. Rendre la template
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+    
+    try:
+        packages = paginator.page(page).object_list
+    except (EmptyPage, InvalidPage):
+        packages = paginator.page(paginator.num_pages).object_list
+        
+    # 5. Rendre la template
     return tpl('packages/list.html',
         {'distro': distro,
          'section': section,
+         'list_pages': get_list_page(page, paginator.num_pages, 4),
          'packages': packages}, request)
 
-def search(request):
+def search(request, page):
     # Recherche q, method, distro
     
-    # 1. Pas de GET, seulement des POST
-    if request.method != 'POST':
-        raise Http404
-    
-    # 2. Construire le début de la requete
+    # 1. Construire le début de la requete
     packages = Package.objects \
         .select_related('arch', 'distribution') \
         .order_by('-distribution', 'name')
     
-    # 3. Récupérer les variables
-    q = request.POST['q']
-    method = request.POST['method']
-    distro = request.POST['distro']
+    # 2. Récupérer les variables
+    q = request.GET['q']
+    method = request.GET['method']
+    distro = request.GET['distro']
     
     # 4. Filtrer pour la distro (dans ce cas le order_by est ignoré)
-    di = False
+    di = None
     
     if distro != 'all':
         packages = packages.filter(distribution=int(distro))
@@ -197,9 +207,26 @@ def search(request):
     else:
         raise Http404
     
-    # 6. Rendre la template
+    # 6. Paginer
+    paginator = Paginator(packages, 20)
+    
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+    
+    try:
+        packages = paginator.page(page).object_list
+    except (EmptyPage, InvalidPage):
+        packages = paginator.page(paginator.num_pages).object_list
+    
+    # 7. Rendre la template
     return tpl('packages/list.html', 
         {'packages': packages,
+         'list_pages': get_list_page(page, paginator.num_pages, 4),
+         'q': q,
+         'method': method,
+         'udistro': distro,
          'distro': di}, request)
 
 def showpackage(request, package_id):
@@ -325,7 +352,7 @@ def viewfiles(request, package_id):
         {'files': files,
          'pkg': package.name + '-' + package.version + ' (' + package.arch.name + ')'}, request)
 
-def changelog(request, package_id):
+def changelog(request, package_id, page):
     # Afficher les changements d'un paquet
     package_id = int(package_id)
     
@@ -344,7 +371,21 @@ def changelog(request, package_id):
     for entry in entries:
         entry.content = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 3, strings, entry).content
         
+    # 4. Paginer
+    paginator = Paginator(entries, 20)
+    
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+    
+    try:
+        entries = paginator.page(page).object_list
+    except (EmptyPage, InvalidPage):
+        entries = paginator.page(paginator.num_pages).object_list
+        
     # 4. Afficher dans la template
     return tpl('packages/changelog.html',
         {'package': package,
+         'list_pages': get_list_page(page, paginator.num_pages, 4),
          'entries': entries}, request)

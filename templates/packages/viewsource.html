@@ -92,7 +92,7 @@
         {% endfor %}
     </ul>
     
-    <h2>{% trans "Historique de constructions" %}</h2>
+    <h2>{% trans "Historique de construction" %}</h2>
     
     <ul>
         {% for log in logs %}
@@ -122,7 +122,7 @@
                         {% endif %}
                     {% endif %}
                 {% else %}
-                    {% trans "Importation manuelle de" %}
+                    {% trans "Importation manuelle par" %}
                     {% if log.author_user %}
                         {{ log.author_user|color_pseudo }}
                     {% else %}
