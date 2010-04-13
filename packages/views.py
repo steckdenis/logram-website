@@ -273,7 +273,7 @@ def showpackage(request, package_id):
          'changelog': changelog,
          'pkgs': pkgs}, request)
          
-def viewsource(request, source_id):
+def viewsource(request, source_id, topic_page, list_page):
     source_id = int(source_id)
     
     # 1. Prendre le paquet source
@@ -290,9 +290,29 @@ def viewsource(request, source_id):
         .select_related('distribution') \
         .filter(source=source) \
         .order_by('-date')
+    
+    # 4. Paginer le tout
+    paginator = Paginator(logs, 25)
+    
+    try:
+        list_page = int(list_page)
+    except ValueError:
+        list_page = 1
+    
+    try:
+        plogs = paginator.page(list_page)
+    except (EmptyPage, InvalidPage):
+        plogs = paginator.page(paginator.num_pages)
         
-    # 4. Dernier log pour les informations intéressantes
-    lastlog = logs[0]
+    # 5. Dernier log pour les informations intéressantes
+    if list_page == 1:
+        # Première page, lastlog est le premier log, on peut économiser une requête
+        logs = list(plogs.object_list)
+        lastlog = logs[0]
+    else:
+        # Pas première page, il faut aller chercher le premier log
+        lastlog = logs[0]
+        logs = plogs.object_list
     
     lastlog.depends = lastlog.depends.split(';')
     lastlog.conflicts = lastlog.conflicts.split(';')
@@ -305,7 +325,7 @@ def viewsource(request, source_id):
         log.flag_failed = ((log.flags & 4) != 0)
         log.flag_warnings = ((log.flags & 64) != 0)
         
-    # 6. Rendre la template (TODO: Commentaires + pagination)
+    # 6. Rendre la template (TODO: Commentaires)
     return tpl('packages/viewsource.html',
         {'source': source,
          'packages': packages,
