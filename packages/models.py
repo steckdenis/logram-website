@@ -24,6 +24,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from pyv4.general.models import Profile
+from pyv4.forum.models import Topic
 
 MIRROR_LOCATIONS = (
     (0, _('Inconnu')),
@@ -83,6 +84,7 @@ class Distribution(models.Model):
 
 class SourcePackage(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
+    topic = models.ForeignKey(Topic, verbose_name=_('Sujet'))
     
     def __unicode__(self):
         return self.name
@@ -130,23 +132,6 @@ class SourceLog(models.Model):
         
     def author_san(self):
         return self.author.replace('@', ' at ')
-        
-    def author_email(self):
-        return self.author.split('<')[-1].split('>')[0]
-
-    def author_user(self):
-        # Renvoyer l'utilisateur (Profile) qui a la bonne url
-        if not hasattr(self, 'auth_user'):
-            rs = Profile.objects \
-                .select_related('user', 'main_group') \
-                .filter(user__email=self.author_email())
-
-            if len(rs) == 0:
-                self.auth_user = None
-            else:
-                self.auth_user = rs[0]
-            
-        return self.auth_user
     
     def __unicode__(self):
         return self.source.name + '~' + self.version

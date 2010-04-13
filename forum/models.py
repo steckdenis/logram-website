@@ -31,6 +31,7 @@ TOPIC_PARENT_TYPE = (
     (0, _('Forum')),
     (1, _('News')),
     (2, _('Demande')),
+    (3, _('Paquet')),
 )
 
 # Create your models here.
@@ -94,7 +95,7 @@ class Choice(models.Model):
 class Topic(models.Model):
     parent_id = models.IntegerField(_('ID du parent (forum, news, etc)'))
     p_type = models.IntegerField(_('Type'), choices=TOPIC_PARENT_TYPE)
-    author = models.ForeignKey(Profile, verbose_name=_('Auteur'))
+    author = models.ForeignKey(Profile, verbose_name=_('Auteur'), blank=True, null=True)
     lang = models.CharField(_('Code ISO de la langue'), max_length=2)
     
     title = models.CharField(_('Titre'), max_length=150)

@@ -97,14 +97,8 @@
     <ul>
         {% for log in logs %}
             <li
-                {% if not log.flag_latest %}
-                    style="padding-left: 20px;"
-                {% endif %}
+                style="padding-left: 20px;{% if log.flag_latest %} background: url('{{ style }}/img/last_post_read.png') top left no-repeat;{% endif %}"
             >
-                {% if log.flag_latest %}
-                    <img src="{{ style }}/img/last_post_read.png" alt="{% trans "Version actuelle" %}" title="{% blocktrans with log.distribution.name as distro %}Version actuellement utilisée dans la distribution {{ distro }}.{% endblocktrans %}" />
-                {% endif %}
-                
                 {% if log.flag_automatic %}
                     {% trans "Construction automatique" %}
                     {% if log.flag_failed %}
@@ -123,11 +117,7 @@
                     {% endif %}
                 {% else %}
                     {% trans "Importation manuelle par" %}
-                    {% if log.author_user %}
-                        {{ log.author_user|color_pseudo }}
-                    {% else %}
-                        {{ log.author_san }}
-                    {% endif %}
+                    {{ log.author_san }}
                 {% endif %}
                 
                 {% blocktrans with log.version as version %}
@@ -144,4 +134,16 @@
             </li>
         {% endfor %}
     </ul>
+    
+    <div class="pagination">
+        {% for pg in list_list_page %}
+            <a href="packages-9-{{ source.id }}-{{ topic_p }}-{{ pg }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
+    
+    <hr />
+    
+    <h2 id="comments">{% trans "Commentaires" %}</h2>
+    
+    {% include "forum/posts_list.html" %}
 {% endblock %}

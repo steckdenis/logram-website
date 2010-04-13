@@ -24,6 +24,7 @@ from pyv4.packages.models import *
 from pyv4.general.functions import tpl, slugify, get_list_page
 from pyv4.general.templatetags.general_tags import format_date
 from pyv4.general.models import Profile
+from pyv4.forum.views import list_posts
 
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -277,7 +278,10 @@ def viewsource(request, source_id, topic_page, list_page):
     source_id = int(source_id)
     
     # 1. Prendre le paquet source
-    source = get_object_or_404(SourcePackage, pk=source_id)
+    try:
+        source = SourcePackage.objects.select_related('topic').get(pk=source_id)
+    except:
+        raise Http404
     
     # 2. Prendre les paquets binaires qu'elle construit
     packages = Package.objects \
@@ -325,12 +329,17 @@ def viewsource(request, source_id, topic_page, list_page):
         log.flag_failed = ((log.flags & 4) != 0)
         log.flag_warnings = ((log.flags & 64) != 0)
         
-    # 6. Rendre la template (TODO: Commentaires)
-    return tpl('packages/viewsource.html',
-        {'source': source,
-         'packages': packages,
-         'logs': logs,
-         'lastlog': lastlog}, request)
+    # 6. Rendre la template
+    config = {'source': source,
+              'packages': packages,
+              'logs': logs,
+              'lastlog': lastlog,
+              'topic_p': topic_page,
+              'list_p': list_page,
+              'list_list_page': get_list_page(list_page, paginator.num_pages, 4),
+              'is_comments': True}
+              
+    return list_posts(request, source.topic, topic_page, config, 'packages/viewsource.html')
 
 def viewmirrors(request, package_id):
     # Afficher les mirroirs et proposer le téléchargement du paquet

@@ -51,6 +51,10 @@ def return_page(topic, msg_id):
         rs = 'demand-5-%i-%i.html' % (
             topic.parent_id,
             topic.last_post_page)
+    elif topic.p_type == 3:
+        rs = 'packages-9-%i-%i-1.html' % (
+            topic.parent_id,
+            topic.last_post_page)
             
     if msg_id != 0:
         rs += '#r%i' % msg_id
