@@ -63,6 +63,11 @@
             </a>
         </li>
         <li>
+            <strong>{% trans "Paquet source" %} :</strong>
+            <a href="packages-9-{{ package.sourcepkg.id }}.html">
+                {{ package.sourcepkg.name }}
+            </a>
+        <li>
             <strong>{% trans "Taille du téléchargement" %} :</strong>
             {{ package.download_size|filesizeformat }}
         </li>

@@ -209,7 +209,7 @@ def showpackage(request, package_id):
     # 1. Récupérer le paquet
     try:
         package = Package.objects \
-            .select_related('arch', 'distribution', 'section') \
+            .select_related('arch', 'distribution', 'section', 'sourcepkg') \
             .get(pk=package_id)
     except Package.DoesNotExist:
         raise Http404
@@ -245,6 +245,45 @@ def showpackage(request, package_id):
         {'package': package,
          'changelog': changelog,
          'pkgs': pkgs}, request)
+         
+def viewsource(request, source_id):
+    source_id = int(source_id)
+    
+    # 1. Prendre le paquet source
+    source = get_object_or_404(SourcePackage, pk=source_id)
+    
+    # 2. Prendre les paquets binaires qu'elle construit
+    packages = Package.objects \
+        .select_related('arch', 'distribution', 'section') \
+        .filter(sourcepkg=source) \
+        .order_by('name')
+        
+    # 3. Prendre l'historique de la source
+    logs = SourceLog.objects \
+        .select_related('distribution') \
+        .filter(source=source) \
+        .order_by('-date')
+        
+    # 4. Dernier log pour les informations intéressantes
+    lastlog = logs[0]
+    
+    lastlog.depends = lastlog.depends.split(';')
+    lastlog.conflicts = lastlog.conflicts.split(';')
+    lastlog.suggests = lastlog.suggests.split(';')
+    
+    # 5. Flags de chaque log
+    for log in logs:
+        log.flag_latest = ((log.flags & 1) != 0)
+        log.flag_automatic = ((log.flags & 2) == 0) # Le flag est MANUAL
+        log.flag_failed = ((log.flags & 4) != 0)
+        log.flag_warnings = ((log.flags & 64) != 0)
+        
+    # 6. Rendre la template (TODO: Commentaires + pagination)
+    return tpl('packages/viewsource.html',
+        {'source': source,
+         'packages': packages,
+         'logs': logs,
+         'lastlog': lastlog}, request)
 
 def viewmirrors(request, package_id):
     # Afficher les mirroirs et proposer le téléchargement du paquet

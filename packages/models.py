@@ -83,7 +83,6 @@ class Distribution(models.Model):
 
 class SourcePackage(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
-    flags = models.IntegerField(_('Flags'))
     
     def __unicode__(self):
         return self.name
@@ -97,12 +96,57 @@ class SourceLog(models.Model):
     flags = models.IntegerField(_('Flags'))
     date = models.DateTimeField(_('Date'))
     author = models.CharField(_('Auteur, si import manuel'), max_length=200)
+    maintainer = models.CharField(_('Mainteneur'), max_length=200)
+    upstream_url = models.CharField(_('Url du site web upstream'), max_length=256)
     version = models.CharField(_('Version'), max_length=200)
     distribution = models.ForeignKey(Distribution, verbose_name=_('Distribution'))
+    license = models.CharField(_('Licence'), max_length=64)
+    
+    date_rebuild_asked = models.DateTimeField(_('Date de demande de reconstruction'), blank=True, null=True)
     
     depends = models.TextField(_('Dépendances'))
     suggests = models.TextField(_('Suggestions'))
     conflicts = models.TextField(_('Conflits'))
+    
+    def maintainer_san(self):
+        return self.maintainer.replace('@', ' at ')
+        
+    def maintainer_email(self):
+        return self.maintainer.split('<')[-1].split('>')[0]
+
+    def maintainer_user(self):
+        # Renvoyer l'utilisateur (Profile) qui a la bonne url
+        if not hasattr(self, 'maint_user'):
+            rs = Profile.objects \
+                .select_related('user', 'main_group') \
+                .filter(user__email=self.maintainer_email())
+
+            if len(rs) == 0:
+                self.maint_user = None
+            else:
+                self.maint_user = rs[0]
+            
+        return self.maint_user
+        
+    def author_san(self):
+        return self.author.replace('@', ' at ')
+        
+    def author_email(self):
+        return self.author.split('<')[-1].split('>')[0]
+
+    def author_user(self):
+        # Renvoyer l'utilisateur (Profile) qui a la bonne url
+        if not hasattr(self, 'auth_user'):
+            rs = Profile.objects \
+                .select_related('user', 'main_group') \
+                .filter(user__email=self.author_email())
+
+            if len(rs) == 0:
+                self.auth_user = None
+            else:
+                self.auth_user = rs[0]
+            
+        return self.auth_user
     
     def __unicode__(self):
         return self.source.name + '~' + self.version
@@ -113,7 +157,7 @@ class SourceLog(models.Model):
 
 class Package(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
-    source = models.ForeignKey(SourcePackage, verbose_name=_('Paquet source'))
+    sourcepkg = models.ForeignKey(SourcePackage, verbose_name=_('Paquet source'))
     
     maintainer = models.CharField(_('Mainteneur'), max_length=200)
     section = models.ForeignKey(Section, verbose_name=_('Section'))

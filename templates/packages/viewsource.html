@@ -1,0 +1,147 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {% blocktrans with source.name|capfirst as source %}
+        Paquet source {{ source }}
+    {% endblocktrans %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    {% blocktrans with source.name|capfirst as source %}
+        Paquet source {{ source }}
+    {% endblocktrans %}
+{% endblock %}
+    
+{% block body %}
+    <h1>
+        {% blocktrans with source.name|capfirst as source %}
+            Paquet source {{ source }}
+        {% endblocktrans %}
+    </h1>
+    
+    <div id="forum_tools">
+        <strong>{% trans "Informations :" %}</strong>
+        
+        {% trans "licence :" %}
+        {{ lastlog.license }}
+        
+        &bull;
+        {% trans "mainteneur :" %}
+        {% if lastlog.maintainer_user %}
+            {{ lastlog.maintainer_user|color_pseudo }}
+        {% else %}
+            {{ lastlog.maintainer_san }}
+        {% endif %}
+        
+        &bull;
+        <a href="{{ lastlog.upstream_url }}">
+            {% trans "site web de l'auteur" %}
+        </a>
+        
+        {# TODO: Opérations pour les empaqueteurs (reconstruire, reconstruire en écrasant le changelog) #}
+    </div>
+    
+    <h2>{% trans "Paquets binaires construit par ce paquet" %}</h2>
+    
+    {% regroup packages by name as packages_list %}
+    
+    <ul>
+        {% for package in packages_list %}
+            <li>
+                <strong>{{ package.grouper }}</strong>
+                <ul>
+                    {% for item in package.list %}
+                        <li>
+                            <strong>{{ item.arch.name }}</strong>
+                            <a href="packages-4-{{ item.id }}.html">
+                                {{ item.name }}~{{ item.version }}
+                            </a>
+                            {% trans "dans" %}
+                            <strong>{{ item.distribution.name }}</strong>/{{ item.section.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>{% trans "Dépendances" %}</h2>
+
+    <strong>{% trans "Légende" %} :</strong>
+    <span class="deps_dep">{% trans "Dépend de" %}</span> &bull;
+    <span class="deps_sugg">{% trans "Suggère" %}</span> &bull;
+    <span class="deps_conf">{% trans "Est en conflit avec" %}</span>
+
+    <ul class="deps_ul">
+        {% for dep in lastlog.depends %}
+            {% if dep %}
+                <li class="deps_dep">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in lastlog.suggests %}
+            {% if dep %}
+                <li class="deps_sugg">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in lastlog.conflicts %}
+            {% if dep %}
+                <li class="deps_conf">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    
+    <h2>{% trans "Historique de constructions" %}</h2>
+    
+    <ul>
+        {% for log in logs %}
+            <li
+                {% if not log.flag_latest %}
+                    style="padding-left: 20px;"
+                {% endif %}
+            >
+                {% if log.flag_latest %}
+                    <img src="{{ style }}/img/last_post_read.png" alt="{% trans "Version actuelle" %}" title="{% blocktrans with log.distribution.name as distro %}Version actuellement utilisée dans la distribution {{ distro }}.{% endblocktrans %}" />
+                {% endif %}
+                
+                {% if log.flag_automatic %}
+                    {% trans "Construction automatique" %}
+                    {% if log.flag_failed %}
+                        <span style="color: red;">
+                            {% trans "échouée" %}
+                        </span>
+                    {% else %}
+                        <span style="color: green;">
+                            {% trans "réussie" %}
+                        </span>
+                        {% if log.flag_warnings %}
+                            <span style="color: #ff8000;">
+                                {% trans "(avec remarques)" %}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% trans "Importation manuelle de" %}
+                    {% if log.author_user %}
+                        {{ log.author_user|color_pseudo }}
+                    {% else %}
+                        {{ log.author_san }}
+                    {% endif %}
+                {% endif %}
+                
+                {% blocktrans with log.version as version %}
+                    de la version <strong>{{ version }}</strong>
+                {% endblocktrans %}
+                
+                {% blocktrans with log.distribution.name as distro %}
+                    dans le dépôt <strong>{{ distro }}</strong>
+                {% endblocktrans %}
+                
+                {{ log.date|format_date }}
+                
+                (<a href="packages-10-{{ source.id }}.html">{% trans "informations" %}</a>)
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
