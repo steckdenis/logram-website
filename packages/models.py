@@ -81,8 +81,39 @@ class Distribution(models.Model):
         verbose_name = _('Distribution')
         verbose_name_plural = _('Distributions')
 
+class SourcePackage(models.Model):
+    name = models.CharField(_('Nom'), max_length=200)
+    flags = models.IntegerField(_('Flags'))
+    
+    def __unicode__(self):
+        return self.name
+        
+    class Meta:
+        verbose_name = _('Paquet source')
+        verbose_name_plural = _('Paquets source')
+        
+class SourceLog(models.Model):
+    source = models.ForeignKey(SourcePackage, verbose_name=_('Paquet source'))
+    flags = models.IntegerField(_('Flags'))
+    date = models.DateTimeField(_('Date'))
+    author = models.CharField(_('Auteur, si import manuel'), max_length=200)
+    version = models.CharField(_('Version'), max_length=200)
+    distribution = models.ForeignKey(Distribution, verbose_name=_('Distribution'))
+    
+    depends = models.TextField(_('Dépendances'))
+    suggests = models.TextField(_('Suggestions'))
+    conflicts = models.TextField(_('Conflits'))
+    
+    def __unicode__(self):
+        return self.source.name + '~' + self.version
+        
+    class Meta:
+        verbose_name = _('Historique de source')
+        verbose_name_plural = _('Historiques de source')
+
 class Package(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
+    source = models.ForeignKey(SourcePackage, verbose_name=_('Paquet source'))
     
     maintainer = models.CharField(_('Mainteneur'), max_length=200)
     section = models.ForeignKey(Section, verbose_name=_('Section'))
