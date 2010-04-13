@@ -156,14 +156,17 @@ class Package(models.Model):
 
     def maintainer_user(self):
         # Renvoyer l'utilisateur (Profile) qui a la bonne url
-        rs = Profile.objects \
-            .select_related('user', 'main_group') \
-            .filter(user__email=self.maintainer_email())
+        if not hasattr(self, 'maint_user'):
+            rs = Profile.objects \
+                .select_related('user', 'main_group') \
+                .filter(user__email=self.maintainer_email())
 
-        if len(rs) == 0:
-            return None
-        else:
-            return rs[0]
+            if len(rs) == 0:
+                self.maint_user = None
+            else:
+                self.maint_user = rs[0]
+            
+        return self.maint_user
 
     def __unicode__(self):
         return self.name
