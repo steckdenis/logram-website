@@ -133,6 +133,12 @@ class SourceLog(models.Model):
     def author_san(self):
         return self.author.replace('@', ' at ')
     
+    def author_email(self):
+        return self.author.split('<')[-1].split('>')[0]
+
+    def author_name(self):
+        return self.author.split('<')[0].strip()
+
     def __unicode__(self):
         return self.source.name + '~' + self.version
         

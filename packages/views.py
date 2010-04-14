@@ -293,7 +293,7 @@ def viewsource(request, source_id, topic_page, list_page):
     logs = SourceLog.objects \
         .select_related('distribution') \
         .filter(source=source) \
-        .order_by('-date')
+        .order_by('-id')
     
     # 4. Paginer le tout
     paginator = Paginator(logs, 25)

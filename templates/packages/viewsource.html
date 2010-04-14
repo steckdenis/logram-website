@@ -117,7 +117,9 @@
                     {% endif %}
                 {% else %}
                     {% trans "Importation manuelle par" %}
-                    {{ log.author_san }}
+                    <span title="{{ log.author_email }}" style="color: green;">
+                        {{ log.author_name }}
+                    </span>
                 {% endif %}
                 
                 {% blocktrans with log.version as version %}
@@ -130,7 +132,7 @@
                 
                 {{ log.date|format_date }}
                 
-                (<a href="packages-10-{{ source.id }}.html">{% trans "informations" %}</a>)
+                (<a href="packages-10-{{ log.id }}.html">{% trans "informations" %}</a>)
             </li>
         {% endfor %}
     </ul>
