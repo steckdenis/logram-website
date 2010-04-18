@@ -75,6 +75,8 @@
     <span class="deps_conf">{% trans "Est en conflit avec" %}</span>
 
     <ul class="deps_ul">
+        <li class="deps_dep">build-essential {% trans "(dépendance automatique)" %}</li>
+        
         {% for dep in lastlog.depends %}
             {% if dep %}
                 <li class="deps_dep">{{ dep }}</li>
