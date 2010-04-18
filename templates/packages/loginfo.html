@@ -27,6 +27,24 @@
         {% endblocktrans %}
     </h1>
     
+    {% if perms.packages.change_sourcelog %}
+        <form method="post" action="packages-11-{{ log.id }}.html">
+            <div id="forum_tools">
+                <strong>{% trans "Changement des flags :" %}</strong>
+                <input type="checkbox" name="rebuild" {% if log.flag_rebuild %}checked="checked"{% endif %} />
+                <label for="rebuild">{% trans "Reconstruire" %}</label>
+                &bull;
+                <input type="checkbox" name="continuous" {% if log.flag_continuous %}checked="checked"{% endif %} />
+                <label for="continuous">{% trans "Reconstruction continue" %}</label>
+                &bull;
+                <input type="checkbox" name="overwrite" {% if log.flag_overwrite %}checked="checked"{% endif %} />
+                <label for="overwrite">{% trans "Ne pas ajouter d'enregistrement de changelog" %}</label>
+                
+                <input type="submit" />
+            </div>
+        </form>
+    {% endif %}
+    
     <h2>{% trans "Informations générales" %}</h2>
     
     <ul>

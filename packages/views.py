@@ -36,6 +36,7 @@ from django.core.cache import cache
 from django.utils.encoding import smart_unicode, smart_str
 
 import os
+import datetime
 
 def string_of_package(package, language, type, strs, changelog):
     # Retourner la chaîne correspondant, ou en créer une nouvelle si elle n'existe pas
@@ -377,6 +378,44 @@ def viewsourcelog(request, log_id):
     return tpl('packages/loginfo.html',
         {'log': log,
          'filename': filename}, request)
+
+def setflags(request, log_id):
+    # Définir les flags d'un enregistrement de log
+    log_id = int(log_id)
+    
+    # 1. Vérifier qu'on est bien en post
+    if request.method != 'POST':
+        raise Http404
+    
+    # 2. Récupérer le log
+    log = get_object_or_404(SourceLog, pk=log_id)
+    
+    # 3. Calculer les flags
+    flags = log.flags
+    
+    if request.POST.get('rebuild', None) == 'on':
+        flags = flags | 16
+        log.date_rebuild_asked = datetime.datetime.now()
+    else:
+        flags = flags & ~16
+        
+    if request.POST.get('continuous', None) == 'on':
+        flags = flags | 32
+    else:
+        flags = flags & ~32
+        
+    if request.POST.get('overwrite', None) == 'on':
+        flags = flags | 8
+    else:
+        flags = flags & ~8
+        
+    # Sauvegarder les flags
+    log.flags = flags
+    log.save()
+    
+    # Rediriger
+    request.user.message_set.create(message=_('Flags de l\'enregistrement positionnés'))
+    return HttpResponseRedirect('packages-10-%i.html' % log_id)
 
 def viewmirrors(request, package_id):
     # Afficher les mirroirs et proposer le téléchargement du paquet
