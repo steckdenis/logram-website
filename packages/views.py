@@ -379,6 +379,7 @@ def viewsourcelog(request, log_id):
         {'log': log,
          'filename': filename}, request)
 
+@permission_required('packages.change_sourcelog')
 def setflags(request, log_id):
     # Définir les flags d'un enregistrement de log
     log_id = int(log_id)
