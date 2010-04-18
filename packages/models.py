@@ -181,7 +181,10 @@ class Package(models.Model):
         return self.version.split('~')[0]
 
     def logram_version(self):
-        return self.version.split('~')[1]
+        if '~' in self.version:
+            return self.version.split('~')[1]
+        else:
+            return 0
 
     def maintainer_san(self):
         return self.maintainer.replace('@', ' at ')
