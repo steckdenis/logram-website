@@ -99,20 +99,26 @@
             <li
                 style="padding-left: 20px;{% if log.flag_latest %} background: url('{{ style }}/img/last_post_read.png') top left no-repeat;{% endif %}"
             >
-                {% if log.flag_automatic %}
+                {% if log.flag_automatic or log.flag_building %}
                     {% trans "Construction automatique" %}
                     {% if log.flag_failed %}
                         <span style="color: red;">
                             {% trans "échouée" %}
                         </span>
                     {% else %}
-                        <span style="color: green;">
-                            {% trans "réussie" %}
-                        </span>
-                        {% if log.flag_warnings %}
-                            <span style="color: #ff8000;">
-                                {% trans "(avec remarques)" %}
+                        {% if log.flag_building %}
+                            <span style="color: blue;">
+                                {% trans "en cours" %}
                             </span>
+                        {% else %}
+                            <span style="color: green;">
+                                {% trans "réussie" %}
+                            </span>
+                            {% if log.flag_warnings %}
+                                <span style="color: #ff8000;">
+                                    {% trans "(avec remarques)" %}
+                                </span>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 {% else %}

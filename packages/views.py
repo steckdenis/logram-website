@@ -328,6 +328,7 @@ def viewsource(request, source_id, topic_page, list_page):
         log.flag_automatic = ((log.flags & 2) == 0) # Le flag est MANUAL
         log.flag_failed = ((log.flags & 4) != 0)
         log.flag_warnings = ((log.flags & 64) != 0)
+        log.flag_building = ((log.flags & 128) != 0)
         
     # 6. Rendre la template
     config = {'source': source,
@@ -340,6 +341,42 @@ def viewsource(request, source_id, topic_page, list_page):
               'is_comments': True}
               
     return list_posts(request, source.topic, topic_page, config, 'packages/viewsource.html')
+
+def viewsourcelog(request, log_id):
+    # Afficher les informations sur une construction d'une source
+    log_id = int(log_id)
+    
+    # 1. Récupérer le log
+    try:
+        log = SourceLog.objects \
+                .select_related('source', 'distribution') \
+                .get(pk=log_id)
+    except SourceLog.DoesNotExist:
+        raise Http404
+    
+    # 2. Gérer les flags
+    log.flag_latest = ((log.flags & 1) != 0)
+    log.flag_manual = ((log.flags & 2) != 0)
+    log.flag_failed = ((log.flags & 4) != 0)
+    log.flag_overwrite = ((log.flags & 8) != 0)
+    log.flag_rebuild = ((log.flags & 16) != 0)
+    log.flag_continuous = ((log.flags & 32) != 0)
+    log.flag_warnings = ((log.flags & 64) != 0)
+    log.flag_building = ((log.flags & 128) != 0)
+    
+    # 3. Gérer les dépendances
+    log.depends = log.depends.split(';')
+    log.conflicts = log.conflicts.split(';')
+    log.suggests = log.suggests.split(';')
+    
+    # 4. Adresse des logs
+    part = (log_id >> 6) << 6;
+    filename = '/files/logs/%i-%i' % (part, part + 64)
+    
+    # 5. Afficher la template
+    return tpl('packages/loginfo.html',
+        {'log': log,
+         'filename': filename}, request)
 
 def viewmirrors(request, package_id):
     # Afficher les mirroirs et proposer le téléchargement du paquet
