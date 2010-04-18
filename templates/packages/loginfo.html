@@ -1,0 +1,216 @@
+{% extends "packages/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+    {% blocktrans with log.source.name|capfirst as source and log.version as ver %}
+        Construction de la version {{ver}} de {{source}}
+    {% endblocktrans %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="packages-9-{{ log.source_id }}-1-1.html">
+        {% blocktrans with log.source.name|capfirst as source %}
+            Paquet source {{ source }}
+        {% endblocktrans %}
+    </a>
+    &raquo;
+    {% blocktrans with log.source.name|capfirst as source and log.version as ver %}
+        Construction de la version {{ver}}
+    {% endblocktrans %}
+{% endblock %}
+    
+{% block body %}
+    <h1>
+        {% blocktrans with log.source.name|capfirst as source and log.version as ver %}
+            Construction de la version {{ver}} de {{source}}
+        {% endblocktrans %}
+    </h1>
+    
+    {% if perms.packages.change_sourcelog %}
+        <form method="post" action="packages-11-{{ log.id }}.html">
+            <div id="forum_tools">
+                <strong>{% trans "Changement des flags :" %}</strong>
+                <input type="checkbox" name="rebuild" {% if log.flag_rebuild %}checked="checked"{% endif %} />
+                <label for="rebuild">{% trans "Reconstruire" %}</label>
+                &bull;
+                <input type="checkbox" name="continuous" {% if log.flag_continuous %}checked="checked"{% endif %} />
+                <label for="continuous">{% trans "Reconstruction continue" %}</label>
+                &bull;
+                <input type="checkbox" name="overwrite" {% if log.flag_overwrite %}checked="checked"{% endif %} />
+                <label for="overwrite">{% trans "Ne pas ajouter d'enregistrement de changelog" %}</label>
+                
+                <input type="submit" />
+            </div>
+        </form>
+    {% endif %}
+    
+    <h2>{% trans "Informations générales" %}</h2>
+    
+    <ul>
+        <li>
+            <strong>{% trans "Paquet source :" %}</strong>
+            <a href="packages-9-{{ log.source_id }}-1-1.html">
+                {{ log.source.name }}
+            </a>
+        </li>
+        <li>
+            <strong>{% trans "Version :" %}</strong>
+            {{ log.version }}
+        </li>
+        <li>
+            <strong>{% trans "Date de construction :" %}</strong>
+            {{ log.date|format_date }}
+        </li>
+        {% if log.flag_manual %}
+            <li>
+                <strong>{% trans "Auteur de l'importation manuelle :" %}</strong>
+                <span title="{{ log.author_email }}">
+                    {{ log.author_name }}
+                </span>
+            </li>
+        {% endif %}
+        {% if log.flag_rebuild %}
+            <li>
+                <strong>{% trans "Date de demande de reconstruction :" %}</strong>
+                {{ log.date_rebuild_asked|format_date }}
+            </li>
+        {% endif %}
+        <li>
+            <strong>{% trans "Mainteneur :" %}</strong>
+            {% if log.maintainer_user %}
+                {{ log.maintainer_user|color_pseudo }}
+            {% else %}
+                {{ log.maintainer_san }}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Url du site web upstream :" %}</strong>
+            <a href="{{ log.upstream_url }}">{{ log.upstream_url }}</a>
+        </li>
+        <li>
+            <strong>{% trans "Licence :" %}</strong>
+            {{ log.license }}
+        </li>
+        <li>
+            <strong>{% trans "Dépôt cible :" %}</strong>
+            {{ log.distribution.name }}
+        </li>
+    </ul>
+    
+    <h2>{% trans "Dépendances" %}</h2>
+
+    <strong>{% trans "Légende" %} :</strong>
+    <span class="deps_dep">{% trans "Dépend de" %}</span> &bull;
+    <span class="deps_sugg">{% trans "Suggère" %}</span> &bull;
+    <span class="deps_conf">{% trans "Est en conflit avec" %}</span>
+
+    <ul class="deps_ul">
+        {% for dep in log.depends %}
+            {% if dep %}
+                <li class="deps_dep">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in log.suggests %}
+            {% if dep %}
+                <li class="deps_sugg">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+        {% for dep in log.conflicts %}
+            {% if dep %}
+                <li class="deps_conf">{{ dep }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    
+    <h2>{% trans "Flags" %}</h2>
+    
+    <ul>
+        <li>
+            <strong>{% trans "Dernière version de la distribution :" %}</strong>
+            {% if log.flag_latest %}
+                {% trans "oui" %}
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Importation manuelle :" %}</strong>
+            {% if log.flag_manual %}
+                {% trans "oui" %}
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Construction échouée :" %}</strong>
+            {% if log.flag_failed %}
+                <span style="color: red;">{% trans "oui" %}</span>
+            {% else %}
+                <span style="color: green;">{% trans "non" %}</span>
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Ne pas ajouter d'enregistrement dans le changelog :" %}</strong>
+            {% if log.flag_overwrite %}
+                {% trans "oui" %}
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Reconstruction demandée :" %}</strong>
+            {% if log.flag_rebuild %}
+                {% trans "oui" %}
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Reconstruction continue :" %}</strong>
+            {% if log.flag_continuous %}
+                {% trans "oui" %}
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "Avertissements lors de la construction :" %}</strong>
+            {% if log.flag_warnings %}
+                <span style="color: #ff8000;">{% trans "oui" %}</span>
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+        <li>
+            <strong>{% trans "En cours de construction :" %}</strong>
+            {% if log.flag_building %}
+                <span style="color: blue;">{% trans "oui" %}</span>
+            {% else %}
+                {% trans "non" %}
+            {% endif %}
+        </li>
+    </ul>
+    
+    {% if not log.flag_manual %}
+        <h2>{% trans "Logs" %}</h2>
+        
+        <ul>
+            <li>
+                <a href="{{ filename }}/download_{{ log.id }}">
+                    {% trans "Préparation et téléchargement" %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ filename }}/build_{{ log.id }}">
+                    {% trans "Compilation" %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ filename }}/package_{{ log.id }}">
+                    {% trans "Empaquetage" %}
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+{% endblock %}

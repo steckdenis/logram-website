@@ -154,7 +154,9 @@
             <a href="news-2-{{ new.id }}-{{ pg }}-{{ news.title|slugify }}.html">{{ pg }}</a>
         {% else %}{% ifequal topic.p_type 2 %}
             <a href="demand-5-{{ demand.id }}-{{ pg }}.html">{{ pg }}</a>
-        {% endifequal %}{% endifequal %}{% endifequal %}
+        {% else %}{% ifequal topic.p_type 3 %}
+            <a href="packages-9-{{ source.id }}-{{ pg }}-{{ list_p }}.html">{{ pg }}</a>
+        {% endifequal %}{% endifequal %}{% endifequal %}{% endifequal %}
     {% endfor %}
 </div>
 

@@ -53,11 +53,20 @@
             {{ package.logram_version }}
         </li>
         <li>
+            <strong>{% trans "Dernière mise à jour" %} :</strong>
+            {{ changelog.date|format_date }}
+        </li>
+        <li>
             <strong>{% trans "Historique de modifications" %} :</strong>
-            <a href="packages-8-{{ package.id }}.html">
+            <a href="packages-8-{{ package.id }}-1.html">
                 {% trans "Voir" %}
             </a>
         </li>
+        <li>
+            <strong>{% trans "Paquet source" %} :</strong>
+            <a href="packages-9-{{ package.sourcepkg.id }}-1-1.html">
+                {{ package.sourcepkg.name }}
+            </a>
         <li>
             <strong>{% trans "Taille du téléchargement" %} :</strong>
             {{ package.download_size|filesizeformat }}
@@ -112,6 +121,22 @@
             {% endif %}
         {% endfor %}
     </ul>
+    
+    {% if request.user.is_authenticated %}
+        <h2>{% trans "Modification des descriptions" %}</h2>
+        
+        <p>
+            {% blocktrans with package.name as pkg %}
+                Les descriptions de {{pkg}} dans différentes langues peuvent être modifiées directement sur le wiki, pour permettre une traduction facile. Le contenu de cette page de wiki sera périodiquement inséré dans le fichier de métadonnées du paquet, depuis le gestionnaire de paquets.
+            {% endblocktrans %}
+        </p>
+        
+        <p style="text-align: center;">
+            <a href="wiki-{{ package.name|slugify }}-{{ package.distribution.name|slugify }}.html">
+                <img src="{{ style }}/img/editer.png" alt="{% trans "Éditer" %}" />
+            </a>
+        </p>
+    {% endif %}
 
     <h2>{% trans "Téléchargements" %}</h2>
 

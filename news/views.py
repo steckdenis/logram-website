@@ -106,10 +106,6 @@ def view(request, page, news_id):
     # On affiche également les commentaires de la news, donc on a besoin d'un topic. Cette fonction
     # nous permet de respecter le principe DRY, en utilisant directement viewtopic du forum
     
-    # NOTE: Quand on poste un message ou qu'on en édite un, il faut savoir sur quelle page on va
-    # revenir (viewtopic, news, bug, etc). Cette variable de session nous informe de ce qu'on doit faire
-    request.session['forum_post_return_url'] = 'news-2-%i-PAGE-%s.html' % (int(news_id), slugify(news.title))
-    
     # On a fini
     return list_posts(request, news.topic, page, config, 'news/view.html')
 

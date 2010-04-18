@@ -27,12 +27,15 @@ urlpatterns = patterns('pyv4.packages.views',
     # (r'^2-(?P<page>\d+)\.html$', 'changes'),
     (r'^1\.html$', 'home'),
     (r'^2-(?P<distro_id>\d+)\.html$', 'sections'),
-    (r'^3-(?P<distro_id>\d+)-(?P<section_id>\d+)\.html$', 'listsection'),
+    (r'^3-(?P<distro_id>\d+)-(?P<section_id>\d+)-(?P<page>\d+)\.html$', 'listsection'),
     
     (r'^4-(?P<package_id>\d+)\.html$', 'showpackage'),
     (r'^6-(?P<package_id>\d+)\.html$', 'viewmirrors'),
     (r'^7-(?P<package_id>\d+)\.html$', 'viewfiles'),
-    (r'^8-(?P<package_id>\d+)\.html$', 'changelog'),
+    (r'^8-(?P<package_id>\d+)-(?P<page>\d+)\.html$', 'changelog'),
+    (r'^9-(?P<source_id>\d+)-(?P<topic_page>\d+)-(?P<list_page>\d+)\.html$', 'viewsource'),
+    (r'^10-(?P<log_id>\d+)\.html$', 'viewsourcelog'),
+    (r'^11-(?P<log_id>\d+)\.html$', 'setflags'),
     
-    (r'^5\.html$', 'search'),
+    (r'^5-(?P<page>\d+)\.html$', 'search'),
 )

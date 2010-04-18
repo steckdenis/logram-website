@@ -21,9 +21,10 @@
 # Boston, MA  02110-1301  USA
 #
 from pyv4.packages.models import *
-from pyv4.general.functions import tpl, slugify
+from pyv4.general.functions import tpl, slugify, get_list_page
 from pyv4.general.templatetags.general_tags import format_date
 from pyv4.general.models import Profile
+from pyv4.forum.views import list_posts
 
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -35,6 +36,7 @@ from django.core.cache import cache
 from django.utils.encoding import smart_unicode, smart_str
 
 import os
+import datetime
 
 def string_of_package(package, language, type, strs, changelog):
     # Retourner la chaîne correspondant, ou en créer une nouvelle si elle n'existe pas
@@ -137,7 +139,7 @@ def sections(request, distro_id):
         {'distro': distro,
          'sections': sections}, request)
 
-def listsection(request, distro_id, section_id):
+def listsection(request, distro_id, section_id, page):
     # Affichage des paquets d'une section
     distro_id = int(distro_id)
     section_id = int(section_id)
@@ -153,32 +155,42 @@ def listsection(request, distro_id, section_id):
         .select_related('arch') \
         .filter(distribution=distro, section=section) \
         .order_by('name')
+        
+    # 4. Paginer
+    paginator = Paginator(packages, 20)
     
-    # 4. Rendre la template
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+    
+    try:
+        packages = paginator.page(page).object_list
+    except (EmptyPage, InvalidPage):
+        packages = paginator.page(paginator.num_pages).object_list
+        
+    # 5. Rendre la template
     return tpl('packages/list.html',
         {'distro': distro,
          'section': section,
+         'list_pages': get_list_page(page, paginator.num_pages, 4),
          'packages': packages}, request)
 
-def search(request):
+def search(request, page):
     # Recherche q, method, distro
     
-    # 1. Pas de GET, seulement des POST
-    if request.method != 'POST':
-        raise Http404
-    
-    # 2. Construire le début de la requete
+    # 1. Construire le début de la requete
     packages = Package.objects \
         .select_related('arch', 'distribution') \
         .order_by('-distribution', 'name')
     
-    # 3. Récupérer les variables
-    q = request.POST['q']
-    method = request.POST['method']
-    distro = request.POST['distro']
+    # 2. Récupérer les variables
+    q = request.GET['q']
+    method = request.GET['method']
+    distro = request.GET['distro']
     
     # 4. Filtrer pour la distro (dans ce cas le order_by est ignoré)
-    di = False
+    di = None
     
     if distro != 'all':
         packages = packages.filter(distribution=int(distro))
@@ -197,9 +209,26 @@ def search(request):
     else:
         raise Http404
     
-    # 6. Rendre la template
+    # 6. Paginer
+    paginator = Paginator(packages, 20)
+    
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+    
+    try:
+        packages = paginator.page(page).object_list
+    except (EmptyPage, InvalidPage):
+        packages = paginator.page(paginator.num_pages).object_list
+    
+    # 7. Rendre la template
     return tpl('packages/list.html', 
         {'packages': packages,
+         'list_pages': get_list_page(page, paginator.num_pages, 4),
+         'q': q,
+         'method': method,
+         'udistro': distro,
          'distro': di}, request)
 
 def showpackage(request, package_id):
@@ -209,7 +238,7 @@ def showpackage(request, package_id):
     # 1. Récupérer le paquet
     try:
         package = Package.objects \
-            .select_related('arch', 'distribution', 'section') \
+            .select_related('arch', 'distribution', 'section', 'sourcepkg') \
             .get(pk=package_id)
     except Package.DoesNotExist:
         raise Http404
@@ -235,10 +264,158 @@ def showpackage(request, package_id):
     package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, None).content
     package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, None).content
     
-    # 5. Rendre la template
+    # 5. Prendre la dernière entrée de changelog
+    changelog = ChangeLog.objects \
+                    .filter(package=package) \
+                    .order_by('-date')[0]
+    
+    # 6. Rendre la template
     return tpl('packages/view.html', 
         {'package': package,
+         'changelog': changelog,
          'pkgs': pkgs}, request)
+         
+def viewsource(request, source_id, topic_page, list_page):
+    source_id = int(source_id)
+    
+    # 1. Prendre le paquet source
+    try:
+        source = SourcePackage.objects.select_related('topic').get(pk=source_id)
+    except:
+        raise Http404
+    
+    # 2. Prendre les paquets binaires qu'elle construit
+    packages = Package.objects \
+        .select_related('arch', 'distribution', 'section') \
+        .filter(sourcepkg=source) \
+        .order_by('name')
+        
+    # 3. Prendre l'historique de la source
+    logs = SourceLog.objects \
+        .select_related('distribution') \
+        .filter(source=source) \
+        .order_by('-id')
+    
+    # 4. Paginer le tout
+    paginator = Paginator(logs, 25)
+    
+    try:
+        list_page = int(list_page)
+    except ValueError:
+        list_page = 1
+    
+    try:
+        plogs = paginator.page(list_page)
+    except (EmptyPage, InvalidPage):
+        plogs = paginator.page(paginator.num_pages)
+        
+    # 5. Dernier log pour les informations intéressantes
+    if list_page == 1:
+        # Première page, lastlog est le premier log, on peut économiser une requête
+        logs = list(plogs.object_list)
+        lastlog = logs[0]
+    else:
+        # Pas première page, il faut aller chercher le premier log
+        lastlog = logs[0]
+        logs = plogs.object_list
+    
+    lastlog.depends = lastlog.depends.split(';')
+    lastlog.conflicts = lastlog.conflicts.split(';')
+    lastlog.suggests = lastlog.suggests.split(';')
+    
+    # 5. Flags de chaque log
+    for log in logs:
+        log.flag_latest = ((log.flags & 1) != 0)
+        log.flag_automatic = ((log.flags & 2) == 0) # Le flag est MANUAL
+        log.flag_failed = ((log.flags & 4) != 0)
+        log.flag_warnings = ((log.flags & 64) != 0)
+        log.flag_building = ((log.flags & 128) != 0)
+        
+    # 6. Rendre la template
+    config = {'source': source,
+              'packages': packages,
+              'logs': logs,
+              'lastlog': lastlog,
+              'topic_p': topic_page,
+              'list_p': list_page,
+              'list_list_page': get_list_page(list_page, paginator.num_pages, 4),
+              'is_comments': True}
+              
+    return list_posts(request, source.topic, topic_page, config, 'packages/viewsource.html')
+
+def viewsourcelog(request, log_id):
+    # Afficher les informations sur une construction d'une source
+    log_id = int(log_id)
+    
+    # 1. Récupérer le log
+    try:
+        log = SourceLog.objects \
+                .select_related('source', 'distribution') \
+                .get(pk=log_id)
+    except SourceLog.DoesNotExist:
+        raise Http404
+    
+    # 2. Gérer les flags
+    log.flag_latest = ((log.flags & 1) != 0)
+    log.flag_manual = ((log.flags & 2) != 0)
+    log.flag_failed = ((log.flags & 4) != 0)
+    log.flag_overwrite = ((log.flags & 8) != 0)
+    log.flag_rebuild = ((log.flags & 16) != 0)
+    log.flag_continuous = ((log.flags & 32) != 0)
+    log.flag_warnings = ((log.flags & 64) != 0)
+    log.flag_building = ((log.flags & 128) != 0)
+    
+    # 3. Gérer les dépendances
+    log.depends = log.depends.split(';')
+    log.conflicts = log.conflicts.split(';')
+    log.suggests = log.suggests.split(';')
+    
+    # 4. Adresse des logs
+    part = (log_id >> 6) << 6;
+    filename = '/files/logs/%i-%i' % (part, part + 64)
+    
+    # 5. Afficher la template
+    return tpl('packages/loginfo.html',
+        {'log': log,
+         'filename': filename}, request)
+
+def setflags(request, log_id):
+    # Définir les flags d'un enregistrement de log
+    log_id = int(log_id)
+    
+    # 1. Vérifier qu'on est bien en post
+    if request.method != 'POST':
+        raise Http404
+    
+    # 2. Récupérer le log
+    log = get_object_or_404(SourceLog, pk=log_id)
+    
+    # 3. Calculer les flags
+    flags = log.flags
+    
+    if request.POST.get('rebuild', None) == 'on':
+        flags = flags | 16
+        log.date_rebuild_asked = datetime.datetime.now()
+    else:
+        flags = flags & ~16
+        
+    if request.POST.get('continuous', None) == 'on':
+        flags = flags | 32
+    else:
+        flags = flags & ~32
+        
+    if request.POST.get('overwrite', None) == 'on':
+        flags = flags | 8
+    else:
+        flags = flags & ~8
+        
+    # Sauvegarder les flags
+    log.flags = flags
+    log.save()
+    
+    # Rediriger
+    request.user.message_set.create(message=_('Flags de l\'enregistrement positionnés'))
+    return HttpResponseRedirect('packages-10-%i.html' % log_id)
 
 def viewmirrors(request, package_id):
     # Afficher les mirroirs et proposer le téléchargement du paquet
@@ -280,7 +457,7 @@ def viewfiles(request, package_id):
         {'files': files,
          'pkg': package.name + '-' + package.version + ' (' + package.arch.name + ')'}, request)
 
-def changelog(request, package_id):
+def changelog(request, package_id, page):
     # Afficher les changements d'un paquet
     package_id = int(package_id)
     
@@ -299,7 +476,21 @@ def changelog(request, package_id):
     for entry in entries:
         entry.content = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 3, strings, entry).content
         
+    # 4. Paginer
+    paginator = Paginator(entries, 20)
+    
+    try:
+        page = int(page)
+    except ValueError:
+        page = 1
+    
+    try:
+        entries = paginator.page(page).object_list
+    except (EmptyPage, InvalidPage):
+        entries = paginator.page(paginator.num_pages).object_list
+        
     # 4. Afficher dans la template
     return tpl('packages/changelog.html',
         {'package': package,
+         'list_pages': get_list_page(page, paginator.num_pages, 4),
          'entries': entries}, request)

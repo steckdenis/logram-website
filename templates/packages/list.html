@@ -50,4 +50,14 @@
             {% endwith %}
         {% endfor %}
     {% endif %}
+    
+    <div class="pagination">
+        {% for pg in list_pages %}
+            {% if section %}
+                <a href="packages-3-{{ distro.id }}-{{ section.id }}-{{ pg }}.html">{{ pg }}</a>
+            {% else %}
+                <a href="packages-5-{{ pg }}.html?q={{ q|urlencode }}&amp;method={{ method|urlencode }}&amp;distro={{ udistro|urlencode }}">{{ pg }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}
