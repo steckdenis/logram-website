@@ -192,23 +192,25 @@
         </li>
     </ul>
     
-    <h2>{% trans "Logs" %}</h2>
-    
-    <ul>
-        <li>
-            <a href="{{ filename }}/download_{{ log.id }}">
-                {% trans "Préparation et téléchargement" %}
-            </a>
-        </li>
-        <li>
-            <a href="{{ filename }}/build_{{ log.id }}">
-                {% trans "Compilation" %}
-            </a>
-        </li>
-        <li>
-            <a href="{{ filename }}/package_{{ log.id }}">
-                {% trans "Empaquetage" %}
-            </a>
-        </li>
-    </ul>
+    {% if not log.flag_manual %}
+        <h2>{% trans "Logs" %}</h2>
+        
+        <ul>
+            <li>
+                <a href="{{ filename }}/download_{{ log.id }}">
+                    {% trans "Préparation et téléchargement" %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ filename }}/build_{{ log.id }}">
+                    {% trans "Compilation" %}
+                </a>
+            </li>
+            <li>
+                <a href="{{ filename }}/package_{{ log.id }}">
+                    {% trans "Empaquetage" %}
+                </a>
+            </li>
+        </ul>
+    {% endif %}
 {% endblock %}
