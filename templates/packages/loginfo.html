@@ -38,7 +38,7 @@
                 <label for="continuous">{% trans "Reconstruction continue" %}</label>
                 &bull;
                 <input type="checkbox" name="overwrite" {% if log.flag_overwrite %}checked="checked"{% endif %} />
-                <label for="overwrite">{% trans "Ne pas ajouter d'enregistrement de changelog" %}</label>
+                <label for="overwrite">{% trans "Ajout automatique d'entrée dans le changelog" %}</label>
                 
                 <input type="submit" />
             </div>
@@ -151,7 +151,7 @@
             {% endif %}
         </li>
         <li>
-            <strong>{% trans "Ne pas ajouter d'enregistrement dans le changelog :" %}</strong>
+            <strong>{% trans "Ajout automatique d'une entrée au changelog :" %}</strong>
             {% if log.flag_overwrite %}
                 {% trans "oui" %}
             {% else %}
