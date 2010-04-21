@@ -138,9 +138,7 @@
                     dans le dépôt <strong>{{ distro }}</strong>
                 {% endblocktrans %}
                 
-                {% if log.flag_automatic or log.flag_building %}
-                    (<strong>{{ log.arch.name }}</strong>)
-                {% endif %}
+                (<strong>{{ log.arch.name }}</strong>)
                 
                 {{ log.date|format_date }}
                 

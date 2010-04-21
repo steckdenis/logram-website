@@ -69,12 +69,11 @@
                     {{ log.author_name }}
                 </span>
             </li>
-        {% else %}
-            <li>
+        {% endif %}
+        <li>
                 <strong>{% trans "Architecture :" %}</strong>
                 {{ log.arch.name }}
-            </li>
-        {% endif %}
+        </li>
         {% if log.flag_rebuild %}
             <li>
                 <strong>{% trans "Date de demande de reconstruction :" %}</strong>
