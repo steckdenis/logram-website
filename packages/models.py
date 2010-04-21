@@ -96,6 +96,7 @@ class SourcePackage(models.Model):
 class SourceLog(models.Model):
     source = models.ForeignKey(SourcePackage, verbose_name=_('Paquet source'))
     flags = models.IntegerField(_('Flags'))
+    arch = models.ForeignKey(Arch, verbose_name=_('Architecture'), blank=True, null=True)
     date = models.DateTimeField(_('Date'))
     author = models.CharField(_('Auteur, si import manuel'), max_length=200)
     maintainer = models.CharField(_('Mainteneur'), max_length=200)

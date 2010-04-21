@@ -350,7 +350,7 @@ def viewsourcelog(request, log_id):
     # 1. Récupérer le log
     try:
         log = SourceLog.objects \
-                .select_related('source', 'distribution') \
+                .select_related('source', 'distribution', 'arch') \
                 .get(pk=log_id)
     except SourceLog.DoesNotExist:
         raise Http404

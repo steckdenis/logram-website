@@ -138,6 +138,10 @@
                     dans le dépôt <strong>{{ distro }}</strong>
                 {% endblocktrans %}
                 
+                {% if log.flag_automatic or log.flag_building %}
+                    (<strong>{{ log.arch.name }}</strong>)
+                {% endif %}
+                
                 {{ log.date|format_date }}
                 
                 (<a href="packages-10-{{ log.id }}.html">{% trans "informations" %}</a>)
