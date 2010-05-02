@@ -371,8 +371,8 @@ def viewsourcelog(request, log_id):
     log.suggests = log.suggests.split(';')
     
     # 4. Adresse des logs
-    part = (log_id >> 6) << 6;
-    filename = '/files/logs/%i-%i' % (part, part + 64)
+    part = (log_id >> 10) << 10;
+    filename = '/files/logs/%i-%i' % (part, part + 1024)
     
     # 5. Afficher la template
     return tpl('packages/loginfo.html',
