@@ -116,7 +116,7 @@ hr
 }
 #header_gauche {
     padding-left: 205px;
-    background: url(img/header_gauche4.png) no-repeat;
+    background: url(img/header_gauche.png) no-repeat;
     height: 100%;
 }
 #header_droite {
@@ -124,8 +124,8 @@ hr
     height: 100%;
 }
 #header_texte {
-    background: url(img/texte_header3.png) no-repeat;
-    width: 478px;
+    background: url(img/texte_header.png) no-repeat;
+    width: 490px;
     height: 146px;
     margin: 0px auto;
 }
