@@ -302,3 +302,28 @@ class DwVariant(models.Model):
     class Meta:
         verbose_name = _('Variante')
         verbose_name_plural = _('Variantes')
+
+class Directory(models.Model):
+    directory = models.ForeignKey('Directory', verbose_name=_('Dossier parent'), related_name='children')
+    name = models.CharField(_('Nom'), max_length=256)
+    path = models.CharField(_('Chemin'), max_length=256)
+    
+    def __unicode__(self):
+        return self.path + '/' + self.name
+        
+    class Meta:
+        verbose_name = _('Dossier')
+        verbose_name_plural = _('Dossiers')
+
+class File(models.Model):
+    package = models.ForeignKey(Package, verbose_name=('Paquet'))
+    directory = models.ForeignKey(Directory, verbose_name=_('Dossier parent'))
+    name = models.CharField(_('Nom'), max_length=256)
+    flags = models.IntegerField(_('Flags'))
+    
+    def __unicode__(self):
+        return self.name
+        
+    class Meta:
+        verbose_name = _('Fichier')
+        verbose_name_plural = _('Fichiers')
