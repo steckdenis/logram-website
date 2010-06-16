@@ -1,0 +1,38 @@
+{% extends "forum/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}
+        {{ poll.question }}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo; 
+    <a href="{{ poll.object.topic|topic_url }}">
+        {{ poll.object.topic.title }}
+    </a>
+    &raquo;
+    {% trans "Résultats du sondage" %}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ poll.question }}</h1>
+    
+    <div class="forum_poll">
+        {% include "forum/viewpoll.html" %}
+    </div>
+    
+    <h2>{% trans "Votants" %}</h2>
+    
+    <table>
+        <tr>
+            <th>{% trans "Utilisateur" %}</th>
+            <th>{% trans "Choix" %}</th>
+        </tr>
+        {% for choice in choices %}
+            <tr>
+                <td>{{ choice.user|color_pseudo }}</td>
+                <td>{{ choice.choice.choice }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
