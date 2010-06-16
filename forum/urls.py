@@ -41,4 +41,5 @@ urlpatterns = patterns('pyv4.forum.views',
     (r'^15-(?P<topic_id>\d+)\.html$', 'addpoll'),
     (r'^16-(?P<poll_id>\d+)\.html$', 'vote'),
     (r'^17-(?P<topic_id>\d+)\.html$', 'toggle_watch'),
+    (r'^18-(?P<poll_id>\d+)\.html$', 'view_votes'),
 )

@@ -764,7 +764,34 @@ def addpoll(request, topic_id):
         {'topic': topic,
          'form': form}, request)
 
+@permission_required('forum.add_poll')
+def view_votes(request, poll_id):
+    # Afficher les résultats d'un sondage
+    poll_id = int(poll_id)
+    
+    # 1. Récupérer le sondage
+    try:
+        poll = Poll.objects \
+                .select_related('topic') \
+                .get(pk=poll_id)
+    except:
+        raise Http404
+    
+    poll = get_poll(request, poll)
+    
+    # 2. Prendre les choix des utilisateurs
+    choices = UserChoice.objects \
+                .select_related('user', 'choice') \
+                .filter(choice__poll=poll['object']) \
+                .order_by('choice')
+                
+    # 3. Afficher
+    return tpl('forum/viewvotes.html',
+        {'topic': poll['object'].topic,
+         'poll': poll,
+         'choices': choices}, request)
 
+@login_required
 def vote(request, poll_id):
     # Voter à un sondage
     poll_id = int(poll_id)
@@ -772,10 +799,11 @@ def vote(request, poll_id):
     if request.method != 'POST':
         raise Http404
     
-    # 1. Vérifier que l'IP peut voter
-    ip = request.META.get('REMOTE_ADDR')
-    key = 'ip_%s_voted_%i' % (ip, poll_id)
-    poll_can_vote = (not cache.get(key, False))
+    # 1. Vérifier que l'utilisateur peut voter
+    user_choices = UserChoice.objects \
+                    .filter(user=request.user.get_profile(), choice__poll=poll_id)
+                    
+    poll_can_vote = (user_choices.count() == 0)
     
     if not poll_can_vote:
         raise Http404
@@ -792,13 +820,13 @@ def vote(request, poll_id):
     choice.save()
     
     # 4. Dire qu'on a voté
-    cache.set(key, True, 24*60*60*365)
+    user_choice = UserChoice(user=request.user.get_profile(), choice=choice)
+    user_choice.save()
     
     # 5. On a fini
     topic = get_object_or_404(Topic, poll=poll_id)
     
-    if not request.user.is_anonymous:
-        request.user.message_set.create(message=_(u'Votre vote a été pris en compte'))
+    request.user.message_set.create(message=_(u'Votre vote a été pris en compte'))
         
     return HttpResponseRedirect(return_page(topic, 0))
 

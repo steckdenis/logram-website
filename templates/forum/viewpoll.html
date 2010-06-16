@@ -42,4 +42,10 @@
             <input type="submit" value="{% trans "Voter" %}" />
         </p>
     {% endif %}
+    
+    {% if perms.forum.add_poll %}
+        <p style="text-align: center;">
+            <a href="forum-18-{{ poll.id }}.html">{% trans "Voir les résultats" %}</a>
+        </p>
+    {% endif %}
 </form>

@@ -92,6 +92,17 @@ class Choice(models.Model):
         verbose_name = _('Choix')
         verbose_name_plural = _('Choix')
         
+class UserChoice(models.Model):
+    user = models.ForeignKey(Profile, verbose_name=_('Utilisateur'))
+    choice = models.ForeignKey(Choice, verbose_name=_('Choix'))
+    
+    def __unicode__(self):
+        return u'Choix'
+        
+    class Meta:
+        verbose_name = _('Choix d\'utilisateur')
+        verbose_name_plural = _('Choix d\'utilisateurs')
+        
 class Topic(models.Model):
     parent_id = models.IntegerField(_('ID du parent (forum, news, etc)'))
     p_type = models.IntegerField(_('Type'), choices=TOPIC_PARENT_TYPE)

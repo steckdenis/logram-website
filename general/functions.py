@@ -345,12 +345,12 @@ def slugify(value):
     """
     import unicodedata
     import re
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicodedata.normalize('NFKD', unicode(value)).encode('ascii', 'ignore')
     value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
     return re.sub('[-\s]+', '-', value)
 
 def get_poll(request, poll):
-    from pyv4.forum.models import Choice
+    from pyv4.forum.models import Choice, UserChoice
     # Retourner un sondage
     rs = {}
     
@@ -374,9 +374,11 @@ def get_poll(request, poll):
         else:
             choice.percent = 0
         
-    ip = request.META.get('REMOTE_ADDR')
-    key = 'ip_%s_voted_%i' % (ip, poll.id)
-    poll_can_vote = (not cache.get(key, False))
+    # Savoir si on peut voter
+    user_choices = UserChoice.objects \
+                    .filter(user=request.user.get_profile(), choice__poll=poll)
+                    
+    poll_can_vote = (user_choices.count() == 0)
     
     # Construire le résultat
     rs['choices'] = choices

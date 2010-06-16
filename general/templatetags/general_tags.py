@@ -48,6 +48,9 @@ def count(l):
 @register.filter
 def format_date(date):
     #Retourne un timestamp sous forme "il y a 3s", "il y a 2min", "le .. a ..", "hier à ..", etc
+    if not date:
+        return ''
+    
     diff = datetime.now() - date
 
     # On specifie la difference de jour
