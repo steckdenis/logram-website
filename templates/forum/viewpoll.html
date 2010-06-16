@@ -43,7 +43,7 @@
         </p>
     {% endif %}
     
-    {% if perms.forum.add_poll %}
+    {% if perms.forum.poll_on_all_topics %}
         <p style="text-align: center;">
             <a href="forum-18-{{ poll.id }}.html">{% trans "Voir les résultats" %}</a>
         </p>

@@ -764,7 +764,7 @@ def addpoll(request, topic_id):
         {'topic': topic,
          'form': form}, request)
 
-@permission_required('forum.add_poll')
+@permission_required('forum.poll_on_all_topics')
 def view_votes(request, poll_id):
     # Afficher les résultats d'un sondage
     poll_id = int(poll_id)
