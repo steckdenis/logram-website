@@ -1,0 +1,7 @@
+*~
+*.pyc
+*.mo
+tmp
+onlines
+files
+settings.py
