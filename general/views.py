@@ -125,6 +125,15 @@ def index(request):
             mpoll = None
             
         cache.set('index_last_poll', mpoll, 60)
+        
+    # Savoir si on peut voter
+    if request.user.is_anonymous():
+         mpoll['can_vote'] = False
+    else:
+        user_choices = UserChoice.objects \
+                        .filter(user=request.user.get_profile(), choice__poll=poll)
+
+        mpoll['can_vote'] = (user_choices.count() == 0)
     
     #Statistique
     stats = cache.get('index_stats', False)

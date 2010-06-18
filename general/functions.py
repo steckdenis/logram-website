@@ -375,10 +375,13 @@ def get_poll(request, poll):
             choice.percent = 0
         
     # Savoir si on peut voter
-    user_choices = UserChoice.objects \
-                    .filter(user=request.user.get_profile(), choice__poll=poll)
-                    
-    poll_can_vote = (user_choices.count() == 0)
+    if request.user.is_anonymous:
+        poll_can_vote = False
+    else:
+        user_choices = UserChoice.objects \
+                        .filter(user=request.user.get_profile(), choice__poll=poll)
+                        
+        poll_can_vote = (user_choices.count() == 0)
     
     # Construire le résultat
     rs['choices'] = choices
