@@ -56,7 +56,7 @@ class Section(models.Model):
     desc = models.TextField(_('Description en français'))
     
     def __unicode__(self):
-        return self.name + ' : ' + self.long_name
+        return self.name
     
     class Meta:
         verbose_name = _('Section')
