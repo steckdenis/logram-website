@@ -21,7 +21,7 @@
 # Boston, MA  02110-1301  USA
 #
 from pyv4.news.models import News
-from pyv4.forum.models import Topic, Forum, Post, Alert, Poll, Choice
+from pyv4.forum.models import Topic, Forum, Post, Alert, Poll, Choice, UserChoice
 from pyv4.general.functions import *
 from pyv4.general.forms import RegisterForm
 from pyv4.upload.models import Directory
@@ -131,7 +131,7 @@ def index(request):
          mpoll['can_vote'] = False
     else:
         user_choices = UserChoice.objects \
-                        .filter(user=request.user.get_profile(), choice__poll=poll)
+                        .filter(user=request.user.get_profile(), choice__poll=mpoll['object'])
 
         mpoll['can_vote'] = (user_choices.count() == 0)
     
