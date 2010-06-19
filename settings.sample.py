@@ -20,12 +20,14 @@ MANAGERS = ADMINS
 # Session
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'votre base'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'un nom'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'mot de passe de la BDD'         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'NAME': 'votre base',
+        'ENGINE': 'mysql',
+        'USER': 'un nom',
+        'PASSWORD': 'mot de passe de la BDD'
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
