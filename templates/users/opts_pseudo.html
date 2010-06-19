@@ -20,7 +20,7 @@
         {% trans "* Toute ressemblance avec une personne réelle n'est que pure coincidence" %}
     </p>
     
-    <form action="user-5-2.html" method="post">
+    <form action="user-5-2.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Pseudonyme" %}</legend>
             

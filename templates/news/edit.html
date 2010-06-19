@@ -18,7 +18,7 @@
         {% endblocktrans %}
     </p>
     
-    <form action="news-4-{{ id }}-{{ title|slugify|default:"new" }}.html" method="post">
+    <form action="news-4-{{ id }}-{{ title|slugify|default:"new" }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Nouvelle" %}</legend>
             

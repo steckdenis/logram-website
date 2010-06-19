@@ -32,7 +32,7 @@
         {% endif %}
         
         {% if perms.forum.change_topic %}
-            <form action="forum-13-{{ topic.id }}.html" method="post">
+            <form action="forum-13-{{ topic.id }}.html" method="post">{% csrf_token %}
                 <strong>{% trans "Modération :" %}</strong>
                 
                 <select name="action" id="action">
@@ -177,7 +177,7 @@
 {% endif %}
 
 {% if not topic.closed and perms.forum.add_post %}
-    <form action="forum-3-{{ topic.id }}.html" method="post">
+    <form action="forum-3-{{ topic.id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Répondre" %}</legend>
             

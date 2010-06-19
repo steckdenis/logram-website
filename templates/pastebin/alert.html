@@ -21,7 +21,7 @@
         </p>
     {% endblocktrans %}
     
-    <form action="pastebin-7-{{ uniqid }}.html" method="post">
+    <form action="pastebin-7-{{ uniqid }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Commentaire" %}</legend>
             

@@ -12,7 +12,7 @@
     {% endif %}
 </p>
                     
-<form action="forum-16-{{ poll.id }}.html" method="post">
+<form action="forum-16-{{ poll.id }}.html" method="post">{% csrf_token %}
     <ul>
         {% for c in poll.choices %}
             <li>

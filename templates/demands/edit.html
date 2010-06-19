@@ -51,7 +51,7 @@
         </p>
     {% endifnotequal %}
 
-    <form action="demand-2-{{ action }}-{{ type_or_demand_id }}.html" method="post">
+    <form action="demand-2-{{ action }}-{{ type_or_demand_id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>
                 {% ifnotequal action 3 %}

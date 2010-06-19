@@ -14,7 +14,7 @@
         {% endblocktrans %}
     </h1>
     
-    <form action="forum-15-{{ topic.id }}.html" method="post">
+    <form action="forum-15-{{ topic.id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Ajouter un sondage" %}</legend>
             

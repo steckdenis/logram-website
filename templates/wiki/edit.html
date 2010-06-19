@@ -55,7 +55,7 @@
         </p>
     {% endblocktrans %}
     
-    <form action="wiki-3-{{ page_id }}-{{ identifier }}-{{ slug }}.html" method="post">
+    <form action="wiki-3-{{ page_id }}-{{ identifier }}-{{ slug }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Page" %}</legend>
             

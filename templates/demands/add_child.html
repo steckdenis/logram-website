@@ -72,7 +72,7 @@
         {% endblocktrans %}
     {% endifequal %}
 
-    <form action="demand-8-{{ child_type }}-{{ demand_id }}.html" method="post">
+    <form action="demand-8-{{ child_type }}-{{ demand_id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Ajouter une demande" %}</legend>
 

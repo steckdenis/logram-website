@@ -41,7 +41,7 @@
     </div>
     
     {% if not news.published %}
-        <form action="news-5-4-{{ news.id }}.html" method="post">
+        <form action="news-5-4-{{ news.id }}.html" method="post">{% csrf_token %}
             <fieldset>
                 <legend>{% trans "Validation" %}</legend>
                 

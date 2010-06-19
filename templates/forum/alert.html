@@ -30,7 +30,7 @@
         </p>
     {% endblocktrans %}
     
-    <form action="forum-12-{{ topic_id }}.html" method="post">
+    <form action="forum-12-{{ topic_id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Commentaire" %}</legend>
             

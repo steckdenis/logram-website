@@ -15,7 +15,7 @@
         {% endblocktrans %}
     </p>
 
-    <form action="mp-7.html" method="post">
+    <form action="mp-7.html" method="post">{% csrf_token %}
         <table style="text-align: center;">
             <tr>
                 <th>{% trans "Titre" %}</th>
@@ -89,7 +89,7 @@
         </p>
     </form>
 
-    <form action="mp-1-1.html" method="post" id="newmp">
+    <form action="mp-1-1.html" method="post" id="newmp">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Nouvelle discussion" %}</legend>
 

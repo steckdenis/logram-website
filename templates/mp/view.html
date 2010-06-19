@@ -24,7 +24,7 @@
     </ul>
 
     {% if usertopic.is_master %}
-        <form action="mp-6-{{ usertopic.topic.id }}.html" method="post">
+        <form action="mp-6-{{ usertopic.topic.id }}.html" method="post">{% csrf_token %}
             <p>
                 <strong>{% trans "Ajouter des participants" %} :</strong>
                 <input type="text" name="parts" id="parts">
@@ -90,7 +90,7 @@
         {% endfor %}
     </div>
 
-    <form action="mp-3-{{ usertopic.topic.id }}.html" method="post">
+    <form action="mp-3-{{ usertopic.topic.id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Répondre" %}</legend>
 

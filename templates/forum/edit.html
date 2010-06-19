@@ -11,9 +11,9 @@
     <h1>{% trans "Édition d'un message" %}</h1>
 
     {% if is_mp %}
-        <form action="mp-4-{{ pid }}.html" method="post">
+        <form action="mp-4-{{ pid }}.html" method="post">{% csrf_token %}
     {% else %}
-        <form action="forum-{{ url }}-{{ pid }}.html" method="post">
+        <form action="forum-{{ url }}-{{ pid }}.html" method="post">{% csrf_token %}
     {% endif %}
         <fieldset>
             <legend>{% trans "Message" %}</legend>

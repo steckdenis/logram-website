@@ -16,7 +16,7 @@
     
     <script type="text/javascript" src="/style/lform.js"></script>
     
-    <form action="pastebin-5-{{ paste.uniqid }}.html" method="post">
+    <form action="pastebin-5-{{ paste.uniqid }}.html" method="post">{% csrf_token %}
         {% include "pastebin/edit_form.html" %}
     </form>
 {% endblock %}

@@ -27,7 +27,7 @@
         {% endblocktrans %}
     </p>
 
-    <form method="post" action="login-1.html">
+    <form method="post" action="login-1.html">{% csrf_token %}
         <fieldset>
             <legend>{% trans "Connexion" %}</legend>
             

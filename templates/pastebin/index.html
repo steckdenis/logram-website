@@ -41,7 +41,7 @@
     <div>
         <h2>{% trans "Nouveau post" %}</h2>
         
-        <form action="pastebin-2.html" method="post">
+        <form action="pastebin-2.html" method="post">{% csrf_token %}
             {% include "pastebin/edit_form.html" %}
         </form>
     </div>

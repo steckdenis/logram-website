@@ -96,7 +96,7 @@
                         
                         <div class="separateur"></div>
                         
-                        <form method="post" action="/i18n/setlang/">
+                        <form method="post" action="/i18n/setlang/">{% csrf_token %}
                             <p style="text-align: center;">
                                 <select name="language">
                                     {% for lang in LANGUAGES %}

@@ -28,7 +28,7 @@
     </h1>
     
     {% if perms.packages.change_sourcelog %}
-        <form method="post" action="packages-11-{{ log.id }}.html">
+        <form method="post" action="packages-11-{{ log.id }}.html">{% csrf_token %}
             <div id="forum_tools">
                 <strong>{% trans "Changement des flags :" %}</strong>
                 <input type="checkbox" name="rebuild" {% if log.flag_rebuild %}checked="checked"{% endif %} />
