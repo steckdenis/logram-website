@@ -37,7 +37,7 @@ from django.contrib.auth.models import User, Group
 from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 from django.utils.cache import cache
-from django.contrib.csrf.middleware import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
