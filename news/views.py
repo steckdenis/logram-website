@@ -113,7 +113,7 @@ def view(request, page, news_id):
 @login_required
 def my(request):
     #Liste les news de l'utilisateur et les afficher dans une template
-    news_list = News.objects.select_related('category').filter(author=request.user).order_by('-date_modified')
+    news_list = News.objects.select_related('category').filter(author=request.user.get_profile()).order_by('-date_modified')
     
     return tpl('news/my.html', {'news_list': news_list}, request)
 
