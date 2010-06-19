@@ -68,22 +68,20 @@
                     <th colspan="2">{% trans "Légende" %}</th>
                 </tr>
                 <tr>
-                    <td style="width:50%;text-align:center;">
-                        <table border="" summary="{% trans "Couleurs" %}">
-                            <tr><th> {% trans "Couleurs" %} </th> </tr>
-                            <tr><td class="diff_add">{% trans "Ajouté" %}</td></tr>
-                            <tr><td class="diff_chg">{% trans "Changé" %}</td> </tr>
-                            <tr><td class="diff_sub">{% trans " Supprimé" %}</td> </tr>
-                        </table>
-                    </td>
-                    <td style="width:50%;text-align:center;">
-                        <table border="" summary="{% trans "Liens" %}">
-                            <tr><th colspan="2"> {% trans "Liens" %} </th> </tr>
-                            <tr><td>(f) {% trans "Premier changement" %}</td> </tr>
-                            <tr><td>(n) {% trans "Changement suivant" %}</td> </tr>
-                            <tr><td>(t) {% trans "Retour en Haut" %}</td> </tr>
-                        </table>
-                    </td>
+                    <th style="width:50%;text-align:center;">{% trans "Couleurs" %}</th>
+                    <th style="width:50%;text-align:center;">{% trans "Liens" %}</th>
+                </tr>
+                <tr>
+                    <td style="width:50%;text-align:center;" class="diff_add">{% trans "Ajouté" %}</td>
+                    <td style="width:50%;text-align:center;">(f) {% trans "Premier changement" %}</td>
+                </tr>
+                <tr>
+                    <td style="width:50%;text-align:center;" class="diff_chg">{% trans "Changé" %}</td>
+                    <td style="width:50%;text-align:center;">(n) {% trans "Changement suivant" %}</td>
+                </tr>
+                <tr>
+                    <td style="width:50%;text-align:center;" class="diff_sub">{% trans " Supprimé" %}</td>
+                    <td style="width:50%;text-align:center;">(t) {% trans "Retour en Haut" %}</td>
                 </tr>
             </table>
         </p>
