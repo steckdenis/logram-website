@@ -21,7 +21,7 @@
 # Boston, MA  02110-1301  USA
 #
 
-from django.contrib.syndication.feeds import Feed
+from django.contrib.syndication.views import Feed
 from django.utils.cache import cache
 from django.utils.translation import gettext as _
 
@@ -42,7 +42,6 @@ class LatestNews(Feed):
     def items(self):
         # Si le cache du rss existe, on l'utilise
         NList = cache.get('feeds_news', False)
-        NList = False
         if not NList:
             NList = News.objects.select_related('category', 'author') \
                     .order_by('-date_published') \
@@ -64,7 +63,6 @@ class LatestJournal(Feed):
     def items(self):
         # Si le cache du rss existe, on l'utilise
         JList = cache.get('feeds_journal', False)
-        JList = False
         if not JList:
             JList = News.objects.select_related('category', 'author') \
                     .order_by('-date_published') \
@@ -86,7 +84,6 @@ class LatestAsk(Feed):
     def items(self):
         # Si le cache du rss existe, on l'utilise
         DList = cache.get('feeds_ask', False)
-        DList = False
         if not DList:
             DList = Demand.objects.select_related('author', 'd_type').order_by('-created_at')[:10]
             
@@ -108,7 +105,6 @@ class LatestMessage(Feed):
     def items(self):
         # Si le cache du rss existe, on l'utilise
         MList = cache.get('feeds_msg', False)
-        MList = False
         if not MList:
             MList = Topic.objects.select_related('last_post', 'last_post__author') \
                     .extra(select={'date_created': 'forum_post.date_created', 'contents': 'forum_post.contents'}) \
@@ -134,7 +130,6 @@ class LatestWiki(Feed):
     def items(self):
         # Si le cache du rss existe, on l'utilise
         WList = cache.get('feeds_wiki', False)
-        WList = False
         if not WList:
             WList = Page.objects.filter(is_private=False).order_by('-id')[:10]
             
@@ -155,7 +150,6 @@ class LatestPackages(Feed):
     def items(self):
         # Si le cache du rss existe, on l'utilise
         PList = cache.get('feeds_packages', False)
-        PList = False
         if not PList:
             PList = Package.objects.select_related('arch').order_by('-date')[:10]
             

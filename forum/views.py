@@ -57,7 +57,7 @@ def return_page(topic, msg_id):
             topic.parent_id,
             topic.last_post_page)
             
-    if msg_id != 0:
+    if msg_id:
         rs += '#r%i' % msg_id
         
     return rs

@@ -36,6 +36,10 @@ feeds = {
 
 urlpatterns = patterns('',
     (r'^$', 'pyv4.feeds.views.index'),
-    (r'^(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
-
+    (r'^latestnews/$', LatestNews()),
+    (r'^latestjournal/$', LatestJournal()),
+    (r'^latestask/$', LatestAsk()),
+    (r'^latestmsg/$', LatestMessage()),
+    (r'^latestwiki/$', LatestWiki()),
+    (r'^latestpackages/$', LatestPackages()),
 )
