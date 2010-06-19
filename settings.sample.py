@@ -145,7 +145,7 @@ UPLOAD_PASSWORD = 'un autre mdp' # Mot de passe pour construire les clefs d'uplo
 DJAPIAN_DATABASE_PATH = './djapiandb/'
 
 # Emails
-EMAIL_BACKEND = 'django.core.mail.backends.console' # Remplacez "console" par "smtp" pour réellement envoyer les mails
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBacked' # Remplacez "console" par "smtp" pour réellement envoyer les mails
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '' # Port email SMTP
 EMAIL_HOST_USER = '' # L'utilisateur SMTP
