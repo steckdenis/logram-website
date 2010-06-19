@@ -33,6 +33,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
 
 from pyv4.general.functions import *
 from pyv4.pastebin.models import *
@@ -183,7 +184,7 @@ def modif(request, uniqid):
         
         # Enregistrer le paste
         paste.save()
-        request.user.message_set.create(message=_(u'Post «%s» modifié avec succès') % title)
+        messages.add_message(request, messages.INFO, _(u'Post «%s» modifié avec succès') % title)
         return HttpResponseRedirect('pastebin-3-%s.html' % paste.uniqid)
     else:
         # Afficher le formulaire
@@ -243,7 +244,7 @@ def alert(request, uniqid):
             alert.save()
             
             # On a fini
-            request.user.message_set.create(message=_('Modérateurs alertés'))
+            messages.add_message(request, messages.INFO, _('Modérateurs alertés'))
             return HttpResponseRedirect('pastebin-3-%s.html' % uniqid)
     else:
         form = AlertForm()

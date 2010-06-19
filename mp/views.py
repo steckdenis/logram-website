@@ -25,6 +25,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext as _
+from django.contrib import messages
 
 from pyv4.general.functions import *
 from pyv4.mp.models import *
@@ -116,7 +117,7 @@ def index(request, page):
                     alreadyparts.append(user)
             
             # 6. On a fini, afficher le MP
-            request.user.message_set.create(message=_('Message personnel créé'))
+            messages.add_message(request, messages.INFO, _('Message personnel créé'))
             return HttpResponseRedirect('mp-2-%i-1.html' % topic.id)
     else:
         if request.GET.get('sendto', False):
@@ -211,7 +212,7 @@ def post(request, topic_id):
     usertopic.topic.save()
 
     # 4. On a fini
-    request.user.message_set.create(message=_('Message posté'))
+    messages.add_message(request, messages.INFO, _('Message posté'))
     return HttpResponseRedirect('mp-2-%i-%i.html#r%i' % (usertopic.topic_id, (usertopic.topic.num_messages / 20) + 1, message.id))
 
 @login_required
@@ -235,7 +236,7 @@ def edit(request, post_id):
         post.body = request.POST['body']
         post.save()
 
-        request.user.message_set.create(message=_('Message édité'))
+        messages.add_message(request, messages.INFO, _('Message édité'))
         return HttpResponseRedirect('mp-2-%i-1.html' % post.topic_id)
     else:
         # Afficher le formulaire
@@ -280,7 +281,7 @@ def newmp(request):
         usertopic.save()
 
     # 6. On a fini, afficher le MP
-    request.user.message_set.create(message=_('Message personnel créé'))
+    messages.add_message(request, messages.INFO, _('Message personnel créé'))
     return HttpResponseRedirect('mp-2-%i-1.html' % topic.id)
 
 @login_required
@@ -317,7 +318,7 @@ def addparts(request, topic_id):
             alreadyparts.append(user)
 
     # 4. On a fini
-    request.user.message_set.create(message=_('Participants ajoutés'))
+    messages.add_message(request, messages.INFO, _('Participants ajoutés'))
     return HttpResponseRedirect('mp-2-%i-1.html' % usertopic.topic.id)
 
 @login_required
@@ -343,5 +344,5 @@ def delete(request):
     cache.delete('mps_%i' % request.user.id)
 
     # 4. On a fini
-    request.user.message_set.create(message=_('Les messages privés ont été supprimés'))
+    messages.add_message(request, messages.INFO, _('Les messages privés ont été supprimés'))
     return HttpResponseRedirect('mp-1-1.html')

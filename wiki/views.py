@@ -24,6 +24,7 @@ from pyv4.wiki.models import *
 from pyv4.wiki.forms import *
 from pyv4.general.functions import *
 from pyv4.general.templatetags.general_tags import format_date
+from django.contrib import messages
 
 from django.http import HttpResponseRedirect, Http404, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
@@ -132,7 +133,7 @@ def edit(request, page_id, identifier, slug):
                 
                 # On a fini
                 if not request.user.is_anonymous():
-                    request.user.message_set.create(message=_(u'Page créée avec succès'))
+                    messages.add_message(request, messages.INFO, _(u'Page créée avec succès'))
                     
                 return HttpResponseRedirect('wiki-%s.%s.html' % (slug, form.cleaned_data['lang']))
         else:
@@ -171,7 +172,7 @@ def edit(request, page_id, identifier, slug):
                 
                 # On a fini
                 if not request.user.is_anonymous():
-                    request.user.message_set.create(message=_(u'Page éditée avec succès'))
+                    messages.add_message(request, messages.INFO, _(u'Page éditée avec succès'))
                     
                 return HttpResponseRedirect('wiki-%s.%s.html' % (slug, page.lang))
     else:
@@ -342,7 +343,7 @@ def cancelchange(request, change_id):
     nchange.save()
     
     # 4. On a fini
-    request.user.message_set.create(message=_('Changement défait'))
+    messages.add_message(request, messages.INFO, _('Changement défait'))
     return HttpResponseRedirect('wiki-%s.%s.html' % (page.slug, page.lang))
 
 def history(request, page_id):
@@ -381,7 +382,7 @@ def toggle_protect(request, page_id):
     page.save()
     
     # On a fini
-    request.user.message_set.create(message=message)
+    messages.add_message(request, messages.INFO, message)
     return HttpResponseRedirect('wiki-%s.%s.html' % (page.slug, page.lang))
 
 @permission_required('wiki.private_page')
@@ -401,5 +402,5 @@ def toggle_private(request, page_id):
     page.save()
     
     # On a fini
-    request.user.message_set.create(message=message)
+    messages.add_message(request, messages.INFO, message)
     return HttpResponseRedirect('wiki-%s.%s.html' % (page.slug, page.lang))

@@ -25,6 +25,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import gettext as _
 from django.conf import settings
+from django.contrib import messages
 
 from os import makedirs, path
 
@@ -111,12 +112,12 @@ def upload(request, dir_id):
         ext = mfl.name.split('.')[-1].lower()
         
         if (not ext in EXTS) and (not request.user.has_perm('upload.ingore_extensions')):
-            request.user.message_set.create(message=_('Extension non valide'))
+            messages.add_message(request, messages.INFO, _('Extension non valide'))
             return HttpResponseRedirect('upload-1-%i.html' % dir_id)
         
         # Vérifier le quota
         if mdir.quota < (mdir.used + mfl.size) and not request.user.has_perm('upload.ignore_quota'):
-            request.user.message_set.create(message=_('Quota dépassé'))
+            messages.add_message(request, messages.INFO, _('Quota dépassé'))
             return HttpResponseRedirect('upload-1-%i.html' % dir_id)
         
         # Vérifier que l'utilisateur envoie bien sans _son_ dossier
@@ -133,10 +134,10 @@ def upload(request, dir_id):
         fl.directory = mdir
         fl.save()
         
-        request.user.message_set.create(message=_('Le fichier a été envoyé avec succès'))
+        messages.add_message(request, messages.INFO, _('Le fichier a été envoyé avec succès'))
         return HttpResponseRedirect('upload-1-%i.html' % dir_id)
     else:
-        request.user.message_set.create(message=_('Le formulaire n\'était <strong>pas</strong> valide, veuillez le vérifier'))
+        messages.add_message(request, messages.INFO, _('Le formulaire n\'était <strong>pas</strong> valide, veuillez le vérifier'))
         return HttpResponseRedirect('upload-1-%i.html' % dir_id)
  
 def delete(request, file_id):
@@ -154,7 +155,7 @@ def delete(request, file_id):
     # Supprimer le fichier
     fl.delete()
     
-    request.user.message_set.create(message=_('Le fichier a été supprimé'))
+    messages.add_message(request, messages.INFO, _('Le fichier a été supprimé'))
     return HttpResponseRedirect('upload-1-%i.html' % mdir.id)
 
 @login_required
@@ -186,5 +187,5 @@ def newdir(request, hash, parent_type, quota, uniqid):
     ndir.save()
 
     # 6. Rediriger l'utilisateur vers ce dossier
-    request.user.message_set.create(message=_('Le dossier a été créé'))
+    messages.add_message(request, messages.INFO, _('Le dossier a été créé'))
     return HttpResponseRedirect('upload-1-%i.html' % ndir.id)

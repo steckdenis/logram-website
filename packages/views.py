@@ -34,6 +34,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.conf import settings
 from django.core.cache import cache
 from django.utils.encoding import smart_unicode, smart_str
+from django.contrib import messages
 
 import os
 import datetime
@@ -415,7 +416,7 @@ def setflags(request, log_id):
     log.save()
     
     # Rediriger
-    request.user.message_set.create(message=_('Flags de l\'enregistrement positionnés'))
+    messages.add_message(request, messages.INFO, _('Flags de l\'enregistrement positionnés'))
     return HttpResponseRedirect('packages-10-%i.html' % log_id)
 
 def viewmirrors(request, package_id):

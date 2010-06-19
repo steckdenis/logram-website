@@ -19,6 +19,7 @@ MANAGERS = ADMINS
 
 # Session
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 DATABASES = {
     'default': {
@@ -81,11 +82,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -107,6 +110,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.markup',
+    'django.contrib.messages',
     'pyv4.general',
     'pyv4.news',
     'pyv4.upload',

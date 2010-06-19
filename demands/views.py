@@ -26,6 +26,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import gettext as _
 from django.core.cache import cache
+from django.contrib import messages
 
 from pyv4.demands.models import *
 from pyv4.packages.models import Distribution
@@ -213,7 +214,7 @@ def post(request, action, type_or_demand_id):
             topic.save()
 
         # On a fini
-        request.user.message_set.create(message=_("La demande a été éxécutée avec succès"))
+        messages.add_message(request, messages.INFO, _("La demande a été éxécutée avec succès"))
         return HttpResponseRedirect("demand-5-%i-1.html" % demand.id)
         
     else:
@@ -347,7 +348,7 @@ def note(request, action, demand_id):
     cache.set('user_%i_already_voted_%i_%i' % (request.user.id, demand_id, dr), True, 24*60*60)
 
     # 4. Rediriger
-    request.user.message_set.create(message=_("Votre vote a été pris en compte"))
+    messages.add_message(request, messages.INFO, _("Votre vote a été pris en compte"))
     return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)
 
 @permission_required('demands.take_demand')
@@ -364,7 +365,7 @@ def take(request, demand_id):
     demand.save()
 
     # 3. On a fini
-    request.user.message_set.create(message=_('La demande vous a bien été attribuée'))
+    messages.add_message(request, messages.INFO, _('La demande vous a bien été attribuée'))
     return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)
 
 @permission_required('demands.change_demand')
@@ -384,7 +385,7 @@ def add_child(request, child_type, demand_id):
             demand.related.add(sd)
 
         # On a fini
-        request.user.message_set.create(message=_('Sous-demande ajoutée'))
+        messages.add_message(request, messages.INFO, _('Sous-demande ajoutée'))
         return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)
     else:
         # Afficher la template
@@ -413,5 +414,5 @@ def remove_child(request, child_type, demand_id, child_id):
         demand.related.remove(get_object_or_404(Demand, pk=child_id))
 
     # 3. On a fini
-    request.user.message_set.create(message=_('La demande enfant a été retirée de la liste'))
+    messages.add_message(request, messages.INFO, _('La demande enfant a été retirée de la liste'))
     return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)

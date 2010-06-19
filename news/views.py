@@ -25,6 +25,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import gettext as _
+from django.contrib import messages
 
 from datetime import datetime
 
@@ -134,16 +135,16 @@ def my_tools(request, acti, news_id):
         news.topic.delete()
         news.delete()
         
-        request.user.message_set.create(message= _(u'Nouvelle "%s" supprimée') % nt)
+        messages.add_message(request, messages.INFO,  _(u'Nouvelle "%s" supprimée') % nt)
         return HttpResponseRedirect('/news-3.html')
     elif acti == '2':
         #Mettre en attente de validation
         if news.to_validate == False:
             news.to_validate = True
-            request.user.message_set.create(message= _('Nouvelle "%s" mise en attente de validation') % news.title)
+            messages.add_message(request, messages.INFO,  _('Nouvelle "%s" mise en attente de validation') % news.title)
         else:
             news.to_validate = False
-            request.user.message_set.create(message= _('La nouvelle "%s" n\'est plus en attente de validation') % news.title)
+            messages.add_message(request, messages.INFO,  _('La nouvelle "%s" n\'est plus en attente de validation') % news.title)
         
         news.save()
         
@@ -155,10 +156,10 @@ def my_tools(request, acti, news_id):
             
         if news.published == False:
             news.published = True
-            request.user.message_set.create(message= _(u'Nouvelle "%s" publiée') % news.title)
+            messages.add_message(request, messages.INFO,  _(u'Nouvelle "%s" publiée') % news.title)
         else:
             news.published = False
-            request.user.message_set.create(message= _(u'Nouvelle "%s" dépubliée') % news.title)
+            messages.add_message(request, messages.INFO,  _(u'Nouvelle "%s" dépubliée') % news.title)
         
         news.save()
         
@@ -190,7 +191,7 @@ def my_tools(request, acti, news_id):
         
         news.save()
         
-        request.user.message_set.create(message=message)
+        messages.add_message(request, messages.INFO, message)
         return HttpResponseRedirect('news-2-%i-1-%s.html' % (news.id, slugify(news.title)))
     else:
         raise Http404
@@ -225,7 +226,7 @@ def edit(request, news_id):
                 news.is_private = form.cleaned_data['is_private']
                 news.save()
                 
-                request.user.message_set.create(message= _(u'Nouvelle "%s" éditée avec succès') % news.title)
+                messages.add_message(request, messages.INFO,  _(u'Nouvelle "%s" éditée avec succès') % news.title)
                 return HttpResponseRedirect('/news-3.html')
             else:
                 topic = Topic(author=request.user.get_profile(),
@@ -263,7 +264,7 @@ def edit(request, news_id):
                 topic.parent_id = news.id
                 topic.save()
 
-                request.user.message_set.create(message= _(u'Nouvelle "%s" créée avec succès') % news.title)
+                messages.add_message(request, messages.INFO,  _(u'Nouvelle "%s" créée avec succès') % news.title)
                 return HttpResponseRedirect('/news-3.html')
         
         upul = False

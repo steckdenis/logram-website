@@ -33,6 +33,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template import Context, Template
+from django.contrib import messages
 
 def return_page(topic, msg_id):
     rs = ''
@@ -303,7 +304,7 @@ def post(request, topic_id):
         fail_silently=True)
     
     # 6. On a fini
-    request.user.message_set.create(message=_('Message posté avec succès'))
+    messages.add_message(request, messages.INFO, _('Message posté avec succès'))
     return HttpResponseRedirect(redirect_url)
 
 @permission_required('forum.change_post')
@@ -342,7 +343,7 @@ def edit(request, post_id):
             log.save()
             
             # On a fini
-            request.user.message_set.create(message=_('Message édité avec succès'))
+            messages.add_message(request, messages.INFO, _('Message édité avec succès'))
         
             # NOTE: On poste dans un topic, mais aussi dans des commentaires, donc on doit savoir sur quelle
             # page on retourne
@@ -400,7 +401,7 @@ def toggle_helped(request, post_id):
     post.save()
     
     # On a fini
-    request.user.message_set.create(message=message)
+    messages.add_message(request, messages.INFO, message)
     return HttpResponseRedirect(return_page(post.topic, post.id))
 
 @permission_required('forum.add_topic')
@@ -444,7 +445,7 @@ def newtopic(request, forum_id):
             topic.save()
             forum.save()
             
-            request.user.message_set.create(message=_('Nouveau sujet créé avec succès'))
+            messages.add_message(request, messages.INFO, _('Nouveau sujet créé avec succès'))
             return HttpResponseRedirect(return_page(topic, message.id))
     else:
         form = NewTopicForm({'lang': request.LANGUAGE_CODE.split('_')[0]})
@@ -586,7 +587,7 @@ def toggle_solve(request, topic_id):
     topic.save()
     
     # On a fini
-    request.user.message_set.create(message=_('Résolution du sujet mise à jour'))
+    messages.add_message(request, messages.INFO, _('Résolution du sujet mise à jour'))
     return HttpResponseRedirect(return_page(topic, 0))
 
 @permission_required('forum.add_alert')
@@ -606,7 +607,7 @@ def alert(request, topic_id):
             alert.save()
             
             # On a fini
-            request.user.message_set.create(message=_('Modérateurs alertés'))
+            messages.add_message(request, messages.INFO, _('Modérateurs alertés'))
             return HttpResponseRedirect(return_page(topic, 0))
     else:
         form = AlertForm()
@@ -682,7 +683,7 @@ def moderate(request, topic_id):
         # et s'il ne l'a pas fait, tant pis, c'est que le topic n'était pas intéressant :-° .
         
         # On a fini
-        request.user.message_set.create(message=_('Sujet déplacé avec succès'))
+        messages.add_message(request, messages.INFO, _('Sujet déplacé avec succès'))
         
         nforum = _(frm.name)
         
@@ -692,7 +693,7 @@ def moderate(request, topic_id):
     
     topic.save()
     
-    request.user.message_set.create(message=message)
+    messages.add_message(request, messages.INFO, message)
     return HttpResponseRedirect(return_page(topic, 0))
 
 @permission_required('forum.delete_alert')
@@ -702,7 +703,7 @@ def rmalert(request, alert_id):
     alert = get_object_or_404(Alert, pk=alert_id)
     alert.delete()
     
-    request.user.message_set.create(message=_('Alerte modérateur supprimée'))
+    messages.add_message(request, messages.INFO, _('Alerte modérateur supprimée'))
     
     return HttpResponseRedirect('/')
     
@@ -754,7 +755,7 @@ def addpoll(request, topic_id):
             topic.save()
             
             # On a fini
-            request.user.message_set.create(message=_(u'Sondage ajouté'))
+            messages.add_message(request, messages.INFO, _(u'Sondage ajouté'))
             return HttpResponseRedirect(return_page(topic, 0))
     else:
         form = PollForm()
@@ -826,7 +827,7 @@ def vote(request, poll_id):
     # 5. On a fini
     topic = get_object_or_404(Topic, poll=poll_id)
     
-    request.user.message_set.create(message=_(u'Votre vote a été pris en compte'))
+    messages.add_message(request, messages.INFO, _(u'Votre vote a été pris en compte'))
         
     return HttpResponseRedirect(return_page(topic, 0))
 
@@ -855,5 +856,5 @@ def toggle_watch(request, topic_id):
         message = _(u'Vous n\'êtes plus abonné au sujet «%s»') % topic.title
     
     # 4. Retourner au sujet
-    request.user.message_set.create(message=message)
+    messages.add_message(request, messages.INFO, message)
     return HttpResponseRedirect(return_page(topic, 0))

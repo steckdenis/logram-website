@@ -28,6 +28,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.utils.translation import gettext as _
 from django.utils.cache import cache
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 from pyv4.general.functions import tpl, get_list_page
 from pyv4.general.models import Profile, Style
@@ -152,7 +153,7 @@ def opts_profile(request):
             
             prof.save()
             
-            request.user.message_set.create(message=_('Profil modifié avec succès'))
+            messages.add_message(request, messages.INFO, _('Profil modifié avec succès'))
             return HttpResponseRedirect('user-5.html')
     else:
         form = ProfileForm(
@@ -183,7 +184,7 @@ def opts_pseudo(request):
             usr.save()
             prof.save()
             
-            request.user.message_set.create(message=_('Pseudonyme et e-mail modifiés avec succès'))
+            messages.add_message(request, messages.INFO, _('Pseudonyme et e-mail modifiés avec succès'))
             return HttpResponseRedirect('user-5.html')
     else:
         form = PseudoForm(
@@ -210,7 +211,7 @@ def opts_mdp(request):
             
             usr.save()
             
-            request.user.message_set.create(message=_('Mot de passe changé avec succès'))
+            messages.add_message(request, messages.INFO, _('Mot de passe changé avec succès'))
             return HttpResponseRedirect('user-5.html')
     else:
         form = PassForm()
@@ -240,7 +241,7 @@ def opts_design(request):
             # Vider le cache de session
             request.session['style'] = durl
             
-            request.user.message_set.create(message=_('Design changé'))
+            messages.add_message(request, messages.INFO, _('Design changé'))
             return HttpResponseRedirect('user-5.html')
     else:
         form = DesignForm({'rurl': request.user.get_profile().style, 'remote': True})

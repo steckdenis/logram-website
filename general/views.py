@@ -40,6 +40,7 @@ from django.utils.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from django.contrib import messages
 
 def index(request):
     # Nouvelles
@@ -204,7 +205,7 @@ def login_validate(request):
         if user.is_active:
             lgin(request, user)
             
-            request.user.message_set.create(message=_('Vous êtes connecté'))
+            messages.add_message(request, messages.INFO, _('Vous êtes connecté'))
             
             return HttpResponseRedirect(request.POST['next'])
         else:
