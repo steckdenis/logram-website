@@ -48,11 +48,11 @@
                 &bull;
             {% endif %}
             
-            {% ifnotequal lang.lang page.lang %}
+            {% if lang.lang != page.lang %}
                 <a href="wiki-{{ lang.slug }}.{{ lang.lang }}.html">{{ lang.lang }}</a>
             {% else %}
                 {{ lang.lang }}
-            {% endifnotequal %}
+            {% endif %}
         {% endfor %}
     </div>
     

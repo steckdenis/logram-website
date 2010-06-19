@@ -25,10 +25,10 @@
     <br />
 {% endif %}
 
-{% ifnotequal profile.main_group_id 1 %}
+{% if profile.main_group_id != 1 %}
     <img 
         src="{{ style }}/img/group_{{ profile.main_group_name|lower }}_{{ LANGUAGE_CODE }}.png"
         alt="{% trans "Groupe :" %} {% trans profile.main_group_name %}" />
 {% else %}
     {% trans "Groupe : Membre" %}
-{% endifnotequal %}
+{% endif %}

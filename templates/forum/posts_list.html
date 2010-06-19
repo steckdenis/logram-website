@@ -5,14 +5,14 @@
     <div id="forum_tools">
         <strong>{% trans "Actions :" %}</strong>
         
-        {% ifequal topic.author user.get_profile %}
-            {% ifequal topic.p_type 0 %}
+        {% if topic.author == user.get_profile %}
+            {% if topic.p_type == 0 %}
                 {% if not topic.resolved %}
                     <a href="forum-11-{{ topic.id }}.html">{% trans "Mon problème est résolu" %}</a>
                 {% else %}
                     <a href="forum-11-{{ topic.id }}.html">{% trans "Mon problème n'est plus résolu" %}</a>
                 {% endif %}
-            {% endifequal %}
+            {% endif %}
             
             {% if not topic.poll_id and perms.forum.add_poll %}
                 <a href="forum-15-{{ topic.id }}.html">
@@ -25,7 +25,7 @@
                     {% trans "Ajouter un sondage" %}
                 </a>
             {% endif %}
-        {% endifequal %}
+        {% endif %}
         
         {% if perms.forum.add_alert %}
             <a href="forum-12-{{ topic.id }}.html">{% trans "Avertir les modérateurs" %}</a>
@@ -38,16 +38,16 @@
                 <select name="action" id="action">
                     <option value="lock">{% trans "Fermer" %}</option>
                     <option value="dlock">{% trans "Rouvrir" %}</option>
-                    {% ifequal topic.p_type 0 %}
+                    {% if topic.p_type == 0 %}
                         <option value="solve">{% trans "Résoudre" %}</option>
                         <option value="dsolve">{% trans "Dé-résoudre" %}</option>
                         <option value="stick">{% trans "Mettre en post-it" %}</option>
                         <option value="dstick">{% trans "Dé-postiter" %}</option>
                         <option value="move">{% trans "Déplacer dans ..." %}</option>
-                    {% endifequal %}
+                    {% endif %}
                 </select>
                 
-                {% ifequal topic.p_type 0 %}
+                {% if topic.p_type == 0 %}
                     {% trans "Si déplacement : forum" %}
                     
                     <select name="forum" id="forum">
@@ -57,7 +57,7 @@
                             </option>
                         {% endfor %}
                     </select>
-                {% endifequal %}
+                {% endif %}
                 
                 <input type="submit" value="OK" />
                 
@@ -88,19 +88,19 @@
                     {% if perms.forum.edit_all_posts %}
                         <a href="forum-4-{{ post.id }}.html">{% trans "Éditer" %}</a>
                     {% else %}
-                        {% ifequal post.author user.get_profile %}
+                        {% if post.author == user.get_profile %}
                             {% if perms.forum.change_post %}
                                 <a href="forum-4-{{ post.id }}.html">{% trans "Éditer" %}</a>
                             {% endif %}
-                        {% endifequal %}
+                        {% endif %}
                     {% endif %}
-                    {% ifequal post.topic.author user.get_profile %}
+                    {% if post.topic.author == user.get_profile %}
                         {% if not post.has_helped %}
                             &bull; <a href="forum-5-{{ post.id }}.html">{% trans "Ce message m'a aidé" %}</a>
                         {% else %}
                             &bull; <a href="forum-5-{{ post.id }}.html">{% trans "Ce message ne m'a pas aidé" %}</a>
                         {% endif %}
-                    {% endifequal %}
+                    {% endif %}
                     {% if perms.forum.edit_all_posts %}
                         &bull; <a href="/admin/forum/post/{{ post.id }}/">{% trans "Admin" %}</a>
                     {% endif %}
@@ -148,15 +148,15 @@
 
 <div class="pagination">
     {% for pg in list_pages %}
-        {% ifequal topic.p_type 0 %}
+        {% if topic.p_type == 0 %}
             <a href="forum-2-{{ topic.id }}-{{ pg }}-{{ topic.title|slugify }}.html">{{ pg }}</a>
-        {% else %}{% ifequal topic.p_type 1 %}
+        {% else %}{% if topic.p_type == 1 %}
             <a href="news-2-{{ new.id }}-{{ pg }}-{{ news.title|slugify }}.html">{{ pg }}</a>
-        {% else %}{% ifequal topic.p_type 2 %}
+        {% else %}{% if topic.p_type == 2 %}
             <a href="demand-5-{{ demand.id }}-{{ pg }}.html">{{ pg }}</a>
-        {% else %}{% ifequal topic.p_type 3 %}
+        {% else %}{% if topic.p_type == 3 %}
             <a href="packages-9-{{ source.id }}-{{ pg }}-{{ list_p }}.html">{{ pg }}</a>
-        {% endifequal %}{% endifequal %}{% endifequal %}{% endifequal %}
+        {% endif %}{% endif %}{% endif %}{% endif %}
     {% endfor %}
 </div>
 

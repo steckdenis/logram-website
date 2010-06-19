@@ -15,17 +15,17 @@
                     </li>
                     <li>
                         <label>{% trans "Durée de sauvegarde" %}</label>
-                        <input type="radio" name="fin" value="d" {% ifequal expires "d" %}checked="checked"{% endifequal %}{% if not expires %}checked="checked"{% endif %} />
+                        <input type="radio" name="fin" value="d" {% if expires == "d" %}checked="checked"{% endif %}{% if not expires %}checked="checked"{% endif %} />
                         {% trans "Un jour" %}
 
-                        <input type="radio" name="fin" value="w" {% ifequal expires "w" %}checked="checked"{% endifequal %} />
+                        <input type="radio" name="fin" value="w" {% if expires == "w" %}checked="checked"{% endif %} />
                         {% trans "Une semaine" %}
 
-                        <input type="radio"name="fin" value="m" {% ifequal expires "m" %}checked="checked"{% endifequal %} />
+                        <input type="radio"name="fin" value="m" {% if expires == "m" %}checked="checked"{% endif %} />
                         {% trans "Un mois" %}
                             
                         {% if user.is_authenticated %}
-                            <input type="radio"name="fin" value="n" {% ifequal expires "n" %}checked="checked"{% endifequal %} />
+                            <input type="radio"name="fin" value="n" {% if expires == "n" %}checked="checked"{% endif %} />
                             {% trans "Pour toujours" %}
                         {% endif %}
                     </li>

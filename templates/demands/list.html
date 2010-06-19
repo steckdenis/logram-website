@@ -46,58 +46,58 @@
     <table class="demand_tbl" style="text-align: center;">
         <tr>
             <th>
-                {% ifnotequal order_by "author" %}
+                {% if order_by != "author" %}
                     <a href="demand-3-{{ type.id }}-{{ st }}-author-{{ page }}.html">
                         {% trans "Auteur" %}
                     </a>
                 {% else %}
                     {% trans "Auteur" %}
-                {% endifnotequal %}
+                {% endif %}
             </th>
             <th>
-                {% ifnotequal order_by "datec" %}
+                {% if order_by != "datec" %}
                     <a href="demand-3-{{ type.id }}-{{ st }}-datec-{{ page }}.html">
                         {% trans "Date de création" %}
                     </a>
                 {% else %}
                     {% trans "Date de création" %}
-                {% endifnotequal %}
+                {% endif %}
             </th>
             <th>
-                {% ifnotequal order_by "title" %}
+                {% if order_by != "title" %}
                     <a href="demand-3-{{ type.id }}-{{ st }}-title-{{ page }}.html">
                         {% trans "Titre" %}
                     </a>
                 {% else %}
                     {% trans "Titre" %}
-                {% endifnotequal %}
+                {% endif %}
             </th>
             <th>
-                {% ifnotequal order_by "category" %}
+                {% if order_by != "category" %}
                     <a href="demand-3-{{ type.id }}-{{ st }}-category-{{ page }}.html">
                         {% trans "Catégorie" %}
                     </a>
                 {% else %}
                     {% trans "Catégorie" %}
-                {% endifnotequal %}
+                {% endif %}
             </th>
             <th>
-                {% ifnotequal order_by "status" %}
+                {% if order_by != "status" %}
                     <a href="demand-3-{{ type.id }}-{{ st }}-status-{{ page }}.html">
                         {% trans "Statut" %}
                     </a>
                 {% else %}
                     {% trans "Statut" %}
-                {% endifnotequal %}
+                {% endif %}
             </th>
             <th>
-                {% ifnotequal order_by "priority" %}
+                {% if order_by != "priority" %}
                     <a href="demand-3-{{ type.id }}-{{ st }}-priority-{{ page }}.html">
                         {% trans "Priorité" %}
                     </a>
                 {% else %}
                     {% trans "Priorité" %}
-                {% endifnotequal %}
+                {% endif %}
             </th>
         </tr>
         {% for d in pg.object_list %}

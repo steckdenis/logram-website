@@ -37,11 +37,11 @@
                 {% endif %}
                 
                 <a href="news-1-1-{{ c.id }}-0.html">
-                    {% ifequal cat_id c.id %}
+                    {% if cat_id == c.id %}
                         <strong>{% trans c.name %}</strong>
                     {% else %}
                         {% trans c.name %}
-                    {% endifequal %}
+                    {% endif %}
                 </a>
             {% endfor %}
             

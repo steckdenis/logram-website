@@ -42,11 +42,11 @@
         </li>
         <li>
             <strong>{% trans "Version upstream" %} :</strong>
-            {% ifnotequal package.upstream_version "0" %}
+            {% if package.upstream_version != "0" %}
                 {{ package.upstream_version }}
             {% else %}
                 <em>{% trans "Paquet propre à Logram" %}</em>
-            {% endifnotequal %}
+            {% endif %}
         </li>
         <li>
             <strong>{% trans "Version Logram" %} :</strong>
@@ -159,9 +159,9 @@
         </tr>
         {% for pkg in pkgs %}
             <tr
-                {% ifequal pkg.version package.version %}
+                {% if pkg.version == package.version %}
                     style="font-style: italic;"
-                {% endifequal %}
+                {% endif %}
                 >
                 <td>
                     <a href="packages-2-{{ pkg.distribution.id }}.html">

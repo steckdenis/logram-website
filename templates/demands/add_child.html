@@ -3,33 +3,33 @@
 {% load general_tags %}
 
 {% block title %}
-    {% ifequal child_type 1 %}
+    {% if child_type == 1 %}
         {% trans "Ajouter une sous-demande" %}
     {% else %}
         {% trans "Ajouter une demande liée" %}
-    {% endifequal %}
+    {% endif %}
 {% endblock %}
 
 
 {% block FAriane %}{{ block.super }} &raquo; 
-    {% ifequal child_type 1 %}
+    {% if child_type == 1 %}
         {% trans "Ajouter une sous-demande" %}
     {% else %}
         {% trans "Ajouter une demande liée" %}
-    {% endifequal %}
+    {% endif %}
 {% endblock %}
 
 
 {% block body %}
     <h1>
-        {% ifequal child_type 1 %}
+        {% if child_type == 1 %}
             {% trans "Ajouter une sous-demande" %}
         {% else %}
             {% trans "Ajouter une demande liée" %}
-        {% endifequal %}
+        {% endif %}
     </h1>
 
-    {% ifequal child_type 1 %}
+    {% if child_type == 1 %}
         {% blocktrans with demand.title as d %}
             <p>
                 Voici le formulaire qui vous permet d'ajouter une sous-demande à la demande «{{ d }}».
@@ -70,7 +70,7 @@
                 l'identificateur !
             </p>
         {% endblocktrans %}
-    {% endifequal %}
+    {% endif %}
 
     <form action="demand-8-{{ child_type }}-{{ demand_id }}.html" method="post">{% csrf_token %}
         <fieldset>

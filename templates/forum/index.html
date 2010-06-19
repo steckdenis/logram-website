@@ -45,7 +45,7 @@
             {# Explorer les forums de la catégorie #}
             
             {% for forum in forums %}
-                {% ifequal forum.category cat %}
+                {% if forum.category == cat %}
                     <tr>
                         <td style="text-align: center;">
                             {% if forum.read %}
@@ -78,7 +78,7 @@
                             {% endif %}
                         </td>
                     </tr>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         {% endfor %}
     </table>

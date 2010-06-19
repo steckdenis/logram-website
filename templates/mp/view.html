@@ -46,9 +46,9 @@
                 </td>
                 <td>
                     <div style="float: right;">
-                        {% ifequal post.author user.get_profile %}
+                        {% if post.author == user.get_profile %}
                             <a href="mp-4-{{ post.id }}.html">{% trans "Éditer" %}</a>
-                        {% endifequal %}
+                        {% endif %}
                     </div>
 
                     <a href="#r{{ post.id }}" id="r{{ post.id }}">#</a>
@@ -66,13 +66,13 @@
                         {{ post.body|lcode }}
                     </div>
 
-                    {% ifnotequal post.date_created post.date_modified %}
+                    {% if post.date_created != post.date_modified %}
                         <h4 class="forum_post_edits">{% trans "Dernière édition" %}</h4>
 
                         <ul class="forum_post_edits_ul">
                             <li>{{ post.date_modified|format_date|capfirst }}</li>
                         </ul>
-                    {% endifnotequal %}
+                    {% endif %}
 
                     {% if post.author.sign %}
                         <div class="forum_post_sign">

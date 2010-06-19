@@ -28,11 +28,11 @@
             <ul>
                 <li>
                     <strong>{% trans "Mise à jour" %} :</strong>
-                    {% ifequal demand.created_at demand.updated_at %}
+                    {% if demand.created_at == demand.updated_at %}
                         -
                     {% else %}
                         {{ demand.updated_at|format_date }}
-                    {% endifequal %}
+                    {% endif %}
                 </li>
                 <li>
                     <strong>{% trans "% Réalisé" %} :</strong>
@@ -124,7 +124,7 @@
 
         <h2>{% trans "Sous-demandes" %}</h2>
         
-        {% ifnotequal child_len 0 %}
+        {% if child_len != 0 %}
             <ul>
                 {% for child in children_demands %}
                     <li>
@@ -141,11 +141,11 @@
             </ul>
         {% else %}
             <em>{% trans "Aucune sous-demande" %}</em>
-        {% endifnotequal %}
+        {% endif %}
 
         <h2>{% trans "Demandes liées" %}</h2>
 
-        {% ifnotequal rel_len 0 %}
+        {% if rel_len != 0 %}
             <ul>
                 {% for rel in related_demands %}
                     <li>
@@ -162,7 +162,7 @@
             </ul>
         {% else %}
             <em>{% trans "Aucune demande liée" %}</em>
-        {% endifnotequal %}
+        {% endif %}
 
         {% if can_edit or can_take or perms.demands.change_demand %}
             <div style="text-align: right;">

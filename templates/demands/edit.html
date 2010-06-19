@@ -3,32 +3,32 @@
 {% load general_tags %}
 
 {% block title %}
-    {% ifequal action 3 %}
+    {% if action == 3 %}
         {% trans "Éditer une demande" %}
     {% else %}
         {% trans "Nouvelle demande" %}
-    {% endifequal %}
+    {% endif %}
 {% endblock %}
 
 {% block FAriane %}{{ block.super }} &raquo;
-    {% ifequal action 3 %}
+    {% if action == 3 %}
         {% trans "Éditer une demande" %}
     {% else %}
         {% trans "Nouvelle demande" %}
-    {% endifequal %}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
     <h1>
-        {% ifequal action 3 %}
+        {% if action == 3 %}
             {% trans "Éditer une demande" %}
         {% else %}
             {% trans "Nouvelle demande" %} ({% trans type.name %})
-        {% endifequal %}
+        {% endif %}
     </h1>
 
     <p>
-        {% ifnotequal action 3 %}
+        {% if action != 3 %}
             {% blocktrans %}
                 Voici la page qui vous permet de poster une nouvelle demande. N'oubliez
                 pas de renseigner dans le corps de la demande le plus d'informations
@@ -40,25 +40,25 @@
                 Voici la page d'édition de la demande «{{ d }}». Vous pouvez ici
                 changer différents aspects de cette demande.
             {% endblocktrans %}
-        {% endifnotequal %}
+        {% endif %}
     </p>
 
-    {% ifnotequal action 3 %}
+    {% if action != 3 %}
         <p>
             {% with type.header|lcode as h %}
                 {% trans h %}
             {% endwith %}
         </p>
-    {% endifnotequal %}
+    {% endif %}
 
     <form action="demand-2-{{ action }}-{{ type_or_demand_id }}.html" method="post">{% csrf_token %}
         <fieldset>
             <legend>
-                {% ifnotequal action 3 %}
+                {% if action != 3 %}
                     {% trans type.name %}
                 {% else %}
                     {% trans "Édition d'une demande" %}
-                {% endifnotequal %}
+                {% endif %}
             </legend>
 
             <p>
@@ -72,9 +72,9 @@
                         <select name="category" id="category">
                             {% for cat in categories %}
                                 <option value="{{ cat.id }}"
-                                    {% ifequal cat.id demand.category_id %}
+                                    {% if cat.id == demand.category_id %}
                                         selected="selected"
-                                    {% endifequal %}>
+                                    {% endif %}>
                                         {% trans cat.name %} - {% trans cat.description %}
                                 </option>
                             {% endfor %}
@@ -86,9 +86,9 @@
                             <select name="priority" id="priority">
                                 {% for p in priorities %}
                                     <option value="{{ p.id }}"
-                                        {% ifequal p.id demand.priority_id %}
+                                        {% if p.id == demand.priority_id %}
                                             selected="selected"
-                                        {% endifequal %}>
+                                        {% endif %}>
                                             {% trans p.name %} - {% trans p.description %}
                                     </option>
                                 {% endfor %}
@@ -99,9 +99,9 @@
                             <select name="status" id="status">
                                 {% for s in status %}
                                     <option value="{{ s.id }}"
-                                        {% ifequal s.id demand.status_id %}
+                                        {% if s.id == demand.status_id %}
                                             selected="selected"
-                                        {% endifequal %}>
+                                        {% endif %}>
                                             {% trans s.name %}
                                     </option>
                                 {% endfor %}
@@ -112,9 +112,9 @@
                             <select name="target_version" id="target_version">
                                 {% for v in versions %}
                                     <option value="{{ v.id }}"
-                                        {% ifequal v.id demand.target_version_id %}
+                                        {% if v.id == demand.target_version_id %}
                                             selected="selected"
-                                        {% endifequal %}>
+                                        {% endif %}>
                                             Logram {{ v.name }}
                                     </option>
                                 {% endfor %}
@@ -128,7 +128,7 @@
                             {% trans "pris en compte uniquement si la demande n'a pas de sous-demandes" %}
                         </li>
                     {% endif %}
-                    {% ifequal action 2 %}
+                    {% if action == 2 %}
                         <li>
                             <label for="url">{% trans "Pièce jointe" %} :</label>
                             <input type="text" name="url" id="url" value="{{ demand.url }}" />
@@ -136,7 +136,7 @@
                                 <a href="{{ upl }}">{% trans "Envoyer un fichier" %}</a>
                             {% endif %}
                         </li>
-                    {% endifequal %}
+                    {% endif %}
                 </ul>
             </p>
 

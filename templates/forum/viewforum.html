@@ -47,11 +47,11 @@
                     <a href="forum-6-{{ forum.id }}.html">{% trans "Nouveau sujet" %}</a> &bull;
                 {% endif %}
             {% else %}
-                {% ifequal forum.id 0 %}
+                {% if forum.id == 0 %}
                     <a href="forum.html">{% trans "Ne plus filtrer" %}</a> &bull;
                 {% else %}
                     <a href="forum-1-{{ forum.id }}-1-{{ forum.name|slugify }}.html">{% trans "Ne plus filtrer" %}</a> &bull;
-                {% endifequal %}
+                {% endif %}
             {% endif %}
             
             {% if not on_unread_topics %}

@@ -35,13 +35,13 @@
         
         <ul>
             {% for mirror in mirrors %}
-                {% ifequal mirror.place 1 %}
+                {% if mirror.place == 1 %}
                     <li>
                         <a href="{{ mirror.url }}/{{ package.download_url }}">
                             {{ mirror.url }}
                         </a>
                     </li>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         </ul>
         
@@ -49,13 +49,13 @@
         
         <ul>
             {% for mirror in mirrors %}
-                {% ifequal mirror.place 5 %}
+                {% if mirror.place == 5 %}
                     <li>
                         <a href="{{ mirror.url }}/{{ package.download_url }}">
                             {{ mirror.url }}
                         </a>
                     </li>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         </ul>
         
@@ -63,13 +63,13 @@
         
         <ul>
             {% for mirror in mirrors %}
-                {% ifequal mirror.place 0 %}
+                {% if mirror.place == 0 %}
                     <li>
                         <a href="{{ mirror.url }}/{{ package.download_url }}">
                             {{ mirror.url }}
                         </a>
                     </li>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
@@ -79,13 +79,13 @@
         
         <ul>
             {% for mirror in mirrors %}
-                {% ifequal mirror.place 2 %}
+                {% if mirror.place == 2 %}
                     <li>
                         <a href="{{ mirror.url }}/{{ package.download_url }}">
                             {{ mirror.url }}
                         </a>
                     </li>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         </ul>
         
@@ -93,13 +93,13 @@
         
         <ul>
             {% for mirror in mirrors %}
-                {% ifequal mirror.place 3 %}
+                {% if mirror.place == 3 %}
                     <li>
                         <a href="{{ mirror.url }}/{{ package.download_url }}">
                             {{ mirror.url }}
                         </a>
                     </li>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         </ul>
         
@@ -107,13 +107,13 @@
         
         <ul>
             {% for mirror in mirrors %}
-                {% ifequal mirror.place 4 %}
+                {% if mirror.place == 4 %}
                     <li>
                         <a href="{{ mirror.url }}/{{ package.download_url }}">
                             {{ mirror.url }}
                         </a>
                     </li>
-                {% endifequal %}
+                {% endif %}
             {% endfor %}
         </ul>
     </div>

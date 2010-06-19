@@ -14,11 +14,11 @@
         </li>
         <li>
             <strong>{% trans "Version upstream" %} :</strong>
-            {% ifnotequal obj.upstream_version "0" %}
+            {% if obj.upstream_version != "0" %}
                 {{ obj.upstream_version }}
             {% else %}
                 <em>{% trans "Paquet propre à Logram" %}</em>
-            {% endifnotequal %}
+            {% endif %}
         </li>
         <li>
             <strong>{% trans "Version Logram" %} :</strong>
