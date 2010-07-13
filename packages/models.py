@@ -54,6 +54,7 @@ class Section(models.Model):
     
     long_name = models.CharField(_('Nom'), max_length=32)
     desc = models.TextField(_('Description en français'))
+    icon = models.ImageField(_('Icône'), upload_to='uploads/%Y/%m/%d/%H%M%S', blank=True, null=True)
     
     def __unicode__(self):
         return self.name

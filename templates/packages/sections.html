@@ -18,6 +18,7 @@
             {% for section in sections %}
                 {% if not forloop.counter|divisibleby:"2" %}
                     <dt>
+                        <img style="float: left; margin: 5px;" src="/files/{{ section.icon }}" alt="" />
                         <a href="packages-3-{{ distro.id }}-{{ section.id }}-1.html" title="{{ section.name }}">
                             {% trans section.long_name %}
                         </a>
@@ -37,6 +38,7 @@
             {% for section in sections %}
                 {% if forloop.counter|divisibleby:"2" %}
                     <dt>
+                        <img style="float: left; margin: 5px;" src="/files/{{ section.icon }}" alt="" />
                         <a href="packages-3-{{ distro.id }}-{{ section.id }}-1.html" title="{{ section.name }}">
                             {% trans section.long_name %}
                         </a>
