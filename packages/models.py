@@ -21,7 +21,8 @@
 # Boston, MA  02110-1301  USA
 #
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, get_language
+from django.utils.encoding import smart_unicode
 
 from pyv4.general.models import Profile
 from pyv4.forum.models import Topic
@@ -51,17 +52,60 @@ CHANGELOG_TYPE = (
 
 class Section(models.Model):
     name = models.CharField(_('Nom générique pour la création de paquets'), max_length=16)
-    
-    long_name = models.CharField(_('Nom'), max_length=32)
-    desc = models.TextField(_('Description en français'))
     icon = models.ImageField(_('Icône'), upload_to='uploads/%Y/%m/%d/%H%M%S', blank=True, null=True)
     
     def __unicode__(self):
         return self.name
+        
+    def _getsstring(self):
+        strings = SectionString.objects.filter(section=self)
+        
+        # Trouver la bonne chaîne
+        l = get_language().split('-')[0]
+        
+        for string in strings:
+            if string.lang == l:
+                self.sstring = string
+                return
+            elif string.lang == 'en':
+                self.sstring = string
+                
+        # Première chaine qui vient
+        if not hasattr(self, 'sstring'):
+            if len(strings) == 0:
+                self.sstring = None
+            else:
+                self.sstring = strings[0]
+        
+    def long_name(self):
+        if not hasattr(self, 'sstring'):
+            self._getsstring()
+            
+        return smart_unicode(self.sstring.long_name)
+            
+    def desc(self):
+        if not hasattr(self, 'sstring'):
+            self._getsstring()
+            
+        return smart_unicode(self.sstring.desc)
     
     class Meta:
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
+        
+class SectionString(models.Model):
+    section = models.ForeignKey(Section, verbose_name=_('Section'))
+    
+    lang = models.CharField('Code ISO de la langue', max_length=2)
+    long_name = models.CharField(_('Nom'), max_length=64)
+    desc = models.TextField(_('Description en français'))
+    
+    def __unicode__(self):
+        return self.long_name
+        
+    class Meta:
+        verbose_name = _('Chaine de section')
+        verbose_name_plural = _('Chaines de section')
 
 class Arch(models.Model):
     name = models.CharField(_('Nom'), max_length=10)

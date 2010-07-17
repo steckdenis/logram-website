@@ -27,9 +27,17 @@ from django.utils.translation import gettext as _
 
 admin.site.register(Arch)
 admin.site.register(Distribution)
-admin.site.register(Section)
 admin.site.register(Mirror)
 
 admin.site.register(Category)
 admin.site.register(Download)
 admin.site.register(DwVariant)
+
+class SectionInline(admin.StackedInline):
+    model = SectionString
+    extra = 1
+
+class SectionAdmin(admin.ModelAdmin):
+    inlines = [SectionInline]
+
+admin.site.register(Section, SectionAdmin)
