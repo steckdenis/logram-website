@@ -53,6 +53,8 @@ CHANGELOG_TYPE = (
 class Section(models.Model):
     name = models.CharField(_('Nom générique pour la création de paquets'), max_length=16)
     icon = models.ImageField(_('Icône'), upload_to='uploads/%Y/%m/%d/%H%M%S', blank=True, null=True)
+    primarylang = models.CharField(_('Code ISO de la langue primaire'), max_length=2)
+    weight = models.IntegerField(_('Poids de la section'))
     
     def __unicode__(self):
         return self.name
@@ -67,7 +69,7 @@ class Section(models.Model):
             if string.lang == l:
                 self.sstring = string
                 return
-            elif string.lang == 'en':
+            elif string.lang == self.primarylang:
                 self.sstring = string
                 
         # Première chaine qui vient

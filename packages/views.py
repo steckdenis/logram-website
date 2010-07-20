@@ -133,7 +133,7 @@ def sections(request, distro_id):
     distro = get_object_or_404(Distribution, pk=distro_id)
     
     # 2. Prendre la liste des sections
-    sections = Section.objects.all()
+    sections = Section.objects.order_by('name')
     
     # 3. Rendre la template
     return tpl('packages/sections.html',
