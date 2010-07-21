@@ -151,7 +151,7 @@
         {% if topic.p_type == 0 %}
             <a href="forum-2-{{ topic.id }}-{{ pg }}-{{ topic.title|slugify }}.html">{{ pg }}</a>
         {% else %}{% if topic.p_type == 1 %}
-            <a href="news-2-{{ new.id }}-{{ pg }}-{{ news.title|slugify }}.html">{{ pg }}</a>
+            <a href="news-2-{{ news.id }}-{{ pg }}-{{ news.title|slugify }}.html">{{ pg }}</a>
         {% else %}{% if topic.p_type == 2 %}
             <a href="demand-5-{{ demand.id }}-{{ pg }}.html">{{ pg }}</a>
         {% else %}{% if topic.p_type == 3 %}
