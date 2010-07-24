@@ -116,7 +116,7 @@ class LatestMessage(Feed):
     
     
     def item_link(self, Topic):
-        return '/' + return_page(Topic, Topic.last_post_id)
+        return '/' + return_page(Topic, None)
 
 def index(request):
     return tpl('feeds/index.html',"", request)
