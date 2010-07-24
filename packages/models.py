@@ -223,6 +223,7 @@ class Package(models.Model):
     packageHash = models.CharField(_('Hash SHA1 du paquet'), max_length=40)
     metadataHash = models.CharField(_('Hash SHA1 des métadonnées'), max_length=40)
     upstream_url = models.CharField(_('Adresse upstream'), max_length=200)
+    icon = models.CharField(_('Icône du paquet'), max_length=100, null=True, blank=True)
 
     # Fonctions d'accès aux informations du paquet
     def upstream_version(self):

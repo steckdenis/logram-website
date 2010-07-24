@@ -22,6 +22,9 @@
     <hr />
 
     <p>
+        {% if package.icon %}
+            <img src="{{ mirror.url }}/{{ package.icon }}" alt="Icon" style="float:left;" />
+        {% endif %}
         {{ package.long_desc|lcode }}
     </p>
     

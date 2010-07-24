@@ -270,10 +270,14 @@ def showpackage(request, package_id):
                     .filter(package=package) \
                     .order_by('-date')[0]
     
-    # 6. Rendre la template
+    # 6. On a besoin du premier mirroir pour afficher l'icône
+    mirror = Mirror.objects.get(pk=1)
+    
+    # 7. Rendre la template
     return tpl('packages/view.html', 
         {'package': package,
          'changelog': changelog,
+         'mirror': mirror,
          'pkgs': pkgs}, request)
          
 def viewsource(request, source_id, topic_page, list_page):
