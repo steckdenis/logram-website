@@ -47,7 +47,7 @@ class LatestNews(Feed):
                     .order_by('-date_published') \
                     .filter(published=True,is_private=0)[:10]
             # Ecris le cache du RSS news de 30min
-            cache.set('feeds_news', NList, 30*60)
+            cache.set('feeds_news', list(NList), 30*60)
         return NList
     
     
@@ -68,7 +68,7 @@ class LatestJournal(Feed):
                     .order_by('-date_published') \
                     .filter(published=True,is_private=1)[:10]
             # Ecris le cache du RSS jounral de 30min
-            cache.set('feeds_journal', JList, 30*60)
+            cache.set('feeds_journal', list(JList), 30*60)
         return JList
     
     
@@ -88,7 +88,7 @@ class LatestAsk(Feed):
             DList = Demand.objects.select_related('author', 'd_type').order_by('-created_at')[:10]
             
             # Ecris le cache du RSS des demandes de 30min
-            cache.set('feeds_ask', DList, 30*60)
+            cache.set('feeds_ask', list(DList), 30*60)
         return DList
     
     
@@ -111,12 +111,12 @@ class LatestMessage(Feed):
                     .order_by('-last_post__date_created')[:10]
             
             # Ecris le cache du RSS Message du forum de 30min
-            cache.set('feeds_msg', MList, 30*60)
+            cache.set('feeds_msg', list(MList), 30*60)
         return MList
     
     
     def item_link(self, Topic):
-        return '/' + return_page(Topic, None)
+        return '/' + return_page(Topic, Topic.last_post_id)
 
 def index(request):
     return tpl('feeds/index.html',"", request)
@@ -134,7 +134,7 @@ class LatestWiki(Feed):
             WList = Page.objects.filter(is_private=False).order_by('-id')[:10]
             
             # Ecris le cache du RSS Wiki de 30min
-            cache.set('feeds_msg', WList, 30*60)
+            cache.set('feeds_wiki', list(WList), 30*60)
         return WList
     
     
@@ -154,7 +154,7 @@ class LatestPackages(Feed):
             PList = Package.objects.select_related('arch').order_by('-date')[:10]
             
             # Ecris le cache du RSS Packages de 30min
-            cache.set('feeds_packages', PList, 30*60)
+            cache.set('feeds_packages', list(PList), 30*60)
         return PList
     
     
