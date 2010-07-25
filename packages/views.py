@@ -265,20 +265,64 @@ def showpackage(request, package_id):
     package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, None).content
     package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, None).content
     
-    # 5. Prendre la dernière entrée de changelog
+    # 5. Gestion des votes
+    if package.total_votes == 0:
+        package.rating = 0.0
+    else:
+        package.rating = float(package.votes) * 3.0 / float(package.total_votes)
+        
+    if request.user.is_anonymous():
+        can_vote = False
+    else:
+        votes = PackageVote.objects.filter(package=package, user=request.user.get_profile())
+        can_vote = (votes.count() == 0)
+    
+    # 6. Prendre la dernière entrée de changelog
     changelog = ChangeLog.objects \
                     .filter(package=package) \
                     .order_by('-date')[0]
     
-    # 6. On a besoin du premier mirroir pour afficher l'icône
+    # 7. On a besoin du premier mirroir pour afficher l'icône
     mirror = Mirror.objects.get(pk=1)
     
-    # 7. Rendre la template
+    # 8. Rendre la template
     return tpl('packages/view.html', 
         {'package': package,
          'changelog': changelog,
          'mirror': mirror,
+         'can_vote': can_vote,
          'pkgs': pkgs}, request)
+         
+@login_required
+def vote(request, package_id, vote):
+    # Voter pour un paquet
+    package_id = int(package_id)
+    vote = int(vote)
+    
+    if (vote < 0) or (vote > 3):
+        raise Http404   # Oh oh mon petit pirate, on fausse les résultats ?
+    
+    # 1. Prendre le paquet
+    package = get_object_or_404(Package, pk=package_id)
+    
+    # 2. Vérifier que l'utilisateur peur voter
+    votes = PackageVote.objects.filter(package=package, user=request.user.get_profile())
+    can_vote = (votes.count() == 0)
+    
+    if not can_vote:
+        raise Http404
+    
+    # 3. Enregistrer le vote
+    package.total_votes += 3
+    package.votes += vote
+    package.save()
+    
+    vote = PackageVote(package=package, user=request.user.get_profile())
+    vote.save()
+    
+    # 4. On a fini
+    messages.add_message(request, messages.INFO, _('Votre vote a été pris en compte'))
+    return HttpResponseRedirect('packages-4-%i.html' % package_id)
          
 def viewsource(request, source_id, topic_page, list_page):
     source_id = int(source_id)

@@ -9,6 +9,34 @@
 {% endblock %}
     
 {% block body %}
+    <div id="package_rating">
+  {% if can_vote %}
+        <a href="packages-12-{{ package.id }}-0.html">
+            <img src="{{ style }}/img/rating-none.png" alt="{% trans "Note 0" %}" title="{% trans "Assigner la note de 0" %}" />
+        </a>
+        <a href="packages-12-{{ package.id }}-1.html">
+  {% endif %}
+            <img src="{{ style }}/img/rating{% if package.rating < 0.5 %}_disabled{% endif %}.png" alt="" title="{% trans "Assigner la note de 1" %}" />
+  {% if can_vote %}
+        </a>
+        <a href="packages-12-{{ package.id }}-2.html">
+  {% endif %}
+            <img src="{{ style }}/img/rating{% if package.rating < 1.5 %}_disabled{% endif %}.png" alt="" title="{% trans "Assigner la note de 2" %}" />
+  {% if can_vote %}
+        </a>
+        <a href="packages-12-{{ package.id }}-3.html">
+  {% endif %}
+            <img src="{{ style }}/img/rating{% if package.rating < 2.5 %}_disabled{% endif %}.png" alt="" title="{% trans "Assigner la note de 3" %}" />
+  {% if can_vote %}
+        </a>
+  {% endif %}
+        
+        <br />
+        {% blocktrans with package.votes|floatformat as votes and package.total_votes|floatformat as total %}
+            {{ votes }} sur {{ total }}
+        {% endblocktrans %}
+    </div>
+    
     <h1>{{ package.name|capfirst }} {% trans "dans" %} Logram {{ package.distribution.name }}</h1>
     
     <p>

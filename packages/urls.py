@@ -36,6 +36,7 @@ urlpatterns = patterns('pyv4.packages.views',
     (r'^9-(?P<source_id>\d+)-(?P<topic_page>\d+)-(?P<list_page>\d+)\.html$', 'viewsource'),
     (r'^10-(?P<log_id>\d+)\.html$', 'viewsourcelog'),
     (r'^11-(?P<log_id>\d+)\.html$', 'setflags'),
+    (r'^12-(?P<package_id>\d+)-(?P<vote>\d+)\.html$', 'vote'),
     
     (r'^5-(?P<page>\d+)\.html$', 'search'),
 )

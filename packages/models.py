@@ -224,6 +224,9 @@ class Package(models.Model):
     metadataHash = models.CharField(_('Hash SHA1 des métadonnées'), max_length=40)
     upstream_url = models.CharField(_('Adresse upstream'), max_length=200)
     icon = models.CharField(_('Icône du paquet'), max_length=100, null=True, blank=True)
+    
+    votes = models.IntegerField(_('Votes positifs pour ce paquet'))
+    total_votes = models.IntegerField(_('Nombre total de votes'))
 
     # Fonctions d'accès aux informations du paquet
     def upstream_version(self):
@@ -261,6 +264,17 @@ class Package(models.Model):
     class Meta:
         verbose_name = _('Paquet')
         verbose_name_plural = _('Paquets')
+        
+class PackageVote(models.Model):
+    package = models.ForeignKey(Package, verbose_name=_('Paquet qui a recu le vote'))
+    user = models.ForeignKey(Profile, verbose_name=_('Utilisateur ayant vote'))
+    
+    def __unicode__(self):
+        return _('Vote')
+        
+    class Meta:
+        verbose_name = _('Vote')
+        verbose_name_plural = _('Votes')
 
 class ChangeLog(models.Model):
     version = models.CharField(_('Version'), max_length=64)
