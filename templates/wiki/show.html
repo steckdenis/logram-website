@@ -11,8 +11,8 @@
     
     <ul id="wiki_links">
         {% if not user.is_anonymous %}
-            <li><a href="wiki-3-{{ page.id }}-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Éditer" %}</a></li>
-            <li><a href="wiki-3-0-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Traduire" %}</a></li>
+            <li><a href="wiki-3-{{ page.id }}-0-{{ page.slug }}.html">{% trans "Éditer" %}</a></li>
+            <li><a href="wiki-3-{{ page.id }}-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Traduire" %}</a></li>
         {% endif %}
         <li><a href="wiki-4-{{ page.id }}.html">{% trans "Historique" %}</a></li>
         

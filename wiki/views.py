@@ -101,11 +101,15 @@ def edit(request, page_id, identifier, slug):
     upl = False
     captcha_string = ''
     
+    #            | zéro          | page_id
+    # zéro       | nouvelle page | édition d'une page
+    # identifier | POST new page | traduction d'une page 
+    
     if request.method == 'POST':
         pbody = request.POST['body']
         page = False
         
-        if page_id == 0:
+        if page_id == 0 or identifier != 0:
             # Nouvelle page
             if not request.user.has_perm('wiki.add_page'):
                 raise Http404
@@ -183,7 +187,10 @@ def edit(request, page_id, identifier, slug):
             if not request.user.is_anonymous():
                 upl = upload_url(request, D_TYPE_WIKI, 8*1024*1024, page.id, page.title)
             
-            form = EditForm({'title': page.title, 'identifier': identifier})
+            if identifier == 0:
+                form = EditForm({'title': page.title})
+            else:
+                form = NewForm({'title': page.title, 'identifier': identifier})
         else:
             # L'utilisateur doit avoir le droit d'ajouter une page, pour éviter le spam
             if not request.user.has_perm('wiki.add_page'):
@@ -223,7 +230,7 @@ def edit(request, page_id, identifier, slug):
     return tpl('wiki/edit.html',
             {'slug': slug,
              'create': page_id == 0,
-             'translate': identifier == 0,
+             'translate': (identifier != 0 and page_id != 0),
              'page_id': page_id,
              'identifier': identifier,
              'upload_url': upl,
