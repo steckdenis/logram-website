@@ -7,6 +7,7 @@ from django.utils.translation import ngettext
 from django.utils.cache import cache
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db import connection, transaction
 
 from datetime import datetime
 import time
@@ -14,6 +15,7 @@ import re
 
 from pyv4.general.functions import lcode as lc, get_list_page, list_languages, highlight_code
 from pyv4.mp.models import UserTopic
+from pyv4.general.models import Activity
 from pyv4.forum.views import return_page
 
 register = template.Library()
@@ -177,76 +179,40 @@ class NumMpsNode(template.Node):
             return ''
 
 class OnlinesNode(template.Node):
-    def __init__(self):
-        self.user = template.Variable('user')
-        self.req = template.Variable('request')
-
     def render(self, context):
-        user = self.user.resolve(context)
-        request = self.req.resolve(context)
+        anon, users, ok = cache.get('connected_users_count', [0, 0, False])
         
-        anon = user.is_anonymous()
-        ip = request.META.get('REMOTE_ADDR')
-        
-        f = open('onlines/activity.log', 'a')
-        
-        # Ajouter une ligne dedans avec nos informations
-        if (anon):
-            uid = 0
-        else:
-            uid = user.get_profile().id
+        if not ok:
+            # Supprimer les activités trop vieilles
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM general_activity WHERE date < (NOW() - 00000000000500)")
+            transaction.commit_unless_managed()
             
-        f.write('%f:%s:%i\n' % (time.time(), ip, uid))
-        f.close()
-        
-        # Si on a les informations nécessaires dans le cache, les utiliser
-        onlines = cache.get('online_users', False)
-        
-        if onlines != False:
-            return '%i (%i)' % (onlines[0], onlines[1])
-        
-        # On doit gérer le fichier
-        lines = {}
-        anons = 0
-        regs = 0
-        cuids = []
-        
-        f = open('onlines/activity.log', 'r+')
-        
-        for l in f:
-            parts = l.strip().split(':')
+            # Prendre les activités
+            activities = Activity.objects \
+                .select_related('user') \
+                .only('user', 'user__user') \
+                .order_by('-date')
             
-            # Si le timestamp n'est pas passé, ajouter la ligne à ce qu'on va sauvegarder
-            old = float(parts[0])
-            now = time.time()
+            # Compter les utilisateurs
+            anon = 0
+            users = 0
             
-            if now - old <= 300.0:
-                # Vérifier qu'on n'a pas déjà cette IP d'enregistrée
-                if not parts[1] in lines:
-                    lines[parts[1]] = ':'.join(parts)
+            connected_users = []
+            
+            for act in activities:
+                if act.user_id:
+                    users += 1
+                    connected_users.append(act.user.user_id)
+                else:
+                    anon += 1
                     
-                    if parts[2] == '0':
-                        anons += 1
-                    else:
-                        regs += 1
-                        cuids.append(int(parts[2]))
+            # Définir le cache
+            cache.set('connected_users_count', [anon, users, True], 5*60)
+            cache.set('connected_users', connected_users, 30*60)            # 30 min, mais renouvelé quand il faut
         
-        # Ecrire le fichier
-        f.close()
-        
-        f = open('onlines/activity.log', 'w')
-        
-        for l in lines.values():
-            if len(l) != 0:
-                f.write(l + '\n')
-        
-        f.close()
-        
-        # Ecrire le cache
-        cache.set('online_users', [regs, anons], 5 * 60)
-        cache.set('connected_users', cuids, 5 * 60)
-        
-        return '%i (%i)' % (regs, anons)
+        # Afficher
+        return '%i (%i)' % (users, anon)
 
 @register.tag(name='num_mps')
 def do_num_mps(parser, token):

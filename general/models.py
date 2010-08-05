@@ -64,3 +64,16 @@ class Style(models.Model):
     
     def __unicode__(self):
         return self.name
+        
+class Activity(models.Model):
+    user = models.ForeignKey(Profile, verbose_name=_('Utilisateur'), blank=True, null=True)
+    ip = models.CharField(_('Adresse IP'), max_length=39, primary_key=True)
+    template = models.CharField(_('Template en cours d\'utilisation'), max_length=200)
+    date = models.DateTimeField(_('Ajout dans la base'), auto_now=True)
+    
+    def __unicode__(self):
+        return self.ip + ' ' + self.date + ' ' + self.template
+    
+    class Meta:
+        verbose_name = _('Activite')
+        verbose_name_plural = _('Activites')

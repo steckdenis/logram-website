@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 
 import markdown
 import hashlib
+import datetime
 
 from pygments import highlight
 from pygments.lexers import *
@@ -239,6 +240,7 @@ pygments_format_list.sort()
 
 #Rend une template, en fournissant un contexte
 def tpl(name, args, request):
+    # Style à utiliser
     if request.user.is_anonymous():
         # Style par défaut
         style = '/style/default'
@@ -249,6 +251,17 @@ def tpl(name, args, request):
             style = request.user.get_profile().style
             request.session['style'] = style
 
+    # Enregistrer l'activité
+    from pyv4.general.models import Activity
+    act = Activity(ip=request.META.get('REMOTE_ADDR'), template=name)
+    act.date = datetime.datetime.now()
+    
+    if not request.user.is_anonymous():
+        act.user = request.user.get_profile()
+        
+    act.save()
+
+    # Rendre la template
     return render_to_response(name, args, context_instance=RequestContext(request, {
         'style': style,
         'settings': settings}))

@@ -26,8 +26,8 @@
                 {% blocktrans %}
                     Voici la liste des membres connectés sur le site de Logram. Un membre est déclaré comme
                     connecté si sa dernière activité sur le site remonte à il y a moins de 5 minutes. Il y
-                    a actuellement <strong>{{ anons }} visiteur(s) anonyme(s)</strong> et <strong>{{ regs }} membre(s)
-                    enregistré(s)</strong> en ligne. Ci-dessous, la liste de ces membres enregistrés.
+                    a actuellement <strong>{{ anons }}</strong> visiteur(s) anonyme(s) et <strong>{{ regs }}</strong> membre(s)
+                    enregistré(s) en ligne. Ci-dessous, la liste de ces membres enregistrés.
                 {% endblocktrans %}
             </p>
         {% else %}
@@ -60,7 +60,11 @@
             <th>{% trans "Pseudo" %}</th>
             <th>{% trans "Groupe principal" %}</th>
             <th>{% trans "Site web" %}</th>
-            <th style="width: 150px;">{% trans "Date d'inscription" %}</th>
+            {% if is_connected %}
+                <th>{% trans "Page visitée" %}</th>
+            {% else %}
+                <th style="width: 150px;">{% trans "Date d'inscription" %}</th>
+            {% endif %}
         </tr>
         
         {% for profile in profiles %}
@@ -74,16 +78,42 @@
                     </td>
                 {% endif %}
                 <td style="text-align: center;">
-                    {{ profile|color_pseudo }}
+                    {% if is_connected %}
+                        {% if profile.user %}
+                            {{ profile.user|color_pseudo }}
+                        {% else %}
+                            {% trans "Anonyme" %}
+                        {% endif %}
+                    {% else %}
+                        {{ profile|color_pseudo }}
+                    {% endif %}
                 </td>
                 <td style="text-align: center;">
-                    {% trans profile.main_group_name %}
+                    {% if is_connected %}
+                        {% if profile.user %}
+                            {{ profile.user.main_group_name }}
+                        {% endif %}
+                    {% else %}
+                        {{ profile.main_group_name }}
+                    {% endif %}
                 </td>
                 <td style="text-align: center;">
-                    <a href="{{ profile.website }}">{{ profile.website }}</a>
+                    {% if is_connected %}
+                        {% if profile.user %}
+                            <a href="{{ profile.user.website }}">{{ profile.user.website }}</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ profile.website }}">{{ profile.website }}</a>
+                    {% endif %}
                 </td>
                 <td style="text-align: center;">
-                    {{ profile.user.date_joined|format_date }}
+                    {% if is_connected %}
+                        {% blocktrans with profile.activity as act and profile.date|format_date as date %}
+                            {{ act }}, {{ date }}
+                        {% endblocktrans %}
+                    {% else %}
+                        {{ profile.user.date_joined|format_date }}
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

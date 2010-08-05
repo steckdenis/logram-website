@@ -25,15 +25,58 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from django.utils.cache import cache
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
 from pyv4.general.functions import tpl, get_list_page
-from pyv4.general.models import Profile, Style
+from pyv4.general.models import Profile, Style, Activity
 from pyv4.users.forms import PseudoForm, PassForm, DesignForm, ProfileForm
 from pyv4.pastebin.models import *
+
+actnames = {
+    'demands/add_child.html': gettext_lazy('Ajout d\'une sous-demande'),
+    'demands/edit.html': gettext_lazy('Édition d\'une demande'),
+    'demands/index.html': gettext_lazy('Accueil des demandes'),
+    'demands/list.html': gettext_lazy('Liste des demandes'),
+    'demands/view.html': gettext_lazy('Affiche d\'une demande'),
+    'feeds/index.html': gettext_lazy('Liste des flux RSS'),
+    'forum/addpoll.html': gettext_lazy('Ajout d\'un sondage'),
+    'forum/alert.html': gettext_lazy('Création d\'une alerte'),
+    'forum/edit.html': gettext_lazy('Édition d\'un message'),
+    'forum/index.html': gettext_lazy('Accueil des forums'),
+    'forum/viewforum.html': gettext_lazy('Affichage d\'un forum'),
+    'forum/viewpoll.html': gettext_lazy('Affichage d\'un sondage'),
+    'forum/viewtopic.html': gettext_lazy('Affichage d\'un sujet du forum'),
+    'global/devcorner.html': gettext_lazy('Centre du développeur'),
+    'global/index.html': gettext_lazy('Page d\'accueil'),
+    'global/login.html': gettext_lazy('Connexion'),
+    'global/register.html': gettext_lazy('Enregistrement'),
+    'global/search.html': gettext_lazy('Recherche'),
+    'news/list.html': gettext_lazy('Liste des nouvelles'),
+    'news/view.html': gettext_lazy('Affichage d\'une nouvelle'),
+    'packages/changelog.html': gettext_lazy('Historique d\'un paquet'),
+    'packages/files.html': gettext_lazy('Fichiers d\'un paquet'),
+    'packages/home.html': gettext_lazy('Accueil des paquets'),
+    'packages/index.html': gettext_lazy('Téléchargements'),
+    'packages/list.html': gettext_lazy('Liste des paquets'),
+    'packages/loginfo.html': gettext_lazy('Informations sur la construction d\'un paquet'),
+    'packages/mirrors.html': gettext_lazy('Liste des mirroirs'),
+    'packages/sections.html': gettext_lazy('Sections d\'une distribution'),
+    'packages/view.html': gettext_lazy('Affichage d\'un paquet'),
+    'packages/viewsource.html': gettext_lazy('Informations sur un paquet source'),
+    'pastebin/alert.html': gettext_lazy('Création d\'une alerte dans le pastebin'),
+    'pastebin/index.html': gettext_lazy('Accueil du pastebin'),
+    'pastebin/liste.html': gettext_lazy('Liste des snippets de code'),
+    'pastebin/view.html': gettext_lazy('Affichage d\'un snippet de code'),
+    'users/list.html': gettext_lazy('Liste des utilisateurs'),
+    'users/show.html': gettext_lazy('Profil d\'un utilisateur'),
+    'wiki/changes.html': gettext_lazy('Changements d\'une page de wiki'),
+    'wiki/edit.html': gettext_lazy('Édition d\'une page de wiki'),
+    'wiki/notfound.html': gettext_lazy('Tentative d\'accès à une page de wiki inexistante'),
+    'wiki/show.html': gettext_lazy('Affichage d\'une page de wiki'),
+}
 
 def view(request, user_id):
     # Afficher les informations d'un utilisateur
@@ -88,48 +131,43 @@ def online(request, page):
     page = int(page)
     
     # 1. Récupérer les informations du cache des connectés
-    onlines = cache.get('online_users', [0, 0])
-    regs = onlines[0]
-    anons = onlines[1]
+    activities = Activity.objects \
+                .select_related('user') \
+                .order_by('-date')
     
-    # 2. Ouvrir le fichier des membres connectés
-    f = open('onlines/activity.log', 'r')
+    # 2. Compter
+    anon = 0
+    users = 0
     
-    # 3. Explorer chaque ligne pour trouver la liste des ID à récupérer
-    ids = []
+    connected_users = []
     
-    for l in f:
-        parts = l.strip().split(':')
-        
-        i = int(parts[2])
-        
-        if i != 0 and not i in ids:
-            ids.append(i)
+    for act in activities:
+        if act.user_id:
+            users += 1
+        else:
+            anon += 1
             
-    f.close()
-    
-    # 4. Prendre les utilisateurs
-    members = Profile.objects \
-        .select_related('user') \
-        .filter(user__id__in=ids) \
-        .order_by('main_group', 'user__username')
-
-    # 4. Paginer
-    paginator = Paginator(members, 30)  # 30 utilisateurs par page
+        if act.template in actnames:
+            act.activity = actnames[act.template]
+        else:
+            act.activity = _('Page privée')
+            
+    # 3. Paginer
+    paginator = Paginator(activities, 30)  # 30 utilisateurs par page
 
     try:
         pg = paginator.page(page)
     except (EmptyPage, InvalidPage):
         pg = paginator.page(paginator.num_pages)
 
-    # 5. Rendre la template
+    # 4. Rendre la template
     return tpl('users/list.html',
         {'list_pages': get_list_page(page, paginator.num_pages, 4),
          'profiles': pg.object_list,
          'is_connected': True,
-         'anons': anons,
+         'anons': anon,
          'pindex': 4,
-         'regs': regs}, request)
+         'regs': users}, request)
 
 @login_required
 def opts_index(request):
