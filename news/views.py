@@ -177,7 +177,7 @@ def my_tools(request, acti, news_id):
             
             news.to_validate = False
             news.published = True
-            news.date_published = datetime.now()
+            news.date_published = datetime.datetime.now()
             
             message = _(u'La nouvelle «%s» est validée') % news.title
         elif act == 'reject':
@@ -250,7 +250,7 @@ def edit(request, news_id):
                             title=form.cleaned_data['title'],
                             intro=form.cleaned_data['intro'],
                             body=body,
-                            date_published=datetime.now(),
+                            date_published=datetime.datetime.now(),
                             category=category,
                             published=False,
                             to_validate=False,
