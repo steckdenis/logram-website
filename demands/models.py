@@ -36,7 +36,8 @@ ASSIGNEE_TYPE = (
 
 RELATION_TYPE = (
     (0, _('La demande principale depend de la secondaire')),
-    (0, _('Les demandes principales et liees sont dependantes')),
+    (1, _('Les demandes principales et secondaires sont dependantes')),
+    (2, _('Les demandes principales et secondaires sont des duplicatas')),
 )
 
 class Type(models.Model):
