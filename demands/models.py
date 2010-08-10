@@ -26,20 +26,24 @@ from django.utils.translation import gettext_lazy as _
 
 from pyv4.general.models import Profile
 from pyv4.forum.models import Topic
-from pyv4.packages.models import Distribution
+from pyv4.packages.models import Arch
 
-# Create your models here.
+ASSIGNEE_TYPE = (
+    (0, _('Utilisateur inscrit')),
+    (1, _('Adresse e-mail')),
+    (2, _('Url sur un autre bugtracker')),
+)
+
+RELATION_TYPE = (
+    (0, _('La demande principale depend de la secondaire')),
+    (0, _('Les demandes principales et liees sont dependantes')),
+)
 
 class Type(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
     description = models.TextField(_('Description'))
-    header = models.TextField(_('En-têtes (consignes)'))
     color = models.CharField(_('Couleur'), max_length=6)
-    icon = models.CharField(_('Url de l\'icône'), max_length=256)
-
-    can_new = models.BooleanField(_('L\'utilisateur peut poster une nouvelle demande'), blank=True)
-    can_propose = models.BooleanField(_('L\'utilisateur peut proposer une demande'), blank=True)
-    is_bug = models.BooleanField(_('Cette demande est un bug'), blank=True)
+    icon = models.ImageField(_('Icône'), upload_to='uploads/%Y/%m/%d/%H%M%S')
 
     def __unicode__(self):
         return self.name
@@ -62,18 +66,65 @@ class Status(models.Model):
         verbose_name = _('Status')
         verbose_name_plural = _('Status')
 
-class Category(models.Model):
+class Product(models.Model):
+    name = models.CharField(_('Nom'), max_length=64)
+    title = models.CharField(_('Titre'), max_length=200)
+    description = models.TextField(_('Description'))
+    
+    def __unicode__(self):
+        return self.title + '(' + self.name + ')'
+        
+    class Meta:
+        verbose_name = _('Produit')
+        verbose_name_plural = _('Produits')
+        
+class Component(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
     description = models.TextField(_('Description'))
-    d_type = models.ForeignKey(Type, verbose_name=_('Type de demande dedans'))
-
+    product = models.ForeignKey(Product, verbose_name=_('Produit'))
+    
     def __unicode__(self):
         return self.name
-
+        
     class Meta:
-        verbose_name = _('Categorie')
-        verbose_name_plural = _('Categories')
+        verbose_name = _('Composant')
+        verbose_name_plural = _('Composants')
 
+class ProductVersion(models.Model):
+    name = models.CharField(_('Texte de la version'), max_length=64)
+    product = models.ForeignKey(Product, verbose_name=_('Produit'))
+    
+    old = models.BooleanField(_('Version périmée'))
+    future = models.BooleanField(_('Version future'))
+    
+    def __unicode__(self):
+        return self.product.name + ' ' + self.name
+        
+    class Meta:
+        verbose_name = _('Version (produit)')
+        verbose_name_plural = _('Versions (produit)')
+        
+class Platform(models.Model):
+    name = models.CharField(_('Nom'), max_length=64)
+    
+    def __unicode__(self):
+        return self.name
+        
+    class Meta:
+        verbose_name = _('Plateforme')
+        verbose_name_plural = _('Plateformes')
+        
+class PlatformVersion(models.Model):
+    name = models.CharField(_('Texte de la version'), max_length=64)
+    platform = models.ForeignKey(Platform, verbose_name=_('Plateforme'))
+    
+    def __unicode__(self):
+        return self.name + ' ' + self.platform.name
+    
+    class Meta:
+        verbose_name = _('Version (plateforme)')
+        verbose_name_plural = _('Version (plateforme)')
+        
 class Priority(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
     description = models.TextField(_('Description'))
@@ -84,7 +135,7 @@ class Priority(models.Model):
         r = self.priority - 50
         if r < 0: return 0
 
-        # 0 < r <= 50, passer à l'échelle 0 < r <= 200 (pas 256, trop clair)
+        # 0 < r <= 50, passer à l'échelle 0 < r <= 256
         return r * 256 / 50
 
     def blue(self):
@@ -92,7 +143,7 @@ class Priority(models.Model):
         r = 50 - self.priority
         if r > 50 or r < 0: return 0
 
-        # 0 < r <= 50, passer à l'échelle 0 < r <= 200 (pas 256, trop clair)
+        # 0 < r <= 50, passer à l'échelle 0 < r <= 256
         return r * 256 / 50
 
     def __unicode__(self):
@@ -101,43 +152,74 @@ class Priority(models.Model):
     class Meta:
         verbose_name = _('Priorite')
         verbose_name_plural = _('Priorites')
-
+        
 class Demand(models.Model):
     title = models.CharField(_('Titre'), max_length=200)
-    body = models.TextField(_('Contenu'))
-
+    content = models.TextField(_('Contenu'))
+    done = models.IntegerField(_('Pourcentage complété'))
+    reported = models.ForeignKey(Profile, verbose_name=_('Auteur'))
+    type = models.ForeignKey(Type, verbose_name=_('Type de demande'))
+    
     created_at = models.DateTimeField(_('Date de création'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Date de mise à jour'), auto_now=True)
-    assigned_at = models.DateTimeField(_('Date d\'assignation'), blank=True, null=True)
-
-    done = models.IntegerField(_('Pourcentage d\'effectué'), default=0)
-    demand_rate = models.IntegerField(_('Votes pour la demande'), default=0)
-    work_rate = models.IntegerField(_('Votes pour la qualité de réalisation'), default=0)
-    is_proposed = models.BooleanField(_('La demande est proposée'), blank=True, default=False)
-
-    d_type = models.ForeignKey(Type, verbose_name=_('Type de demande'))
-    author = models.ForeignKey(Profile, verbose_name=_('Auteur'))
-    topic = models.ForeignKey(Topic, verbose_name=_('Sujet'))
+    
+    product = models.ForeignKey(Product, verbose_name=_('Produit'))
+    component = models.ForeignKey(Component, verbose_name=_('Composant'))
+    product_version = models.ForeignKey(ProductVersion, verbose_name=_('Version du produit'))
+    fixed_in = models.ForeignKey(ProductVersion, blank=True, null=True, related_name='fixes', verbose_name=_('Fixé dans la version'))
+    
+    platform = models.ForeignKey(Platform, verbose_name=_('Plateforme'))
+    platform_version = models.ForeignKey(PlatformVersion, verbose_name=_('Version de la plateforme'))
+    
+    architecture = models.ForeignKey(Arch, verbose_name=_('Architecture'))
     status = models.ForeignKey(Status, verbose_name=_('Status'))
-    category = models.ForeignKey(Category, verbose_name=_('Catégorie'))
     priority = models.ForeignKey(Priority, verbose_name=_('Priorité'))
-    target_version = models.ForeignKey(Distribution, verbose_name=_('Version cible'), blank=True, null=True)
-    assigned_to = models.ForeignKey(Profile, verbose_name=_('Personne assignée'), blank=True, null=True, related_name='assignated_demands')
-
-    url = models.CharField(_('Url d\'un fichier'), max_length=256, blank=True, null=True)
-    upstream_url = models.CharField(_('Url du bug upstream, si existant'), max_length=256, blank=True, null=True)
-
-    children = models.ManyToManyField('self', verbose_name=_('Sous-demandes'), symmetrical=False, related_name='parents', blank=True)
-    related = models.ManyToManyField('self', verbose_name=_('Demandes liées'), blank=True)
-
+    
     def __unicode__(self):
         return self.title
-
+        
     class Meta:
         verbose_name = _('Demande')
         verbose_name_plural = _('Demandes')
         
-        permissions = (
-            ('vote_demand', 'Vote one demand'),
-            ('take_demand', 'Take one demand'),
-        )
+class Relation(models.Model):
+    type = models.IntegerField(_('Type'), choices=RELATION_TYPE)
+    maindemand = models.ForeignKey(Demand, verbose_name=_('Demande principale'), related_name='relations_as_main')
+    subdemand = models.ForeignKey(Demand, verbose_name=_('Sous-demande'), related_name='relations_as_sub')
+    
+    def __unicode__(self):
+        return RELATION_TYPE[self.type][1] + ': ' + self.maindemand.title + ' > ' + self.subdemand.title
+        
+    class Meta:
+        verbose_name = _('Relation')
+        verbose_name_plural = _('Relations')
+        
+class Attachment(models.Model):
+    author = models.ForeignKey(Profile, verbose_name=_('Auteur'))
+    url = models.FileField(_('Fichier'), upload_to='uploads/%Y/%m/%d/%H%M%S')
+    mimetype = models.CharField(_('Type MIME'), max_length=64)
+    description = models.CharField(_('Description'), max_length=200)
+    demand = models.ForeignKey(Demand, verbose_name=_('Demande'))
+    
+    def __unicode__(self):
+        return self.description
+        
+    class Meta:
+        verbose_name = _('Attachement')
+        verbose_name_plural = _('Attachements')
+        
+class Assignee(models.Model):
+    type = models.IntegerField(_('Type'), choices=ASSIGNEE_TYPE)
+    user = models.ForeignKey(Profile, verbose_name=_('Utilisateur'), blank=True, null=True)
+    value = models.CharField(_('Url ou adresse e-mail'), max_length=256)
+    demand = models.ForeignKey(Demand, verbose_name=_('Demande'))
+    
+    def __unicode__(self):
+        if self.type == 0:
+            return self.user.uname
+        else:
+            return self.value
+            
+    class Meta:
+        verbose_name = _('Assignee')
+        verbose_name_plural = _('Assignees')
