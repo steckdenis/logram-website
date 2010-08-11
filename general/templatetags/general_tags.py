@@ -185,7 +185,7 @@ class OnlinesNode(template.Node):
         if not ok:
             # Supprimer les activités trop vieilles
             cursor = connection.cursor()
-            cursor.execute("DELETE FROM general_activity WHERE date < (NOW() - 00000000000500)")
+            cursor.execute("DELETE FROM general_activity WHERE date < FROM_UNIXTIME(UNIX_TIMESTAMP(NOW()) - (5 * 60))")
             transaction.commit_unless_managed()
             
             # Prendre les activités

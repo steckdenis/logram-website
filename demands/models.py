@@ -23,6 +23,7 @@
 from django.db import models
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
+from django.utils.encoding import force_unicode
 
 from pyv4.general.models import Profile
 from pyv4.forum.models import Topic
@@ -45,7 +46,51 @@ class Type(models.Model):
     description = models.TextField(_('Description'))
     color = models.CharField(_('Couleur'), max_length=6)
     icon = models.ImageField(_('Icône'), upload_to='uploads/%Y/%m/%d/%H%M%S')
-
+    
+    def color_vector(self):
+        s = self.color
+        r = int(s[0:2], 16)
+        g = int(s[2:4], 16)
+        b = int(s[4:6], 16)
+        
+        return (r, g, b)
+        
+    def vector_color(self, vec):
+        return '%2X%2X%2X' % vec
+        
+    def neg_color(self, vec, amount):
+        r = int(float(255 - vec[0]) * amount)
+        g = int(float(255 - vec[1]) * amount)
+        b = int(float(255 - vec[2]) * amount)
+        
+        return (r, g, b)
+        
+    def lightcolor(self):
+        vec = self.color_vector()
+        vec2 = self.neg_color(vec, 0.5)
+        
+        r = vec[0] + vec2[0]
+        g = vec[1] + vec2[1]
+        b = vec[2] + vec2[2]
+        
+        return self.vector_color((r, g, b))
+        
+    def darkcolor(self):
+        vec = self.color_vector()
+        vec2 = self.neg_color(vec, 0.5)
+        
+        s = str(vec)
+        s += str(vec2)
+        
+        r = vec[0] - vec2[0]
+        g = vec[1] - vec2[1]
+        b = vec[2] - vec2[2]
+        
+        s += str(self.vector_color((r, g, b)))
+        
+        return s
+        return self.vector_color((r, g, b))
+        
     def __unicode__(self):
         return self.name
 
@@ -61,7 +106,7 @@ class Status(models.Model):
     resolved = models.BooleanField(_('Demande résolue'))
 
     def __unicode__(self):
-        return self.name
+        return force_unicode(self.name)
 
     class Meta:
         verbose_name = _('Status')
@@ -73,7 +118,7 @@ class Product(models.Model):
     description = models.TextField(_('Description'))
     
     def __unicode__(self):
-        return self.title + '(' + self.name + ')'
+        return self.title + ' (' + self.name + ')'
         
     class Meta:
         verbose_name = _('Produit')
@@ -130,6 +175,7 @@ class Priority(models.Model):
     name = models.CharField(_('Nom'), max_length=200)
     description = models.TextField(_('Description'))
     priority = models.IntegerField(_('Pourcentage de priorité'))
+    default = models.BooleanField(_('Priorité par défaut'))
 
     def red(self):
         # Niveau de rouge de la couleur

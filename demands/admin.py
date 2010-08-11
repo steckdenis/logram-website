@@ -3,7 +3,7 @@
 # admin.py
 # This file is part of Logram Website
 #
-# Copyright (C) 2009 - Denis Steckelmacher <steckdenis@logram-project.org>
+# Copyright (C) 2010 - Denis Steckelmacher <steckdenis@logram-project.org>
 #
 # Logram Website is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -24,8 +24,32 @@ from pyv4.demands.models import *
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
-admin.site.register(Demand)
 admin.site.register(Type)
-admin.site.register(Category)
 admin.site.register(Status)
 admin.site.register(Priority)
+admin.site.register(Demand)
+admin.site.register(Relation)
+admin.site.register(Attachment)
+admin.site.register(Assignee)
+
+class ComponentsInline(admin.StackedInline):
+    model = Component
+    extra = 1
+    
+class ProductVersionsInline(admin.StackedInline):
+    model = ProductVersion
+    extra = 1
+
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductVersionsInline, ComponentsInline]
+    
+admin.site.register(Product, ProductAdmin)
+
+class PlatformVersionsInline(admin.StackedInline):
+    model = PlatformVersion
+    extra = 1
+    
+class PlatformAdmin(admin.ModelAdmin):
+    inlines = [PlatformVersionsInline]
+
+admin.site.register(Platform, PlatformAdmin)

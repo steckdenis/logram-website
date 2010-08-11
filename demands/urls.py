@@ -25,11 +25,4 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('pyv4.demands.views',
     #routes "demands-...", ou "demands-" n'est pas mis
     (r'^1\.html', 'index'),
-    (r'^2-(?P<action>\d+)-(?P<type_or_demand_id>\d+)\.html$', 'post'),
-    (r'^3-(?P<type_id>\d+)-(?P<status_id>\d+)-(?P<order_by>[a-z]+)-(?P<page>\d+)\.html', 'mlist'),
-    (r'^5-(?P<demand_id>\d+)-(?P<page>\d+)\.html$', 'view'),
-    (r'^6-(?P<action>\d+)-(?P<demand_id>\d+)\.html$', 'note'),
-    (r'^7-(?P<demand_id>\d+)\.html$', 'take'),
-    (r'^8-(?P<child_type>\d+)-(?P<demand_id>\d+)\.html$', 'add_child'),
-    (r'^9-(?P<child_type>\d+)-(?P<demand_id>\d+)-(?P<child_id>\d+)\.html$', 'remove_child'),
 )

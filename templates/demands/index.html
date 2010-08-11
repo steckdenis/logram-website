@@ -40,26 +40,19 @@
     </p>
 
     {% for type in types %}
-        <div class="demand_{% cycle 'left' 'right' %}" style="background-color: #{{ type.color }}">
-            <img class="demand_icon" src="{{ type.icon }}" alt="{% trans "Icône" %}" />
+        <div class="demand_{% cycle 'left' 'right' %}" style="background-color: #{{ type.lightcolor }}; border: 1px solid #{{ type.color }};">
+            <img class="demand_icon" src="/files/{{ type.icon }}" alt="{% trans "Icône" %}" />
             
-            <h3>{% trans type.name %}</h3>
+            <h3 style="color: #{{ type.darkcolor }} !important;">{% trans type.name %}</h3>
 
             <p>
                 {% trans type.description %}
             </p>
 
             <p class="demand_index_actions">
-                {% if type.can_new and perms.demands.add_demand %}
-                    <a href="demand-2-1-{{ type.id }}.html">
-                        <img src="{{ style }}/img/demand_new_{{ LANGUAGE_CODE }}.png" alt="{% trans "Nouveau" %}" />
-                    </a>
-                {% endif %}
-                {% if type.can_propose and perms.demands.add_demand %}
-                    <a href="demand-2-2-{{ type.id }}.html">
-                        <img src="{{ style }}/img/demand_propose_{{ LANGUAGE_CODE }}.png" alt="{% trans "Proposer" %}" />
-                    </a>
-                {% endif %}
+                <a href="demand-2-1-{{ type.id }}.html">
+                    <img src="{{ style }}/img/demand_new_{{ LANGUAGE_CODE }}.png" alt="{% trans "Nouveau" %}" />
+                </a>
                 <a href="demand-3-{{ type.id }}-0-datec-1.html">
                     <img src="{{ style }}/img/demand_list_{{ LANGUAGE_CODE }}.png" alt="{% trans "Liste" %}" />
                 </a>
