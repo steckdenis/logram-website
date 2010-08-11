@@ -2,40 +2,103 @@
 {% load i18n %}
 {% load general_tags %}
 
-{% block title %}{% trans type.name %}{% endblock %}
+{% block title %}
+    {% if product %}
+        {% trans product.title %}
+    {% else %}
+        {% trans type.name %}
+    {% endif %}
+{% endblock %}
 
 {% block FAriane %}{{ block.super }} &raquo;
-    {% trans type.name %}
+    {% if product %}
+        {% trans product.title %}
+    {% else %}
+        {% trans type.name %}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
-    <h1>{% trans type.name %}</h1>
+    <h1>
+        {% if product %}
+            {% trans product.title %}
+        {% else %}
+            {% trans type.name %}
+        {% endif %}
+    </h1>
 
-    <p>
-        {% blocktrans with type.name as t %}
-            Voici la page qui liste les demandes de type <strong>{{ t }}</strong>. Cette page
-            est conçue pour être puissante : vous pouvez filtrer et ordonner les demandes comme
-            vous voulez.
-        {% endblocktrans %}
-    </p>
+    {% if product %}
+        <p>
+            {% blocktrans with product.title as product %}
+                Cette page est le centre de la gestion du projet «{{ product }}». Elle vous permet de filtrer ses bugs ou d'en ajouter directement de nouveaux.
+            {% endblocktrans %}
+        </p>
+        
+        <p>
+            {{ product.description|lcode }}
+        </p>
+        
+        <h2>{% trans "Composants de ce produit" %}</h2>
+        
+        <dl>
+            {% for component in product.component_set.all %}
+                <dt><strong>{{ component.name }}</strong> (<a href="TODO">{% trans "Soumettre une demande" %}</a>)</dt>
+                <dd>{{ component.description|lcode }}</dd>
+            {% endfor %}
+        </dl>
+        
+        <h2>{% trans "Liste des demandes" %}</h2>
+    {% else %}
+        <p style="overflow: hidden;">
+            <img src="/files/{{ type.icon }}" alt="{{ type.name }}" style="float: left;" />
+            {% blocktrans with type.name as type %}
+                Voici la liste des demandes du type <strong>{{ type }}</strong>. Des filtres et options de tri sont à votre disposition pour affiner votre recherche.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
 
     <div id="forum_tools">
-        <strong>{% trans "Afficher uniquement les demandes" %} :</strong>
-
-        {% for s in status %}
-            {% if not forloop.first %}
-                &bull;
-            {% endif %}
-
-            <a href="demand-3-{{ type.id }}-{{ s.id }}-{{ order_by }}-{{ page }}.html">
-                {% trans s.name %}
-            </a>
-        {% endfor %}
+        <form action="demand-3.html" method="post">
+            <label for="type"><strong>{% trans "Type :" %}</strong></label>
+            <select name="type" id="type">
+                {% for t in types %}
+                    <option value="{{ t.id }}" {% if t.id == type_id %}selected="selected"{% endif %}>{{ t.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="status"><strong>{% trans "Status :" %}</strong></label>
+            <select name="status" id="status">
+                <option value="0" selected="selected">{% trans "Ne pas filtrer" %}</option>
+                {% for s in status %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="order"><strong>{% trans "Trier par :" %}</strong></label>
+            <select name="order" id="order">
+                <option value="update" selected="selected">{% trans "Dernière modification" %}</option>
+                <option value="date">{% trans "Date de création" %}</option>
+                <option value="title">{% trans "Titre" %}</option>
+                <option value="done">{% trans "Pourcentage effectué" %}</option>
+                <option value="status">{% trans "Status" %}</option>
+                <option value="priority">{% trans "Priorité" %}</option>
+                <option value="author">{% trans "Auteur" %}</option>
+                <option value="productversion">{% trans "Produit » Version" %}</option>
+                <option value="productcomponent">{% trans "Produit » Composant" %}</option>
+                <option value="platform">{% trans "Plateforme" %}</option>
+                <option value="type">{% trans "Type" %}</option>
+            </select>
+            
+            <input type="checkbox" name="desc" value="yes" />
+            <label for="desc">{% trans "Descendant" %}</label>
+            
+            <input type="submit" />
+        </form>
     </div>
 
     <style type="text/css">
         .demand_tbl tr th {
-            background-color: #{{ type.color }} !important;
+            background-color: #{{ type.lightcolor }} !important;
         }
 
         .demand_tbl, .demand_tbl td, .demand_tbl th {
@@ -45,95 +108,55 @@
     
     <table class="demand_tbl" style="text-align: center;">
         <tr>
-            <th>
-                {% if order_by != "author" %}
-                    <a href="demand-3-{{ type.id }}-{{ st }}-author-{{ page }}.html">
-                        {% trans "Auteur" %}
-                    </a>
-                {% else %}
-                    {% trans "Auteur" %}
-                {% endif %}
-            </th>
-            <th>
-                {% if order_by != "datec" %}
-                    <a href="demand-3-{{ type.id }}-{{ st }}-datec-{{ page }}.html">
-                        {% trans "Date de création" %}
-                    </a>
-                {% else %}
-                    {% trans "Date de création" %}
-                {% endif %}
-            </th>
-            <th>
-                {% if order_by != "title" %}
-                    <a href="demand-3-{{ type.id }}-{{ st }}-title-{{ page }}.html">
-                        {% trans "Titre" %}
-                    </a>
-                {% else %}
-                    {% trans "Titre" %}
-                {% endif %}
-            </th>
-            <th>
-                {% if order_by != "category" %}
-                    <a href="demand-3-{{ type.id }}-{{ st }}-category-{{ page }}.html">
-                        {% trans "Catégorie" %}
-                    </a>
-                {% else %}
-                    {% trans "Catégorie" %}
-                {% endif %}
-            </th>
-            <th>
-                {% if order_by != "status" %}
-                    <a href="demand-3-{{ type.id }}-{{ st }}-status-{{ page }}.html">
-                        {% trans "Statut" %}
-                    </a>
-                {% else %}
-                    {% trans "Statut" %}
-                {% endif %}
-            </th>
-            <th>
-                {% if order_by != "priority" %}
-                    <a href="demand-3-{{ type.id }}-{{ st }}-priority-{{ page }}.html">
-                        {% trans "Priorité" %}
-                    </a>
-                {% else %}
-                    {% trans "Priorité" %}
-                {% endif %}
-            </th>
+            <th>{% trans "Auteur" %}</th>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Titre" %}</th>
+            {% if product %}
+                <th>{% trans "Type" %}</th>
+            {% else %}
+                <th>{% trans "Produit" %}</th>
+            {% endif %}
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Priorité" %}</th>
         </tr>
-        {% for d in pg.object_list %}
-            <tr>
+        {% for demand in demands %}
+            <tr style="background-color: rgb({{ demand.priority.red }}, 128, {{ demand.priority.blue }});">
                 <td>
-                    {{ d.author|color_pseudo }}
+                    {{ demand.reporter|color_pseudo }}
                 </td>
                 <td>
-                    {{ d.created_at|format_date }}
+                    {% blocktrans with demand.created_at|format_date as created and demand.updated_at|format_date as updated %}
+                        Créée {{ created }}<br />
+                        Mise à jour {{ updated }}
+                    {% endblocktrans %}
                 </td>
                 <td>
-                    <a href="demand-5-{{ d.id }}-1.html">
-			{% if d.status.closed %}<del>{% endif %}
-                        {{ d.title }}
-			{% if d.status.closed %}</del>{% endif %}
-                    </a>
-                    {% if d.is_proposed %}
-                        <img style="vertical-align: middle;" src="{{ style }}/img/proposed_demand.png" alt="{% trans "Demande proposée" %}" />
+                    {% if demand.status.closed %}
+                        <del><a href="TODO">{{ demand.title }}</a></del>
+                    {% else %}
+                        <a href="TODO">{{ demand.title }}</a>
                     {% endif %}
                 </td>
                 <td>
-                    {% trans d.category.name %}
+                    {% if product %}
+                        <a href="demand-2-{{ demand.type.id }}-{{ status_id }}-{{ product_id }}{{ sort }}-{{ page }}.html">
+                            {{ demand.type.name }}
+                        </a>
+                    {% else %}
+                        <a href="demand-2-0-{{ status_id }}-{{ demand.product.id }}{{ sort }}-{{ page }}.html">
+                            {{ demand.product.name }}/{{ demand.component.name }} {{ demand.product_version }}
+                        </a>
+                    {% endif %}
                 </td>
                 <td>
-                    <a href="demand-3-{{ type.id }}-{{ d.status.id }}-{{ order_by }}-{{ page }}.html">
-                        {% trans d.status.name %}
-                    </a>
+                    {{ demand.status.name }}
                 </td>
-                <td>
-                    <span
-                        title="{% trans d.priority.description %}"
-                        style="color: rgb({{ d.priority.red }}, 0, {{ d.priority.blue }});">
-                            {% trans d.priority.name %}
-                    </span>
+                <td style="color: rgb({{ demand.priority.red }}, 0, {{ demand.priority.blue }});">
+                    {{ demand.priority.name }}
                 </td>
             </tr>
         {% endfor %}
     </table>
+    
+    {# TODO: Pagination #}
 {% endblock %}

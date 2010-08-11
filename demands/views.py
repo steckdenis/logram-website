@@ -29,7 +29,6 @@ from django.core.cache import cache
 from django.contrib import messages
 
 from pyv4.demands.models import *
-from pyv4.packages.models import Distribution
 from pyv4.forum.models import Topic
 from pyv4.general.functions import *
 from pyv4.forum.views import list_posts
@@ -38,11 +37,94 @@ import datetime
 
 def index(request):
     # Afficher les types de demandes
-
     types = Type.objects.all()
 
     return tpl('demands/index.html',
         {'types': types}, request)
+        
+def mlist(request, type_id, status_id, product_id, sort, page):
+    # Afficher les demandes
+    type_id = int(type_id)
+    status_id = int(status_id)
+    product_id = int(product_id)
+    page = int(page)
+    
+    # 1. Requête de base
+    demands = Demand.objects \
+        .select_related('reporter', 'product', 'component', 'product_version', 'status', 'priority')
+        
+    # 2. Filtres demandés
+    t = None
+    
+    if type_id != 0:
+        t = get_object_or_404(Type, pk=type_id)
+        demands.filter(type=t)
+    
+    if status_id != 0:
+        demands.filter(status_id=status_id)
+    
+    product = None
+    if product_id != 0:
+        product = get_object_or_404(Product, pk=product_id)
+        demands.filter(product=product)
+        demands.select_related('type')
+        
+    # 3. Ordonner
+    sign = ''
+    
+    if sort[0] == '-':
+        sign = '-'
+        
+    osort = sort
+    sort = sort[1:]
+        
+    if sort == 'update':
+        demands.order_by(sign + 'updated_at')
+    elif sort == 'date':
+        demands.order_by(sign + 'created_at')
+    elif sort == 'title':
+        demands.order_by(sign + 'title')
+    elif sort == 'done':
+        demands.order_by(sign + 'done')
+    elif sort == 'status':
+        demands.order_by(sign + 'status')
+    elif sort == 'priority':
+        demands.order_by(sign + 'priority__priority')
+    elif sort == 'author':
+        demands.order_by(sign + 'reporter__uname')
+    elif sort == 'productversion':
+        demands.order_by(sign + 'product__name', sign + 'product_version__name')
+    elif sort == 'productcomponent':
+        demands.order_by(sign + 'product__name', sign + 'component__name')
+    elif sort == 'platform':
+        demands.order_by(sign + 'platform__name', sign + 'platform_version__name')
+    elif sort == 'type':
+        demands.order_by(sign + 'type')
+        
+    # 4. Obtenir des listes (liste des types par exemple)
+    types = Type.objects.all()
+    status = Status.objects.all()
+    
+    # 5. Paginer
+    paginator = Paginator(demands, 15)        #15 demandes par pages
+
+    try:
+        pg = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        pg = paginator.page(paginator.num_pages)
+        
+    # 6. Rendre la template
+    return tpl('demands/list.html',
+        {'type_id': type_id,
+         'status_id': status_id,
+         'product_id': product_id,
+         'sort': osort,
+         'page': page,
+         'demands': pg.object_list,
+         'type': t,
+         'product': product,
+         'types': types,
+         'status': status}, request)
 
 #def mlist(request, type_id, status_id, order_by, page):
     ## Afficher la liste des demandes d'un certain type, classées, et paginées

@@ -39,9 +39,13 @@ class ComponentsInline(admin.StackedInline):
 class ProductVersionsInline(admin.StackedInline):
     model = ProductVersion
     extra = 1
+    
+class DefaultAssigneesInline(admin.StackedInline):
+    model = DefaultAssignee
+    extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductVersionsInline, ComponentsInline]
+    inlines = [ProductVersionsInline, ComponentsInline, DefaultAssigneesInline]
     
 admin.site.register(Product, ProductAdmin)
 

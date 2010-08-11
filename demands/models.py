@@ -135,6 +135,22 @@ class Component(models.Model):
     class Meta:
         verbose_name = _('Composant')
         verbose_name_plural = _('Composants')
+        
+class DefaultAssignee(models.Model):
+    type = models.IntegerField(_('Type'), choices=ASSIGNEE_TYPE)
+    user = models.ForeignKey(Profile, verbose_name=_('Utilisateur'), blank=True, null=True)
+    value = models.CharField(_('Url ou adresse e-mail'), max_length=256)
+    product = models.ForeignKey(Product, verbose_name=_('Produit'))
+    
+    def __unicode__(self):
+        if self.type == 0:
+            return self.user.uname
+        else:
+            return self.value
+            
+    class Meta:
+        verbose_name = _('CC par defaut')
+        verbose_name_plural = _('CC par defaut')
 
 class ProductVersion(models.Model):
     name = models.CharField(_('Texte de la version'), max_length=64)
@@ -165,7 +181,7 @@ class PlatformVersion(models.Model):
     platform = models.ForeignKey(Platform, verbose_name=_('Plateforme'))
     
     def __unicode__(self):
-        return self.name + ' ' + self.platform.name
+        return self.platform.name + ' ' + self.name
     
     class Meta:
         verbose_name = _('Version (plateforme)')
@@ -204,7 +220,7 @@ class Demand(models.Model):
     title = models.CharField(_('Titre'), max_length=200)
     content = models.TextField(_('Contenu'))
     done = models.IntegerField(_('Pourcentage complété'))
-    reported = models.ForeignKey(Profile, verbose_name=_('Auteur'))
+    reporter = models.ForeignKey(Profile, verbose_name=_('Auteur'))
     type = models.ForeignKey(Type, verbose_name=_('Type de demande'))
     
     created_at = models.DateTimeField(_('Date de création'), auto_now_add=True)
