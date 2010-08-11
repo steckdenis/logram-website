@@ -58,7 +58,10 @@
     {% endif %}
 
     <div id="forum_tools">
-        <form action="demand-3.html" method="post">
+        <form action="demand-3.html" method="post">{% csrf_token %}
+            <input type="hidden" name="product" value="{{ product_id }}" />
+            <input type="hidden" name="page" value="{{ page }}" />
+        
             <label for="type"><strong>{% trans "Type :" %}</strong></label>
             <select name="type" id="type">
                 {% for t in types %}
@@ -68,9 +71,9 @@
             
             <label for="status"><strong>{% trans "Status :" %}</strong></label>
             <select name="status" id="status">
-                <option value="0" selected="selected">{% trans "Ne pas filtrer" %}</option>
+                <option value="0">{% trans "Ne pas filtrer" %}</option>
                 {% for s in status %}
-                    <option value="{{ s.id }}">{{ s.name }}</option>
+                    <option value="{{ s.id }}" {% if s.id == status_id %}selected="selected"{% endif %}>{{ s.name }}</option>
                 {% endfor %}
             </select>
             
@@ -89,7 +92,7 @@
                 <option value="type">{% trans "Type" %}</option>
             </select>
             
-            <input type="checkbox" name="desc" value="yes" />
+            <input type="checkbox" name="desc" checked="true" />
             <label for="desc">{% trans "Descendant" %}</label>
             
             <input type="submit" />
@@ -144,7 +147,7 @@
                         </a>
                     {% else %}
                         <a href="demand-2-0-{{ status_id }}-{{ demand.product.id }}{{ sort }}-{{ page }}.html">
-                            {{ demand.product.name }}/{{ demand.component.name }} {{ demand.product_version }}
+                            {{ demand.product.title }}, {{ demand.component.name }} {{ demand.product_version.name }}
                         </a>
                     {% endif %}
                 </td>

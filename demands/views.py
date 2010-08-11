@@ -51,23 +51,22 @@ def mlist(request, type_id, status_id, product_id, sort, page):
     
     # 1. Requête de base
     demands = Demand.objects \
-        .select_related('reporter', 'product', 'component', 'product_version', 'status', 'priority')
+        .select_related('reporter', 'product', 'component', 'product_version', 'status', 'priority', 'type')
         
     # 2. Filtres demandés
     t = None
     
     if type_id != 0:
         t = get_object_or_404(Type, pk=type_id)
-        demands.filter(type=t)
+        demands = demands.filter(type=t)
     
     if status_id != 0:
-        demands.filter(status_id=status_id)
+        demands = demands.filter(status=status_id)
     
     product = None
     if product_id != 0:
         product = get_object_or_404(Product, pk=product_id)
-        demands.filter(product=product)
-        demands.select_related('type')
+        demands = demands.filter(product=product)
         
     # 3. Ordonner
     sign = ''
@@ -79,27 +78,29 @@ def mlist(request, type_id, status_id, product_id, sort, page):
     sort = sort[1:]
         
     if sort == 'update':
-        demands.order_by(sign + 'updated_at')
+        demands = demands.order_by(sign + 'updated_at')
     elif sort == 'date':
-        demands.order_by(sign + 'created_at')
+        demands = demands.order_by(sign + 'created_at')
     elif sort == 'title':
-        demands.order_by(sign + 'title')
+        demands = demands.order_by(sign + 'title')
     elif sort == 'done':
-        demands.order_by(sign + 'done')
+        demands = demands.order_by(sign + 'done')
     elif sort == 'status':
-        demands.order_by(sign + 'status')
+        demands = demands.order_by(sign + 'status')
     elif sort == 'priority':
-        demands.order_by(sign + 'priority__priority')
+        demands = demands.order_by(sign + 'priority__priority')
     elif sort == 'author':
-        demands.order_by(sign + 'reporter__uname')
+        demands = demands.order_by(sign + 'reporter__uname')
     elif sort == 'productversion':
-        demands.order_by(sign + 'product__name', sign + 'product_version__name')
+        demands = demands.order_by(sign + 'product__name', sign + 'product_version__name')
     elif sort == 'productcomponent':
-        demands.order_by(sign + 'product__name', sign + 'component__name')
+        demands = demands.order_by(sign + 'product__name', sign + 'component__name')
     elif sort == 'platform':
-        demands.order_by(sign + 'platform__name', sign + 'platform_version__name')
+        demands = demands.order_by(sign + 'platform__name', sign + 'platform_version__name')
     elif sort == 'type':
-        demands.order_by(sign + 'type')
+        demands = demands.order_by(sign + 'type')
+    else:
+        raise Http404
         
     # 4. Obtenir des listes (liste des types par exemple)
     types = Type.objects.all()
@@ -125,6 +126,30 @@ def mlist(request, type_id, status_id, product_id, sort, page):
          'product': product,
          'types': types,
          'status': status}, request)
+         
+def updatefilter(request):
+    if request.method != 'POST':
+        raise Http404
+    
+    type_id = int(request.POST['type'])
+    status_id = int(request.POST['status'])
+    order = request.POST['order']
+    desc = ('desc' in request.POST)
+    product_id = int(request.POST['product'])
+    page = int(request.POST['page'])
+    
+    if desc:
+        o = '-' + order
+    else:
+        o = '+' + order
+    
+    # Rediriger
+    return HttpResponseRedirect('demand-2-%i-%i-%i%s-%i.html' % (
+        type_id,
+        status_id,
+        product_id,
+        o,
+        page))
 
 #def mlist(request, type_id, status_id, order_by, page):
     ## Afficher la liste des demandes d'un certain type, classées, et paginées
