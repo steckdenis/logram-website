@@ -27,6 +27,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import gettext as _
 from django.core.cache import cache
 from django.contrib import messages
+from django.db.models import Q
 
 from pyv4.demands.models import *
 from pyv4.forum.models import Topic
@@ -125,7 +126,8 @@ def mlist(request, type_id, status_id, product_id, sort, page):
          'type': t,
          'product': product,
          'types': types,
-         'status': status}, request)
+         'status': status,
+         'list_pages': get_list_page(page, paginator.num_pages, 4)}, request)
          
 def updatefilter(request):
     if request.method != 'POST':
@@ -150,68 +152,71 @@ def updatefilter(request):
         product_id,
         o,
         page))
-
-#def mlist(request, type_id, status_id, order_by, page):
-    ## Afficher la liste des demandes d'un certain type, classées, et paginées
-    #type_id = int(type_id)
-    #status_id = int(status_id)
-    #page = int(page)
-
-    ## 1. Construire la requête de base
-    #demands = Demand.objects \
-        #.select_related('author', 'status', 'category', 'priority') \
-        #.filter(d_type=type_id)
-
-    ## 2. Appliquer le filtre
-    #if status_id != 0:
-        #demands = demands.filter(status=status_id)
-
-    ## 3. Ordonner
-    #if order_by == 'datec':
-        #demands = demands.order_by('-created_at')
-    #elif order_by == 'datem':
-        #demands = demands.order_by('-updated_at')
-    #elif order_by == 'datea':
-        #demands = demands.order_by('-assigned_at')
-    #elif order_by == 'title':
-        #demands = demands.order_by('title')
-    #elif order_by == 'done':
-        #demands = demands.order_by('-done')
-    #elif order_by == 'drate':
-        #demands = demands.order_by('-demand_rate')
-    #elif order_by == 'wrate':
-        #demands = demands.order_by('-work_rate')
-    #elif order_by == 'status':
-        #demands = demands.order_by('status')
-    #elif order_by == 'priority':
-        #demands = demands.order_by('-priority__priority')
-    #elif order_by == 'author':
-        #demands = demands.order_by('author__uname')
-    #elif order_by == 'category':
-        #demands = demands.order_by('category__name')
-
-    ## 4. Obtenir l'objet Type, pour colorer la page
-    #t = get_object_or_404(Type, pk=type_id)
-
-    ## 7. Obtenir les status
-    #status = Status.objects.all()
+        
+def view(request, demand_id, page):
+    # Afficher une demande
+    demand_id = int(demand_id)
+    page = int(page)
     
-    ## 6. Paginer
-    #paginator = Paginator(demands, 30)        #30 demandes par pages
+    try:
+        demand = Demand.objects \
+            .select_related('reporter', 'type', 'product', 'component', 'product_version', 'fixed_in', 'platform', 'platform_version', 'architecture', 'status', 'priority', 'topic') \
+            .get(pk=demand_id)
+    except Demand.DoesNotExist:
+        raise Http404
+    
+    # Prendre les demandes liées
+    relations = Relation.objects \
+        .select_related('maindemand', 'subdemand', 'maindemand__status', 'subdemand__status') \
+        .filter(Q(maindemand__id=demand_id) | Q(subdemand__id=demand_id)) \
+        .order_by('type', 'maindemand')
+    
+    for rel in relations:
+        if rel.type == 0:
+            # Dépendance
+            if rel.maindemand == demand:
+                rel.type_title = _('Dépendances')
+            else:
+                rel.type_title = _('Bloque')
+        elif rel.type == 1:
+            # Liaison
+            rel.type_title = _('Demandes liées')
+        elif rel.type == 2:
+            # Duplication
+            rel.type_title = _('Doublons')
+            
+        if rel.maindemand == demand:
+            rel.item = rel.subdemand
+        else:
+            rel.item = rel.maindemand
+            
+    
+    # Prendre la liste des assignés
+    assignees = Assignee.objects \
+        .select_related('user') \
+        .filter(demand=demand)
+        
+    # Prendre la liste des fichiers attachés
+    attachments = Attachment.objects \
+        .select_related('author') \
+        .filter(demand=demand)
+        
+    # Configuration du forum
+    config = {'demand': demand,
+              'extends': 'demands/base.html',
+              'relations': relations,
+              'assignees': assignees,
+              'attachments': attachments,
+              'title': demand.title}
+              
+    # Affichage
+    return list_posts(request, demand.topic, page, config, 'demands/view.html')
+    
+def viewattachment(request, attachment_id):
+    pass
 
-    #try:
-        #pg = paginator.page(page)
-    #except (EmptyPage, InvalidPage):
-        #pg = paginator.page(paginator.num_pages)
-
-    ## 6. Rendre la template
-    #return tpl('demands/list.html',
-        #{'type': t,
-         #'status': status,
-         #'st': status_id,
-         #'order_by': order_by,
-         #'page': page,
-         #'pg': pg}, request)
+def downloadattachment(request, attachment_id):
+    pass
 
 #@permission_required('demands.add_demand')
 #def post(request, action, type_or_demand_id):
@@ -360,166 +365,3 @@ def updatefilter(request):
              #'can_set_done': can_set_done,
              #'upl': upl,
              #'type_or_demand_id': type_or_demand_id}, request)
-
-#def view(request, demand_id, page):
-    ## Afficher une demande
-    #demand_id = int(demand_id)
-    #page = int(page)
-    
-    ## 1. Récupérer la demande
-    #try:
-        #demand = Demand.objects \
-            #.select_related('author', 'status', 'category', 'priority', 'target_version', 'assigned_to', 'd_type') \
-            #.get(pk=demand_id)
-    #except Demand.DoesNotExist:
-        #raise Http404
-
-    ## 2. Savoir si le vote est permis ou pas
-    #if not request.user.has_perm('demands.vote_demand'):
-        #vote_allowed = False
-    #else:
-        #vote_allowed = not cache.get('user_%i_already_voted_%i_%i' % (request.user.id, demand_id, demand.status.resolved), False)
-
-    ## Ainsi que la prise de la demande et l'édition
-    #can_take = False
-    #can_edit = False
-    
-    #if not demand.assigned_to:
-        #if request.user.has_perm('demands.take_demand'):
-            #can_take = True
-
-    #if request.user.has_perm('demands.change_demand') or request.user == demand.author.user:
-        #can_edit = True
-
-    ## 3. Prendre les sous-demandes, et les demandes liées
-    #related_demands = demand.related.all()
-    #children_demands = demand.children.all()
-
-    ## S'il y a des enfants, calculer le pourcentage d'avancement en fonction des enfants
-    #total = 0
-    #pourcent = 0
-    
-    #if len(children_demands) != 0: #len précharge la demande, on gagne une requête
-        #for child in children_demands:
-            #total += 100
-            #pourcent += child.done
-
-        #demand.done = pourcent * 100 / total
-
-    
-    
-    ## 4. Configuration de la liste des sujets
-    #config = {'demand': demand,
-              #'extends': 'demands/base.html',
-              #'vote_allowed': vote_allowed,
-              #'can_take': can_take,
-              #'can_edit': can_edit,
-              #'related_demands': related_demands,
-              #'children_demands': children_demands,
-              #'rel_len': len(related_demands),
-              #'child_len': len(children_demands),
-              #'title': demand.title}
-
-    ## On a fini
-    #return list_posts(request, demand.topic, page, config, 'demands/view.html')
-
-#@permission_required('demands.vote_demand')
-#def note(request, action, demand_id):
-    ## Noter une demande
-    #action = int(action)
-    #demand_id = int(demand_id)
-
-    ## Vérifier que l'utilisateur peut voter
-    #dr = (action == 1 or action == 2)
-    #if cache.get('user_%i_already_voted_%i_%i' % (request.user.id, demand_id, dr), False):
-        #raise Http404
-
-    ## 1. Récupérer la demande
-    #demand = get_object_or_404(Demand, pk=demand_id)
-
-    ## 2. Exécuter l'action
-    #if action == 1:
-        #demand.work_rate += 1
-    #elif action == 2:
-        #demand.work_rate -= 1
-    #elif action == 3:
-        #demand.demand_rate += 1
-    #elif action == 4:
-        #demand.demand_rate -= 1
-    #else:
-        #raise Http404
-    
-    ## 3. Enregistrer la demande
-    #demand.save()
-
-    #cache.set('user_%i_already_voted_%i_%i' % (request.user.id, demand_id, dr), True, 24*60*60)
-
-    ## 4. Rediriger
-    #messages.add_message(request, messages.INFO, _("Votre vote a été pris en compte"))
-    #return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)
-
-#@permission_required('demands.take_demand')
-#def take(request, demand_id):
-    ## Prendre une demande
-    #demand_id = int(demand_id)
-    
-    ## 1. Récupérer la demande
-    #demand = get_object_or_404(Demand, pk=demand_id)
-
-    ## 2. Prendre la demande
-    #demand.assigned_to = request.user.get_profile()
-    #demand.assigned_at = datetime.datetime.now()
-    #demand.save()
-
-    ## 3. On a fini
-    #messages.add_message(request, messages.INFO, _('La demande vous a bien été attribuée'))
-    #return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)
-
-#@permission_required('demands.change_demand')
-#def add_child(request, child_type, demand_id):
-    ## Ajouter une demande
-    #child_type = int(child_type)
-    #demand_id = int(demand_id)
-
-    #if request.method == 'POST':
-        ## Ajouter la demande
-        #demand = get_object_or_404(Demand, pk=demand_id)
-        #sd = get_object_or_404(Demand, pk=request.POST['did'])
-
-        #if child_type == 1:
-            #demand.children.add(sd)
-        #else:
-            #demand.related.add(sd)
-
-        ## On a fini
-        #messages.add_message(request, messages.INFO, _('Sous-demande ajoutée'))
-        #return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)
-    #else:
-        ## Afficher la template
-
-        #return tpl('demands/add_child.html',
-            #{'child_type': child_type,
-             #'demand': get_object_or_404(Demand, pk=demand_id),
-             #'demand_id': demand_id}, request)
-
-#@permission_required('demands.change_demand')
-#def remove_child(request, child_type, demand_id, child_id):
-    ## Supprimer une demande liée/enfant
-    #child_type = int(child_type)
-    #child_id = int(child_id)
-    #demand_id = int(demand_id)
-
-    ## 1. Récupérer la demande
-    #demand = get_object_or_404(Demand, pk=demand_id)
-
-    ## 2. Supprimer le bon type d'enfant
-    #if child_type == 1:
-        ## Sous-demande
-        #demand.children.remove(get_object_or_404(Demand, pk=child_id))
-    #else:
-        ## Demande liée
-        #demand.related.remove(get_object_or_404(Demand, pk=child_id))
-
-    ## 3. On a fini
-    #messages.add_message(request, messages.INFO, _('La demande enfant a été retirée de la liste'))
-    #return HttpResponseRedirect('demand-5-%i-1.html' % demand_id)

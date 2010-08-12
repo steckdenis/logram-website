@@ -29,13 +29,13 @@
 
     {% if product %}
         <p>
-            {% blocktrans with product.title as product %}
+            {% blocktrans with product.title|translate as product %}
                 Cette page est le centre de la gestion du projet «{{ product }}». Elle vous permet de filtrer ses bugs ou d'en ajouter directement de nouveaux.
             {% endblocktrans %}
         </p>
         
         <p>
-            {{ product.description|lcode }}
+            {{ product.description|translate|lcode }}
         </p>
         
         <h2>{% trans "Composants de ce produit" %}</h2>
@@ -43,15 +43,15 @@
         <dl>
             {% for component in product.component_set.all %}
                 <dt><strong>{{ component.name }}</strong> (<a href="TODO">{% trans "Soumettre une demande" %}</a>)</dt>
-                <dd>{{ component.description|lcode }}</dd>
+                <dd>{{ component.description|translate|lcode }}</dd>
             {% endfor %}
         </dl>
         
         <h2>{% trans "Liste des demandes" %}</h2>
     {% else %}
         <p style="overflow: hidden;">
-            <img src="/files/{{ type.icon }}" alt="{{ type.name }}" style="float: left;" />
-            {% blocktrans with type.name as type %}
+            <img src="/files/{{ type.icon }}" alt="{% trans type.name %}" style="float: left;" />
+            {% blocktrans with type.name|translate as type %}
                 Voici la liste des demandes du type <strong>{{ type }}</strong>. Des filtres et options de tri sont à votre disposition pour affiner votre recherche.
             {% endblocktrans %}
         </p>
@@ -65,7 +65,7 @@
             <label for="type"><strong>{% trans "Type :" %}</strong></label>
             <select name="type" id="type">
                 {% for t in types %}
-                    <option value="{{ t.id }}" {% if t.id == type_id %}selected="selected"{% endif %}>{{ t.name }}</option>
+                    <option value="{{ t.id }}" {% if t.id == type_id %}selected="selected"{% endif %}>{% trans t.name %}</option>
                 {% endfor %}
             </select>
             
@@ -73,7 +73,7 @@
             <select name="status" id="status">
                 <option value="0">{% trans "Ne pas filtrer" %}</option>
                 {% for s in status %}
-                    <option value="{{ s.id }}" {% if s.id == status_id %}selected="selected"{% endif %}>{{ s.name }}</option>
+                    <option value="{{ s.id }}" {% if s.id == status_id %}selected="selected"{% endif %}>{% trans s.name %}</option>
                 {% endfor %}
             </select>
             
@@ -135,31 +135,36 @@
                 </td>
                 <td>
                     {% if demand.status.closed %}
-                        <del><a href="TODO">{{ demand.title }}</a></del>
+                        <del><a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a></del>
                     {% else %}
-                        <a href="TODO">{{ demand.title }}</a>
+                        <a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a>
                     {% endif %}
                 </td>
                 <td>
                     {% if product %}
-                        <a href="demand-2-{{ demand.type.id }}-{{ status_id }}-{{ product_id }}{{ sort }}-{{ page }}.html">
-                            {{ demand.type.name }}
+                        <a href="demand-2-{{ demand.type.id }}-{{ status_id }}-0{{ sort }}-{{ page }}.html">
+                            {% trans demand.type.name %}
                         </a>
                     {% else %}
                         <a href="demand-2-0-{{ status_id }}-{{ demand.product.id }}{{ sort }}-{{ page }}.html">
-                            {{ demand.product.title }}, {{ demand.component.name }} {{ demand.product_version.name }}
+                            {{ demand.product.title }}<br />
+                            {{ demand.component.name }} {{ demand.product_version.name }}
                         </a>
                     {% endif %}
                 </td>
                 <td>
-                    {{ demand.status.name }}
+                    {% trans demand.status.name %}
                 </td>
                 <td style="color: rgb({{ demand.priority.red }}, 0, {{ demand.priority.blue }});">
-                    {{ demand.priority.name }}
+                    {% trans demand.priority.name %}
                 </td>
             </tr>
         {% endfor %}
     </table>
     
-    {# TODO: Pagination #}
+    <div class="pagination">
+        {% for pg in list_pages %}
+            <a href="demand-2-{{ type_id }}-{{ status_id }}-{{ product_id }}{{ sort }}-{{ pg }}.html">{{ pg }}</a>
+        {% endfor %}
+    </div>
 {% endblock %}

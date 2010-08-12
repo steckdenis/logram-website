@@ -49,7 +49,7 @@ def return_page(topic, msg_id):
             topic.last_post_page,
             slugify(news.title))
     elif topic.p_type == 2:
-        rs = 'demand-5-%i-%i.html' % (
+        rs = 'demand-4-%i-%i.html' % (
             topic.parent_id,
             topic.last_post_page)
     elif topic.p_type == 3:

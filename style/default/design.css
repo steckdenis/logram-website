@@ -819,7 +819,8 @@ hr
 #demand_pane {
     padding-left: 5px;
     padding-right: 5px;
-    background-color: #eee;
+    border-width: 1px;
+    border-style: solid;
 }
 
 #demand_content_left {

@@ -388,7 +388,7 @@ def get_poll(request, poll):
             choice.percent = 0
         
     # Savoir si on peut voter
-    if request.user.is_anonymous:
+    if request.user.is_anonymous():
         poll_can_vote = False
     else:
         user_choices = UserChoice.objects \

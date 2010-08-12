@@ -24,7 +24,10 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('pyv4.demands.views',
     #routes "demands-...", ou "demands-" n'est pas mis
-    (r'^1\.html', 'index'),
-    (r'^2-(?P<type_id>\d+)-(?P<status_id>\d+)-(?P<product_id>\d+)(?P<sort>[a-z+-]+)-(?P<page>\d+)\.html', 'mlist'),
-    (r'^3\.html', 'updatefilter'),
+    (r'^1\.html$', 'index'),
+    (r'^2-(?P<type_id>\d+)-(?P<status_id>\d+)-(?P<product_id>\d+)(?P<sort>[a-z+-]+)-(?P<page>\d+)\.html$', 'mlist'),
+    (r'^3\.html$', 'updatefilter'),
+    (r'^4-(?P<demand_id>\d+)-(?P<page>\d+)\.html$', 'view'),
+    (r'^5-(?P<attachment_id>\d+)\.html$', 'viewattachment'),
+    (r'^6-(?P<attachment_id>\d+)\.html$', 'downloadattachment'),
 )

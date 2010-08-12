@@ -37,7 +37,7 @@ ASSIGNEE_TYPE = (
 
 RELATION_TYPE = (
     (0, _('La demande principale depend de la secondaire')),
-    (1, _('Les demandes principales et secondaires sont dependantes')),
+    (1, _('Les demandes principales et secondaires sont liees')),
     (2, _('Les demandes principales et secondaires sont des duplicatas')),
 )
 
@@ -67,7 +67,7 @@ class Type(models.Model):
         
     def lightcolor(self):
         vec = self.color_vector()
-        vec2 = self.neg_color(vec, 0.5)
+        vec2 = self.neg_color(vec, 0.7)
         
         r = vec[0] + vec2[0]
         g = vec[1] + vec2[1]
@@ -79,16 +79,10 @@ class Type(models.Model):
         vec = self.color_vector()
         vec2 = self.neg_color(vec, 0.5)
         
-        s = str(vec)
-        s += str(vec2)
-        
         r = vec[0] - vec2[0]
         g = vec[1] - vec2[1]
         b = vec[2] - vec2[2]
         
-        s += str(self.vector_color((r, g, b)))
-        
-        return s
         return self.vector_color((r, g, b))
         
     def __unicode__(self):
@@ -222,6 +216,7 @@ class Demand(models.Model):
     done = models.IntegerField(_('Pourcentage complété'))
     reporter = models.ForeignKey(Profile, verbose_name=_('Auteur'))
     type = models.ForeignKey(Type, verbose_name=_('Type de demande'))
+    topic = models.ForeignKey(Topic, verbose_name=_('Sujet'))
     
     created_at = models.DateTimeField(_('Date de création'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Date de mise à jour'), auto_now=True)

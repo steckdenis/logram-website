@@ -46,6 +46,10 @@ def topic_url(topic):
 @register.filter
 def count(l):
     return len(l)
+    
+@register.filter
+def translate(s):
+    return _(unicode(s))
 
 @register.filter
 def format_date(date):
