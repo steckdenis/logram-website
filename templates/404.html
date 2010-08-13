@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+{% load i18n %}
+{% load general_tags %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{% trans "Page non-trouvée" %} | Logram</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/style/default/design.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+</head>
+<body>
+<div id="page">
+    <div id="page_bis">
+        <div id="contenu">
+            <div id="header">
+                <div id="header_gauche">
+                    <div id="header_droite">
+                        <div id="header_texte"></div>
+                            <ul id="menu">
+                                {% block speedbarre %}
+                                    <li {% block Accueil %}{% endblock %}>
+                                        <a href="/">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Accueil" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li {% block Wiki %}{% endblock %}>
+                                        <a href="wiki-discover.html">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Découvrir Logram" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li {% block Forum %}{% endblock %}>
+                                        <a href="forum.html">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Forums" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li {% block Docs %}{% endblock %}>
+                                        <a href="wiki.html">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Documentation" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li {% block Devcorner %}{% endblock %}>
+                                        <a href="devcorner.html">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Développement" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li {% block Demandes %}{% endblock %}>
+                                        <a href="demand-1.html">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Demandes" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <li {% block Downloads %}{% endblock %}>
+                                        <a href="downloads.html">
+                                            <span class="gauche"></span><span class="middle">
+                                            {% trans "Téléchargements" %}
+                                            </span><span class="droite"></span>
+                                        </a>
+                                    </li>
+                                {% endblock %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="conteneur">
+                    <div id="sidebar">
+                        <form method="get" action="search-1.html">
+                            <p style="text-align:center;">
+                                <input type="text" name="q" style="width: 90%;" /> <input type="submit" name="submit" value="{% trans "Rechercher" %}"/>
+                            </p>
+                        </form>
+                        
+                        <div class="separateur"></div>
+                        
+                        <form method="post" action="/i18n/setlang/">{% csrf_token %}
+                            <p style="text-align: center;">
+                                <select name="language">
+                                    {% for lang in LANGUAGES %}
+                                        <option value="{{ lang.0 }}">{% trans lang.1 %}</option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <input type="submit" value="Ok" />
+                            </p>
+                        </form>
+                    </div>
+                    
+                    <div id="corps">
+                        <div id="ariane">
+                            {% trans "Vous êtes ici" %} ->
+                            {% block FAriane %}
+                                <a href="/">
+                                    {% trans "Accueil" %}
+                                </a> &raquo;
+                                {% trans "Page non-trouvée" %}
+                            {% endblock %}
+                        </div>
+                        
+                        {% blocktrans %}
+                            La page que vous recherchez n'existe pas. Ceci peut être du à une erreur dans l'adresse que vous avez entrée, ou à un lien cassé sur une page.
+                        {% endblocktrans %}
+                    </div>
+                    
+                    <div id="footer">
+                        {% blocktrans %}
+                            La documentation de ce site est disponible sous <a href="http://creativecommons.org/licenses/by-sa/2.0/fr/">Creative Commons Attribution Même licence</a><br />
+                            Les écrits des membres sur le forum sont leur propriété. En aucun cas le site de Logram ne
+                            pourra être tenu responsable de leurs écrits.<br />
+                            Contact : steckdenis at logram-project point org<br />
+                <span style="font-size: 0.9em;">Smileys du <a href="http://www.siteduzero.com">Site du zéro</a>, design par <a href="http://steven-lerouzic.1s.fr">Steven Le Rouzic</a>, <a href="wiki-oxyicons.html">certaines icônes</a> viennent du projet <a href="http://oxygen-icons.org">Oxygen</a> sous GPL, site réalisé grâce à <a href="http://djangoproject.org">Django</a></span>
+                        {% endblocktrans %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
