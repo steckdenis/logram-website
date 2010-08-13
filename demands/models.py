@@ -112,7 +112,7 @@ class Product(models.Model):
     description = models.TextField(_('Description'))
     
     def __unicode__(self):
-        return self.title + ' (' + self.name + ')'
+        return self.title
         
     class Meta:
         verbose_name = _('Produit')
@@ -154,7 +154,7 @@ class ProductVersion(models.Model):
     future = models.BooleanField(_('Version future'))
     
     def __unicode__(self):
-        return self.product.name + ' ' + self.name
+        return self.name
         
     class Meta:
         verbose_name = _('Version (produit)')
@@ -175,7 +175,7 @@ class PlatformVersion(models.Model):
     platform = models.ForeignKey(Platform, verbose_name=_('Plateforme'))
     
     def __unicode__(self):
-        return self.platform.name + ' ' + self.name
+        return self.name
     
     class Meta:
         verbose_name = _('Version (plateforme)')

@@ -35,7 +35,13 @@ strong {
     color: #555;
 }
 #corps ul {
-    list-style-image: url('img/bullet.png');
+    list-style: none;
+    padding-left: 15px;
+}
+#corps ul li {
+    background: url('img/bullet.png') no-repeat left top;
+    padding-left: 22px;
+    margin: 3px 0;
 }
 fieldset {
     border: 1px solid #888;
