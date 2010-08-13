@@ -1,0 +1,39 @@
+{% extends "demands/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{{ attachment.description }}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo;
+    <a href="demand-2-0-0-{{ attachment.demand.product_id }}-update-1.html">{% trans attachment.demand.product.title %}</a> &raquo;
+    <a href="demand-2-{{ attachment.demand.type_id }}-0-{{ attachment.demand.product_id }}-update-1.html">{% trans attachment.demand.type.name %}</a> &raquo;
+    <a href="demand-4-{{ attachment.demand_id }}-1.html">{{ attachment.demand.title }}</a> &raquo;
+    {{ attachment.description }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ attachment.description }}</h1>
+    
+    <div id="news_infos">
+        {% trans "par" %}
+        {{ attachment.author|color_pseudo }}
+    </div>
+    
+    {% if primarymime == "text" %}
+        <div class="pastebin_code">
+            {{ content|safe }}
+        </div>
+    {% else %}
+        {% if primarymime == "image" %}
+            <p style="text-align: center; overflow: scroll;">
+                <img src="demand-6-{{ attachment.id }}.html" alt="{% trans "Image de l'attachement" %}" />
+            </p>
+        {% else %}
+            <p style="text-align: center;">
+                {% blocktrans with attachment.id as id %}
+                    Cet attachement n'est ni un fichier texte ni une image. Vous ne pouvez donc pas la prévisualiser et devez le télécharger <a href="demand-6-{{ id }}.html">ici</a>.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

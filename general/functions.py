@@ -286,13 +286,16 @@ def lcode(text):
     return rs
     
 def highlight_code(code, lang):
-    try:
-        lexer = get_lexer_by_name(lang)
-    except:
+    if lang == 'auto':
+        lexer = guess_lexer(code)
+    else:
         try:
-            lexer = guess_lexer(code)
+            lexer = get_lexer_by_name(lang)
         except:
-            lexer = PythonLexer()
+            try:
+                lexer = guess_lexer(code)
+            except:
+                lexer = PythonLexer()
     
     return highlight(code, lexer, HtmlFormatter(linenos='table', cssclass='codehilite'))
 

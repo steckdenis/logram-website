@@ -23,7 +23,7 @@
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.utils.translation import gettext as _
 from django.core.cache import cache
 from django.contrib import messages
@@ -33,6 +33,10 @@ from pyv4.demands.models import *
 from pyv4.forum.models import Topic
 from pyv4.general.functions import *
 from pyv4.forum.views import list_posts
+
+from pygments import highlight
+from pygments.lexers import *
+from pygments.formatters import HtmlFormatter
 
 import datetime
 
@@ -213,10 +217,54 @@ def view(request, demand_id, page):
     return list_posts(request, demand.topic, page, config, 'demands/view.html')
     
 def viewattachment(request, attachment_id):
-    pass
+    # Afficher les informations d'un attachement
+    attachment_id = int(attachment_id)
+    
+    try:
+        attachment = Attachment.objects \
+            .select_related('author', 'demand', 'demand__product', 'demand__type') \
+            .get(pk=attachment_id)
+    except Attachment.DoesNotExist:
+        raise Http404
+    
+    primarymime = attachment.mimetype.split('/')[0]
+    
+    # Si le mime est du texte, alors l'afficher avec coloration syntaxique
+    content = ''
+    
+    if primarymime == 'text':
+        fl = attachment.url
+    
+        fl.open(mode='rb')
+        code = fl.read()
+        fl.close()
+        
+        try:
+            lexer = get_lexer_for_filename(fl.name, code)
+        except:
+            lexer = TextLexer()
+        
+        content = highlight(code, lexer, HtmlFormatter(linenos='table', cssclass='codehilite'))
+    
+    return tpl('demands/viewattachment.html',
+        {'attachment': attachment,
+         'primarymime': primarymime,
+         'content': content}, request)
 
 def downloadattachment(request, attachment_id):
-    pass
+    # Télécharger directement un attachement
+    attachment_id = int(attachment_id)
+    
+    attachment = get_object_or_404(Attachment, pk=attachment_id)
+    
+    # Ouvrir et lire le fichier
+    fl = attachment.url
+    
+    fl.open(mode='rb')
+    s = fl.read()
+    fl.close()
+    
+    return HttpResponse(s, mimetype=attachment.mimetype)
 
 #@permission_required('demands.add_demand')
 #def post(request, action, type_or_demand_id):
