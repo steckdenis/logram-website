@@ -1,0 +1,32 @@
+{% extends "demands/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Ajout d'un attachement" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo;
+    <a href="demand-2-0-0-{{ demand.product_id }}-update-1.html">{% trans demand.product.title %}</a> &raquo;
+    <a href="demand-2-{{ demand.type_id }}-0-{{ demand.product_id }}-update-1.html">{% trans demand.type.name %}</a> &raquo;
+    <a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a> &raquo;
+    {% trans "Ajout d'un attachement" %}
+{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Ajout d'un attachement" %}</h1>
+    
+    <form enctype="multipart/form-data" method="post" action="demand-7-{{ demand.id }}.html">{% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Informations sur le nouvel attachement" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    {{ form.as_ul }}
+                </ul>
+            </p>
+            
+            <p style="text-align: center;">
+                <input type="submit" value="{% trans "Envoyer" %}" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}
