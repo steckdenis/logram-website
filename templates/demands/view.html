@@ -66,6 +66,8 @@
                                     {% endif %}
                                 </li>
                             {% endfor %}
+                        </ul>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -151,7 +153,8 @@
         
         {% if perms.demands.change_demand %}
             <div style="text-align: right;">
-                <a href="TODO">{% trans "Éditer" %}</a>
+                <a href="TODO">{% trans "Éditer" %}</a> &bull;
+                <a href="demand-8-{{ demand.id }}.html">{% trans "Gérer les demandes liées" %}</a>
             </div>
         {% endif %}
     </div>

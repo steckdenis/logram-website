@@ -308,6 +308,92 @@ def addattachment(request, demand_id):
     return tpl('demands/addattachment.html', 
         {'form': form,
          'demand': demand}, request)
+         
+def handlerelated(request, demand_id):
+    # Gérer les demandes liées
+    demand_id = int(demand_id)
+    
+    # Trouver la demande
+    try:
+        demand = Demand.objects \
+            .select_related('type', 'product') \
+            .get(pk=demand_id)
+    except Demand.DoesNotExist:
+        raise Http404
+    
+    if request.method == 'POST':
+        # Récupérer les ids des liaisons à supprimer
+        ids = []
+
+        for p in request.POST:
+            if p.startswith('relation'):
+                ids.append(int(p.split('[')[1][0:-1]))
+        
+        if len(ids) != 0:
+            # Prendre toutes les relations qui correspondent
+            relations = Relation.objects.filter(id__in=ids).delete()
+            
+            messages.add_message(request, messages.INFO, _('Les relations demandées ont été supprimées'))
+            
+        # Voir si on ajoute une relation
+        newrelation = request.POST['newrelation']
+        
+        try:
+            newrelation = len(newrelation) and int(newrelation) # '' et 0 ==> 0. x ==> x
+        except:
+            raise Http404
+        
+        if newrelation != 0:
+            newrelationtype = request.POST['newrelationtype']
+            subdemand = get_object_or_404(Demand, pk=newrelation)
+            
+            # Créer la relation
+            if newrelationtype == 'depend':
+                rel = Relation(type=0, maindemand=demand, subdemand=subdemand)
+            elif newrelationtype == 'block':
+                rel = Relation(type=0, maindemand=subdemand, subdemand=demand)
+            elif newrelationtype == 'duplicate':
+                rel = Relation(type=2, maindemand=demand, subdemand=subdemand)
+            elif newrelationtype == 'link':
+                rel = Relation(type=1, maindemand=demand, subdemand=subdemand)
+            else:
+                raise Http404
+            
+            rel.save()
+            messages.add_message(request, messages.INFO, _('La nouvelle relation a été ajoutée'))
+        
+        # Traitement fini, on redirige
+        return HttpResponseRedirect('demand-4-%i-1.html' % demand_id)
+    
+    # Prendre la liste des demandes liées
+    relations = Relation.objects \
+        .select_related('maindemand', 'subdemand', 'maindemand__status', 'subdemand__status') \
+        .filter(Q(maindemand__id=demand_id) | Q(subdemand__id=demand_id)) \
+        .order_by('type', 'maindemand')
+    
+    for rel in relations:
+        if rel.type == 0:
+            # Dépendance
+            if rel.maindemand == demand:
+                rel.type_title = _('Dépend de')
+            else:
+                rel.type_title = _('Bloque')
+        elif rel.type == 1:
+            # Liaison
+            rel.type_title = _('Liée à')
+        elif rel.type == 2:
+            # Duplication
+            rel.type_title = _('Doublon de')
+            
+        if rel.maindemand == demand:
+            rel.item = rel.subdemand
+        else:
+            rel.item = rel.maindemand
+            
+    # Afficher la template
+    return tpl('demands/handlerelated.html',
+        {'demand': demand,
+         'relations': relations}, request)
 
 #@permission_required('demands.add_demand')
 #def post(request, action, type_or_demand_id):

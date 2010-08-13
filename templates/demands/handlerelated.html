@@ -1,0 +1,60 @@
+{% extends "demands/base.html" %}
+{% load i18n %}
+{% load general_tags %}
+
+{% block title %}{% trans "Gérer les demandes liées" %}{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo;
+    <a href="demand-2-0-0-{{ demand.product_id }}-update-1.html">{% trans demand.product.title %}</a> &raquo;
+    <a href="demand-2-{{ demand.type_id }}-0-{{ demand.product_id }}-update-1.html">{% trans demand.type.name %}</a> &raquo;
+    <a href="demand-4-{{ demand_id }}-1.html">{{ demand.title }}</a> &raquo;
+    {% trans "Gérer les demandes liées" %}
+{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Gérer les demandes liées" %}</h1>
+    
+    <p>
+        {% blocktrans with demand.title as demand %}
+            Cette page vous permet de gérer les demandes liées à «{{ demand }}». Vous pouvez supprimer des liaisons, ou ajouter des demandes dépendantes, bloquées, dupliquées ou simplement liées.
+        {% endblocktrans %}
+    </p>
+    
+    <form action="demand-8-{{ demand.id }}.html" method="post">{% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Demandes liées" %}</legend>
+            
+            <ul>
+                <li>
+                    {% trans "Sélectionnez les liaisons à supprimer" %}
+                    
+                    <ul>
+                        {% for rel in relations %}
+                            <li>
+                                <input type="checkbox" name="relation[{{ rel.id }}]" />
+                                <strong>{{ rel.type_title }}</strong> :
+                                {{ rel.item.title }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <label for="newrelation">{% trans "Ajout d'une relation :" %}</label>
+                    <input type="text" name="newrelation" id="newrelation" />
+                    <select name="newrelationtype">
+                        <option value="depend">{% trans "Dépendance" %}</option>
+                        <option value="block">{% trans "Bloquage" %}</option>
+                        <option value="duplicate">{% trans "Doublon" %}</option>
+                        <option value="link">{% trans "Liée" %}</option>
+                    </select>
+                    <br />
+                    <em>{% trans "Entrez le numéro de la demande à ajouter, 0 ou laissez vide pour ne rien ajouter" %}</em>
+                </li>
+            </ul>
+            
+            <p style="text-align: center;">
+                <input type="submit" />
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}
