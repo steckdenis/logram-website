@@ -254,10 +254,11 @@ class Relation(models.Model):
         
 class Attachment(models.Model):
     author = models.ForeignKey(Profile, verbose_name=_('Auteur'))
-    url = models.FileField(_('Fichier'), upload_to='uploads/%Y/%m/%d/%H%M%S')
+    url = models.FileField(_('Fichier à joindre'), upload_to='uploads/%Y/%m/%d/%H%M%S')
     mimetype = models.CharField(_('Type MIME'), max_length=64)
     description = models.CharField(_('Description'), max_length=200)
     demand = models.ForeignKey(Demand, verbose_name=_('Demande'))
+    invalidated = models.BooleanField(_('Invalidé'))
     
     def __unicode__(self):
         return self.description

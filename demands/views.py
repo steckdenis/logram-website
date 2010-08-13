@@ -30,6 +30,7 @@ from django.contrib import messages
 from django.db.models import Q
 
 from pyv4.demands.models import *
+from pyv4.demands.forms import *
 from pyv4.forum.models import Topic
 from pyv4.general.functions import *
 from pyv4.forum.views import list_posts
@@ -227,29 +228,40 @@ def viewattachment(request, attachment_id):
     except Attachment.DoesNotExist:
         raise Http404
     
-    primarymime = attachment.mimetype.split('/')[0]
-    
-    # Si le mime est du texte, alors l'afficher avec coloration syntaxique
-    content = ''
-    
-    if primarymime == 'text':
-        fl = attachment.url
-    
-        fl.open(mode='rb')
-        code = fl.read()
-        fl.close()
+    if request.method == 'POST':
+        # Vérifier les droits
+        if request.user.has_perm('demands.change_attachment') or attachement.author == request.user.get_profile():
+            attachment.invalidated = ('invalidated' in request.POST)
+            attachment.save()
+            
+            messages.add_message(request, messages.INFO, _("Attachement modifié avec succès"))
+            return HttpResponseRedirect("demand-5-%i.html" % attachment_id)
+        else:
+            raise Http404
+    else:
+        primarymime = attachment.mimetype.split('/')[0]
         
-        try:
-            lexer = get_lexer_for_filename(fl.name, code)
-        except:
-            lexer = TextLexer()
+        # Si le mime est du texte, alors l'afficher avec coloration syntaxique
+        content = ''
         
-        content = highlight(code, lexer, HtmlFormatter(linenos='table', cssclass='codehilite'))
-    
-    return tpl('demands/viewattachment.html',
-        {'attachment': attachment,
-         'primarymime': primarymime,
-         'content': content}, request)
+        if primarymime == 'text':
+            fl = attachment.url
+        
+            fl.open(mode='rb')
+            code = fl.read()
+            fl.close()
+            
+            try:
+                lexer = get_lexer_for_filename(fl.name, code)
+            except:
+                lexer = TextLexer()
+            
+            content = highlight(code, lexer, HtmlFormatter(linenos='table', cssclass='codehilite'))
+        
+        return tpl('demands/viewattachment.html',
+            {'attachment': attachment,
+            'primarymime': primarymime,
+            'content': content}, request)
 
 def downloadattachment(request, attachment_id):
     # Télécharger directement un attachement
@@ -265,6 +277,37 @@ def downloadattachment(request, attachment_id):
     fl.close()
     
     return HttpResponse(s, mimetype=attachment.mimetype)
+    
+def addattachment(request, demand_id):
+    # Ajout d'un attachement à une demande
+    demand_id = int(demand_id)
+    
+    # Trouver la demande
+    try:
+        demand = Demand.objects \
+            .select_related('type', 'product') \
+            .get(pk=demand_id)
+    except Demand.DoesNotExist:
+        raise Http404
+    
+    if request.method == 'POST':
+        form = AddAttachmentForm(request.POST, request.FILES)
+            
+        if form.is_valid():
+            a = form.save(commit=False)
+            a.author = request.user.get_profile()
+            a.demand = demand
+            a.invalidated = False
+            a.save()
+            
+            messages.add_message(request, messages.INFO, _('Attachement ajouté'))
+            return HttpResponseRedirect('demand-4-%i-1.html' % demand_id)
+    else:
+        form = AddAttachmentForm(initial={'mimetype': 'text/plain'})
+    
+    return tpl('demands/addattachment.html', 
+        {'form': form,
+         'demand': demand}, request)
 
 #@permission_required('demands.add_demand')
 #def post(request, action, type_or_demand_id):

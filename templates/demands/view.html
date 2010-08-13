@@ -124,7 +124,11 @@
                         {{ a.author|color_pseudo }}
                     </td>
                     <td>
-                        <a href="demand-5-{{ a.id }}.html">{{ a.description }}</a>
+                        {% if a.invalidated %}
+                            <del><a href="demand-5-{{ a.id }}.html">{{ a.description }}</a></del>
+                        {% else %}
+                            <a href="demand-5-{{ a.id }}.html">{{ a.description }}</a>
+                        {% endif %}
                         (<a href="demand-6-{{ a.id }}.html">{% trans "Télécharger" %}</a>)
                     </td>
                     <td style="text-align: center;">
@@ -134,7 +138,7 @@
             {% endfor %}
             <tr>
                 <td colspan="3" style="text-align: center;">
-                    <a href="TODO">{% trans "Ajouter un attachement" %}</a>
+                    <a href="demand-7-{{ demand.id }}.html">{% trans "Ajouter un attachement" %}</a>
                 </td>
             </tr>
         </table>

@@ -30,4 +30,5 @@ urlpatterns = patterns('pyv4.demands.views',
     (r'^4-(?P<demand_id>\d+)-(?P<page>\d+)\.html$', 'view'),
     (r'^5-(?P<attachment_id>\d+)\.html$', 'viewattachment'),
     (r'^6-(?P<attachment_id>\d+)\.html$', 'downloadattachment'),
+    (r'^7-(?P<demand_id>\d+)\.html$', 'addattachment'),
 )
