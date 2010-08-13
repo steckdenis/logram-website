@@ -199,7 +199,8 @@ def view(request, demand_id, page):
     # Prendre la liste des assignés
     assignees = Assignee.objects \
         .select_related('user') \
-        .filter(demand=demand)
+        .filter(demand=demand) \
+        .order_by('type')
         
     # Prendre la liste des fichiers attachés
     attachments = Attachment.objects \
@@ -278,6 +279,7 @@ def downloadattachment(request, attachment_id):
     
     return HttpResponse(s, mimetype=attachment.mimetype)
     
+@login_required
 def addattachment(request, demand_id):
     # Ajout d'un attachement à une demande
     demand_id = int(demand_id)
@@ -308,7 +310,8 @@ def addattachment(request, demand_id):
     return tpl('demands/addattachment.html', 
         {'form': form,
          'demand': demand}, request)
-         
+    
+@permission_required('demands.change_demand')
 def handlerelated(request, demand_id):
     # Gérer les demandes liées
     demand_id = int(demand_id)
@@ -331,7 +334,7 @@ def handlerelated(request, demand_id):
         
         if len(ids) != 0:
             # Prendre toutes les relations qui correspondent
-            relations = Relation.objects.filter(id__in=ids).delete()
+            Relation.objects.filter(id__in=ids).delete()
             
             messages.add_message(request, messages.INFO, _('Les relations demandées ont été supprimées'))
             
@@ -394,6 +397,74 @@ def handlerelated(request, demand_id):
     return tpl('demands/handlerelated.html',
         {'demand': demand,
          'relations': relations}, request)
+         
+@permission_required('demands.change_demand')
+def handleassignees(request, demand_id):
+    # Gérer les demandes liées
+    demand_id = int(demand_id)
+    
+    # Trouver la demande
+    try:
+        demand = Demand.objects \
+            .select_related('type', 'product') \
+            .get(pk=demand_id)
+    except Demand.DoesNotExist:
+        raise Http404
+    
+    if request.method == 'POST':
+        # Récupérer les ids des liaisons à supprimer
+        ids = []
+
+        for p in request.POST:
+            if p.startswith('assignee'):
+                ids.append(int(p.split('[')[1][0:-1]))
+        
+        if len(ids) != 0:
+            # Prendre toutes les relations qui correspondent
+            Assignee.objects.filter(id__in=ids).delete()
+            
+            messages.add_message(request, messages.INFO, _('Les assignations demandées ont été supprimées'))
+            
+        # Voir si on ajoute une relation
+        newassignee = request.POST['newassignee']
+        
+        if len(newassignee) != 0:
+            newassigneetype = request.POST['newassigneetype']
+            
+            # Créer la relation
+            if newassigneetype == 'user':
+                try:
+                    user = Profile.objects.select_related('user').get(uname=newassignee)
+                except Profile.DoesNotExist:
+                    messages.add_message(request, messages.ERROR, _('L\'utilisateur demandé n\'existe pas'))
+                    return HttpResponseRedirect('demand-9-%i.html' % demand_id)
+                    
+                a = Assignee(type=0, demand=demand, user=user, value=user.user.email)
+            elif newassigneetype == 'email':
+                a = Assignee(type=1, demand=demand, value=newassignee)
+            elif newassigneetype == 'url':
+                a = Assignee(type=2, demand=demand, value=newassignee)
+            else:
+                raise Http404
+            
+            a.save()
+            messages.add_message(request, messages.INFO, _('La nouvelle assignation a été ajoutée'))
+        
+        # Traitement fini, on redirige
+        return HttpResponseRedirect('demand-4-%i-1.html' % demand_id)
+    
+    # Prendre la liste des demandes liées
+    assignees = Assignee.objects \
+        .select_related('user') \
+        .filter(demand=demand)
+    
+    for a in assignees:
+        a.type_title = ASSIGNEE_TYPE[a.type]
+            
+    # Afficher la template
+    return tpl('demands/handleassignees.html',
+        {'demand': demand,
+         'assignees': assignees}, request)
 
 #@permission_required('demands.add_demand')
 #def post(request, action, type_or_demand_id):

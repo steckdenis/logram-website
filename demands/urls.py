@@ -32,4 +32,5 @@ urlpatterns = patterns('pyv4.demands.views',
     (r'^6-(?P<attachment_id>\d+)\.html$', 'downloadattachment'),
     (r'^7-(?P<demand_id>\d+)\.html$', 'addattachment'),
     (r'^8-(?P<demand_id>\d+)\.html$', 'handlerelated'),
+    (r'^9-(?P<demand_id>\d+)\.html$', 'handleassignees'),
 )

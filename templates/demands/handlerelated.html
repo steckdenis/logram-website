@@ -1,13 +1,12 @@
 {% extends "demands/base.html" %}
 {% load i18n %}
-{% load general_tags %}
 
 {% block title %}{% trans "Gérer les demandes liées" %}{% endblock %}
 
 {% block FAriane %}{{ block.super }} &raquo;
     <a href="demand-2-0-0-{{ demand.product_id }}-update-1.html">{% trans demand.product.title %}</a> &raquo;
     <a href="demand-2-{{ demand.type_id }}-0-{{ demand.product_id }}-update-1.html">{% trans demand.type.name %}</a> &raquo;
-    <a href="demand-4-{{ demand_id }}-1.html">{{ demand.title }}</a> &raquo;
+    <a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a> &raquo;
     {% trans "Gérer les demandes liées" %}
 {% endblock %}
 

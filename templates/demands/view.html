@@ -138,11 +138,13 @@
                     </td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td colspan="3" style="text-align: center;">
-                    <a href="demand-7-{{ demand.id }}.html">{% trans "Ajouter un attachement" %}</a>
-                </td>
-            </tr>
+            {% if user.is_authenticated %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                        <a href="demand-7-{{ demand.id }}.html">{% trans "Ajouter un attachement" %}</a>
+                    </td>
+                </tr>
+            {% endif %}
         </table>
         
         <hr style="clear: right;" />
@@ -154,7 +156,8 @@
         {% if perms.demands.change_demand %}
             <div style="text-align: right;">
                 <a href="TODO">{% trans "Éditer" %}</a> &bull;
-                <a href="demand-8-{{ demand.id }}.html">{% trans "Gérer les demandes liées" %}</a>
+                <a href="demand-8-{{ demand.id }}.html">{% trans "Gérer les demandes liées" %}</a> &bull;
+                <a href="demand-9-{{ demand.id }}.html">{% trans "Gérer les assignations" %}</a>
             </div>
         {% endif %}
     </div>
