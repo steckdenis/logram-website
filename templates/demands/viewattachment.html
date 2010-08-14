@@ -37,13 +37,15 @@
         {% endif %}
     {% endif %}
     
-    {% if perms.demands.change_attachment or attachement.author == request.user.get_profile %}
-        <form action="demand-5-{{ attachment.id }}.html" method="post">{% csrf_token %}
-            <p style="text-align: center;">
-                <input type="checkbox" name="invalidated" {% if attachment.invalidated %}checked="checked"{% endif %} />
-                {% trans "Cet attachement est invalide" %}
-                <input type="submit" />
-            </p>
-        </form>
+    {% if request.user.is_authenticated %}
+        {% if perms.demands.change_attachment or attachement.author == request.user.get_profile %}
+            <form action="demand-5-{{ attachment.id }}.html" method="post">{% csrf_token %}
+                <p style="text-align: center;">
+                    <input type="checkbox" name="invalidated" {% if attachment.invalidated %}checked="checked"{% endif %} />
+                    {% trans "Cet attachement est invalide" %}
+                    <input type="submit" />
+                </p>
+            </form>
+        {% endif %}
     {% endif %}
 {% endblock %}

@@ -231,7 +231,7 @@ def viewattachment(request, attachment_id):
     
     if request.method == 'POST':
         # Vérifier les droits
-        if request.user.has_perm('demands.change_attachment') or attachement.author == request.user.get_profile():
+        if request.user.is_authenticated() and (request.user.has_perm('demands.change_attachment') or attachement.author == request.user.get_profile()):
             attachment.invalidated = ('invalidated' in request.POST)
             attachment.save()
             
