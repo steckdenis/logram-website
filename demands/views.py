@@ -466,6 +466,251 @@ def handleassignees(request, demand_id):
         {'demand': demand,
          'assignees': assignees}, request)
 
+@login_required
+def newdemand(request, type_id, product_id, component_id):
+    # Créer une demande, étape 1
+    type_id = int(type_id)
+    product_id = int(product_id)
+    component_id = int(component_id)
+    
+    if request.method == 'GET':
+        return edit_step1(request, type_id, product_id, component_id, 0)
+    else:
+        demand_id = int(request.POST['demand_id'])
+        platform_id = int(request.POST['platform_id'])
+        product_id = int(request.POST['product_id'])
+        type_id = int(request.POST['type_id'])
+        
+        if demand_id != 0 and not request.user.has_perm('demands.change_demand'):
+            raise Http404
+        
+        if demand_id != 0:
+            # Prendre la demande, mettre à jour ses informations, et revenir sur la page d'édition des demandes
+            demand = get_object_or_404(Demand, pk=demand_id)
+            pl = get_object_or_404(Platform, pk=platform_id)
+            p = get_object_or_404(Product, pk=product_id)
+            t = get_object_or_404(Type, pk=type_id)
+            
+            demand.platform = pl
+            demand.product = p
+            demand.type = t
+            demand.save()
+            
+            return HttpResponseRedirect('demand-11-%i.html' % demand_id)
+        else:
+            # Simplement rediriger vers l'étape 2
+            return HttpResponseRedirect('demand-12-%i-%i-%i-%i.html' % (type_id, product_id, component_id, platform_id))
+
+@login_required
+def setstep1(request, demand_id, component_id):
+    # POST de l'étape 1
+    demand_id = int(demand_id)
+    component_id = int(component_id)
+    
+    if request.method != 'POST':
+        raise Http404
+    
+    platform_id = int(request.POST['platform_id'])
+    product_id = int(request.POST['product_id'])
+    type_id = int(request.POST['type_id'])
+    
+    if demand_id != 0 and not request.user.has_perm('demands.change_demand'):
+        raise Http404
+    
+    if demand_id != 0:
+        # Prendre la demande, mettre à jour ses informations, et revenir sur la page d'édition des demandes
+        demand = get_object_or_404(Demand, pk=demand_id)
+        pl = get_object_or_404(Platform, pk=platform_id)
+        p = get_object_or_404(Product, pk=product_id)
+        t = get_object_or_404(Type, pk=type_id)
+        
+        demand.platform = pl
+        demand.product = p
+        demand.type = t
+        demand.save()
+        
+        return HttpResponseRedirect('demand-11-%i.html' % demand_id)
+    else:
+        # Simplement rediriger vers l'étape 2
+        return HttpResponseRedirect('demand-12-%i-%i-%i-%i.html' % (type_id, product_id, component_id, platform_id))
+
+@permission_required('demands.change_demand')
+def edit_demand(request, demand_id):
+    # Éditer une demande
+    demand_id = int(demand_id)
+    
+    if request.method == 'GET':
+        return edit_step2(request, 0, 0, 0, 0, demand_id)
+    else:
+        title = request.POST['title']
+        body = request.POST['body']
+        type_id = int(request.POST['type_id'])
+        product_id = int(request.POST['product_id'])
+        component_id = int(request.POST['component_id'])
+        pversion_id = int(request.POST['pversion_id'])
+        platform_id = int(request.POST['platform_id'])
+        platform_version_id = int(request.POST['platform_version_id'])
+        arch_id = int(request.POST['arch_id'])
+        
+        if demand_id:
+            status_id = int(request.POST['status_id'])
+            priority_id = int(request.POST['priority_id'])
+            done = int(request.POST['done'])
+            done = done if done < 100 else 100
+        
+        fixed_in_id = request.POST.get('fixed_in_id', 'none')
+        
+        if fixed_in_id == 'none':
+            fixed_in_id = None
+        else:
+            fixed_in_id = int(fixed_in_id)
+        
+        type = get_object_or_404(Type, pk=type_id)
+        product = get_object_or_404(Product, pk=product_id)
+        component = get_object_or_404(Component, pk=component_id)
+        product_version = get_object_or_404(ProductVersion, pk=pversion_id)
+        platform = get_object_or_404(Platform, pk=platform_id)
+        platform_version = get_object_or_404(PlatformVersion, pk=platform_version_id)
+        arch = get_object_or_404(Arch, pk=arch_id)
+        
+        if demand_id:
+            status = get_object_or_404(Status, pk=status_id)
+            priority = get_object_or_404(Priority, pk=priority_id)
+            
+            if fixed_in_id:
+                fixed_in = get_object_or_404(ProductVersion, pk=fixed_in_id)
+            else:
+                fixed_in = None
+                
+            demand = get_object_or_404(Demand, pk=demand_id)
+            demand.title = title
+            demand.content = body
+            demand.done = done
+            demand.reporter = request.user.get_profile()
+            demand.type = type
+            demand.product = product
+            demand.component = component
+            demand.product_version = product_version
+            demand.fixed_in = fixed_in
+            demand.platform = platform
+            demand.platform_version = platform_version
+            demand.architecture = arch
+            demand.status = status
+            demand.priority = priority
+            
+            # TODO: Stats
+            
+            demand.save()
+            messages.add_message(request, messages.INFO, _('La demande a été éditée'))
+            return HttpResponseRedirect('demand-4-%i-1.html' % demand_id)
+        else:
+            pass
+
+@login_required
+def newdemand_step2(request, type_id, product_id, component_id, platform_id):
+    # Passer à la deuxième étape quand on a créé la demande
+    type_id = int(type_id)
+    product_id = int(product_id)
+    component_id = int(component_id)
+    platform_id = int(platform_id)
+    
+    return edit_step2(request, type_id, product_id, component_id, platform_id, 0)
+
+@permission_required('demands.change_demand')
+def change_product(request, demand_id):
+    # Changer le produit ou la plateforme d'une demande déjà existante
+    demand_id = int(demand_id)
+    
+    return edit_step1(request, 0, 0, 0, demand_id)
+
+def edit_step1(request, type_id, product_id, component_id, demand_id):
+    # Afficher un formulaire permettant de choisir le produit et la plateforme d'une demande,
+    # car on a besoin de ces informations pour sélectionner, dans step2, la version affectée du
+    # produit ou de la plateforme.
+    demand = None
+    
+    if demand_id != 0:
+        try:
+            demand = Demand.objects \
+                .select_related('type', 'product') \
+                .get(pk=demand_id)
+        except Demand.DoesNotExist:
+            raise Http404
+        
+        product_id = demand.product_id
+        component_id = demand.component_id
+        type_id = demand.type_id
+        
+    products = Product.objects.all()
+    platforms = Platform.objects.all()
+    types = Type.objects.all()
+        
+    return tpl('demands/edit_step1.html',
+        {'demand': demand,
+         'products': products,
+         'platforms': platforms,
+         'types': types,
+         'demand_id': demand_id,
+         'type_id': type_id,
+         'component_id': component_id,
+         'product_id': product_id}, request)
+
+def edit_step2(request, type_id, product_id, component_id, platform_id, demand_id):
+    # Deuxième phase de l'édition ou création d'une demande. On a maintenant son produit
+    # et sa plateforme, ainsi que son type. On renseigne ici tous les autres champs.
+    demand = None
+    
+    if demand_id != 0:
+        try:
+            demand = Demand.objects \
+                .select_related('platform', 'product', 'type') \
+                .get(pk=demand_id)
+        except Demand.DoesNotExist:
+            raise Http404
+        
+        pl = demand.platform
+        p = demand.product
+        t = demand.type
+        
+        type_id = t.id
+        product_id = p.id
+        component_id = demand.component_id
+        platform_id = pl.id
+        
+    else:
+        pl = get_object_or_404(Platform, pk=platform_id)
+        p = get_object_or_404(Product, pk=product_id)
+        t = get_object_or_404(Type, pk=type_id)
+    
+    # Différentes listes (TODO: Pas moyen de cacher toutes ces requêtes ?)
+    pversions = ProductVersion.objects.filter(product=p)
+    plversions = PlatformVersion.objects.filter(platform=pl)
+    components = Component.objects.filter(product=p)
+    archs = Arch.objects.all()
+    status = None
+    priorities = None
+    
+    if demand_id != 0:
+        status = Status.objects.all()
+        priorities = Priority.objects.all()
+        
+    return tpl('demands/edit_step2.html',
+        {'demand': demand,
+         'type_id': type_id,
+         'product_id': product_id,
+         'component_id': component_id,
+         'platform_id': platform_id,
+         'demand_id': demand_id,
+         'platform': pl,
+         'product': p,
+         'type': t,
+         'pversions': pversions,
+         'plversions': plversions,
+         'components': components,
+         'archs': archs,
+         'status': status,
+         'priorities': priorities}, request)
+        
 #@permission_required('demands.add_demand')
 #def post(request, action, type_or_demand_id):
     ## Poster/Proposer/Éditer une demande. type_or_demand_id est un paeramètre qui change en

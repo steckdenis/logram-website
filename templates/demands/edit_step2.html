@@ -1,0 +1,186 @@
+{% extends "demands/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% if demand %}
+        {% trans "Édition d'une demande" %}
+    {% else %}
+        {% trans "Nouvelle demande, étape 2" %}
+    {% endif %}
+{% endblock %}
+
+{% block FAriane %}{{ block.super }} &raquo;
+    {% if demand %}
+        <a href="demand-2-0-0-{{ demand.product_id }}-update-1.html">{% trans demand.product.title %}</a> &raquo;
+        <a href="demand-2-{{ demand.type_id }}-0-{{ demand.product_id }}-update-1.html">{% trans demand.type.name %}</a> &raquo;
+        <a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a> &raquo;
+        {% trans "Édition" %}
+    {% else %}
+        {% trans "Nouvelle demande, étape 2" %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {% if demand %}
+            {% trans "Édition d'une demande" %}
+        {% else %}
+            {% trans "Nouvelle demande, étape 2" %}
+        {% endif %}
+    </h1>
+    
+    <form action="demand-11-{{ demand_id }}.html" method="post">{% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Informations sur la demande" %}</legend>
+            
+            <p>
+                <ul class="form_ul">
+                    <li>
+                        <label for="title">{% trans "Titre :" %}</label>
+                        <input type="text" name="title" id="title" value="{{ demand.title }}" />
+                        <br />
+                        <span class="forum_subtitle">{% trans "Essayez d'être à la fois bref et précis. Un très bon titre vous assure que les développeurs prendront votre demande en compte du mieux qu'ils peuvent." %}</span>
+                    </li>
+                    <li>
+                        <label for="type_id">{% trans "Type :" %}</label>
+                        {% trans type.name %}
+                        <input type="hidden" name="type_id" id="type_id" value="{{ type_id }}" />
+                        {% if demand %}
+                            (<a href="demand-13-{{ demand_id }}.html">{% trans "Changer" %}</a>)
+                        {% else %}
+                            <br />
+                            <span class="forum_subtitle">{% trans "Information entrée à l'étape précédente. Utilisez la flèche «Précédant» de votre navigateur web si vous vous êtes trompé." %}</span>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <label for="product_id">{% trans "Produit :" %}</label>
+                        {% trans product.title %}
+                        <input type="hidden" name="product_id" id="product_id" value="{{ product_id }}" />
+                        {% if demand %}
+                            (<a href="demand-13-{{ demand_id }}.html">{% trans "Changer" %}</a>)
+                        {% else %}
+                            <br />
+                            <span class="forum_subtitle">{% trans "Information entrée à l'étape précédente. Utilisez la flèche «Précédant» de votre navigateur web si vous vous êtes trompé." %}</span>
+                        {% endif %}
+                        <ul>
+                            <li>
+                                <label for="component_id">{% trans "Composant :" %}</label>
+                                <select name="component_id" id="component_id">
+                                    {% for c in components %}
+                                        <option value="{{ c.id }}" {% if c.id == component_id %}selected="selected"{% endif %}>
+                                            {{ c.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <br />
+                                <span class="forum_subtitle">{% trans "Ce choix vous permet d'affiner ce que vous avez déjà renseigné dans «Produit»." %}</span>
+                            </li>
+                            <li>
+                                <label for="pversion_id">{% trans "Version :" %}</label>
+                                <select name="pversion_id" id="pversion_id">
+                                    {% for v in pversions %}
+                                        <option value="{{ v.id }}" {% if v.id == demand.product_version_id %}selected="selected"{% endif %}>
+                                            {{ v.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <br />
+                                <span class="forum_subtitle">{% trans "Version du produit à laquelle se rapporte votre demande, généralement celle que vous utilisez." %}</span>
+                            </li>
+                            {% if demand %}
+                                <li>
+                                    <label for="fixed_in_id">{% trans "Fixé dans la version :" %}</label>
+                                    <select name="fixed_in_id" id="fixed_in_id">
+                                        <option value="none">{% trans "Indéfini" %}</option>
+                                        {% for v in pversions %}
+                                            <option value="{{ v.id }}" {% if v.id == demand.fixed_in_id %}selected="selected"{% endif %}>
+                                                {{ v.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <br />
+                                    <span class="forum_subtitle">{% trans "Version du produit contenant le correctif ou l'objet de la demande." %}</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>{% trans "Plateforme :" %}</strong>
+                        {% trans platform.name %}
+                        <input type="hidden" name="platform_id" id="platform_id" value="{{ platform_id }}" />
+                        {% if demand %}
+                            (<a href="demand-13-{{ demand_id }}.html">{% trans "Changer" %}</a>)
+                        {% else %}
+                            <br />
+                            <span class="forum_subtitle">{% trans "Information entrée à l'étape précédente. Utilisez la flèche «Précédant» de votre navigateur web si vous vous êtes trompé." %}</span>
+                        {% endif %}
+                        <ul>
+                            <li>
+                                <label for="platform_version_id">{% trans "Version :" %}</label>
+                                <select name="platform_version_id" id="platform_version_id">
+                                    {% for v in plversions %}
+                                        <option value="{{ v.id }}" {% if v.id == demand.platform_version_id %}selected="selected"{% endif %}>
+                                            {{ v.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <br />
+                                <span class="forum_subtitle">{% trans "Version de la plateforme que vous utilisez." %}</span>
+                            </li>
+                            <li>
+                                <label for="arch_id">{% trans "Architecture :" %}</label>
+                                <select name="arch_id" id="arch_id">
+                                    {% for a in archs %}
+                                        {% if a.name != "all" %}
+                                            <option value="{{ a.id }}" {% if a.id == demand.architecture_id %}selected="selected"{% endif %}>
+                                                {{ a.name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <br />
+                                <span class="forum_subtitle">{% trans "Architecture que vous utilisez." %}</span>
+                            </li>
+                        </ul>
+                    </li>
+                    {% if demand %}
+                        <li>
+                            <label for="status_id">{% trans "Status :" %}</label>
+                            <select name="status_id" id="status_id">
+                                {% for s in status %}
+                                    <option value="{{ s.id }}" {% if s.id == demand.status_id %}selected="selected"{% endif %}>
+                                        {{ s.name }} - {{ s.description }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <br />
+                            <span class="forum_subtitle">{% trans "Status de la demande." %}</span>
+                        </li>
+                        <li>
+                            <label for="priority_id">{% trans "Priorité :" %}</label>
+                            <select name="priority_id" id="priority_id">
+                                {% for p in priorities %}
+                                    <option value="{{ p.id }}" {% if p.id == demand.priority_id %}selected="selected"{% endif %}>
+                                        {{ p.name }} - {{ p.description }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <br />
+                            <span class="forum_subtitle">{% trans "Priorité de la demande." %}</span>
+                        </li>
+                        <li>
+                            <label for="done">{% trans "Pourcentage effectué :" %}</label>
+                            <input type="text" name="done" id="done" value="{{ demand.done }}" />
+                            <br />
+                            <span class="forum_subtitle">{% trans "De 0 à 100" %}</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </p>
+            
+            {% with demand.content as body %}
+                {% include "global/lform.html" %}
+            {% endwith %}
+        </fieldset>
+    </form>
+{% endblock %}

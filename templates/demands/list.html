@@ -42,7 +42,7 @@
         
         <dl>
             {% for component in product.component_set.all %}
-                <dt><strong>{{ component.name }}</strong> (<a href="TODO">{% trans "Soumettre une demande" %}</a>)</dt>
+                <dt><strong>{{ component.name }}</strong> (<a href="demand-10-0-{{ product.id }}-{{ component.id }}.html">{% trans "Soumettre une demande" %}</a>)</dt>
                 <dd>{{ component.description|translate|lcode }}</dd>
             {% endfor %}
         </dl>
