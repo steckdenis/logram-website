@@ -604,7 +604,47 @@ def edit_demand(request, demand_id):
             messages.add_message(request, messages.INFO, _('La demande a été éditée'))
             return HttpResponseRedirect('demand-4-%i-1.html' % demand_id)
         else:
-            pass
+            # Trouver le status par défaut
+            status = get_object_or_404(Status, default=True)
+            priority = get_object_or_404(Priority, default=True)
+            
+            # Créer un sujet de forum pour la demande
+            topic = Topic(author=request.user.get_profile(), 
+                          title=title, 
+                          subtitle='', 
+                          lang=request.LANGUAGE_CODE.split('_')[0],
+                          last_post_page=1, 
+                          num_posts=0, 
+                          stick=False, 
+                          closed=False, 
+                          resolved=False, 
+                          p_type=2, 
+                          parent_id=0)
+            topic.save()
+            
+            # Créer la demande (TODO: Assignees par défaut)
+            demand = Demand(title=title,
+                            content=body,
+                            done=0,
+                            reporter=request.user.get_profile(),
+                            type=type,
+                            topic=topic,
+                            product=product,
+                            component=component,
+                            product_version=product_version,
+                            platform=platform,
+                            platform_version=platform_version,
+                            architecture=arch,
+                            status=status,
+                            priority=priority)
+         
+            demand.save()
+            
+            topic.parent_id = demand.id
+            topic.save()
+            
+            messages.add_message(request, messages.INFO, _('Nouvelle demande créée avec succès'))
+            return HttpResponseRedirect('demand-4-%i-1.html' % demand.id)
 
 @login_required
 def newdemand_step2(request, type_id, product_id, component_id, platform_id):
