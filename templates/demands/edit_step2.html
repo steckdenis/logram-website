@@ -105,7 +105,7 @@
                         </ul>
                     </li>
                     <li>
-                        <strong>{% trans "Plateforme :" %}</strong>
+                        <label for="platform_id">{% trans "Plateforme :" %}</label>
                         {% trans platform.name %}
                         <input type="hidden" name="platform_id" id="platform_id" value="{{ platform_id }}" />
                         {% if demand %}
