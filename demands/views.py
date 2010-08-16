@@ -518,18 +518,7 @@ def setstep1(request, demand_id, component_id):
         raise Http404
     
     if demand_id != 0:
-        # Prendre la demande, mettre à jour ses informations, et revenir sur la page d'édition des demandes
-        demand = get_object_or_404(Demand, pk=demand_id)
-        pl = get_object_or_404(Platform, pk=platform_id)
-        p = get_object_or_404(Product, pk=product_id)
-        t = get_object_or_404(Type, pk=type_id)
-        
-        demand.platform = pl
-        demand.product = p
-        demand.type = t
-        demand.save()
-        
-        return HttpResponseRedirect('demand-11-%i.html' % demand_id)
+        return HttpResponseRedirect('demand-11-%i.html?p=%i&pl=%i&t=%i' % (demand_id, product_id, platform_id, type_id))
     else:
         # Simplement rediriger vers l'étape 2
         return HttpResponseRedirect('demand-12-%i-%i-%i-%i.html' % (type_id, product_id, component_id, platform_id))
@@ -540,7 +529,12 @@ def edit_demand(request, demand_id):
     demand_id = int(demand_id)
     
     if request.method == 'GET':
-        return edit_step2(request, 0, 0, 0, 0, demand_id)
+        return edit_step2(request,
+                          request.GET.get('t', 0), 
+                          request.GET.get('p', 0), 
+                          0, 
+                          request.GET.get('pl', 0), 
+                          demand_id)
     else:
         title = request.POST['title']
         body = request.POST['body']
@@ -583,6 +577,25 @@ def edit_demand(request, demand_id):
                 fixed_in = None
                 
             demand = get_object_or_404(Demand, pk=demand_id)
+            
+            # Supprimer les default assignees de l'ancien produit (si on a changé)
+            # et ajouter ceux du nouveau.
+            if demand.product_id != product_id:
+                demand.assignee_set.filter(default=True).delete()
+                
+                default_assignees = DefaultAssignee.objects \
+                    .select_related('user') \
+                    .filter(product=product)
+                    
+                for a in default_assignees:
+                    assignee = Assignee(type=a.type,
+                                        user=a.user,
+                                        value=a.value,
+                                        demand=demand,
+                                        default=True)
+                
+                    assignee.save()
+            
             demand.title = title
             demand.content = body
             demand.done = done
@@ -599,9 +612,6 @@ def edit_demand(request, demand_id):
             demand.priority = priority
             
             # TODO: Stats
-            
-            # TODO: Supprimer les default assignees de l'ancien produit (si on a changé)
-            #       et ajouter ceux du nouveau.
             
             demand.save()
             messages.add_message(request, messages.INFO, _('La demande a été éditée'))
@@ -625,7 +635,7 @@ def edit_demand(request, demand_id):
                           parent_id=0)
             topic.save()
             
-            # Créer la demande (TODO: Assignees par défaut)
+            # Créer la demande
             demand = Demand(title=title,
                             content=body,
                             done=0,
@@ -725,15 +735,25 @@ def edit_step2(request, type_id, product_id, component_id, platform_id, demand_i
         except Demand.DoesNotExist:
             raise Http404
         
-        pl = demand.platform
-        p = demand.product
-        t = demand.type
+        if platform_id == 0:
+            pl = demand.platform
+            platform_id = pl.id
+        else:
+            pl = get_object_or_404(Platform, pk=platform_id)
         
-        type_id = t.id
-        product_id = p.id
+        if product_id == 0:
+            p = demand.product
+            product_id = p.id
+        else:
+            p = get_object_or_404(Product, pk=product_id)
+        
+        if type_id == 0:
+            t = demand.type
+            type_id = t.id
+        else:
+            t = get_object_or_404(Type, pk=type_id)
+        
         component_id = demand.component_id
-        platform_id = pl.id
-        
     else:
         pl = get_object_or_404(Platform, pk=platform_id)
         p = get_object_or_404(Product, pk=product_id)
