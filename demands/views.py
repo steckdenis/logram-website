@@ -600,6 +600,9 @@ def edit_demand(request, demand_id):
             
             # TODO: Stats
             
+            # TODO: Supprimer les default assignees de l'ancien produit (si on a changé)
+            #       et ajouter ceux du nouveau.
+            
             demand.save()
             messages.add_message(request, messages.INFO, _('La demande a été éditée'))
             return HttpResponseRedirect('demand-4-%i-1.html' % demand_id)
@@ -642,6 +645,20 @@ def edit_demand(request, demand_id):
             
             topic.parent_id = demand.id
             topic.save()
+            
+            # Ajouter les assignés par défaut à cette demande
+            default_assignees = DefaultAssignee.objects \
+                .select_related('user') \
+                .filter(product=product)
+                
+            for a in default_assignees:
+                assignee = Assignee(type=a.type,
+                                    user=a.user,
+                                    value=a.value,
+                                    demand=demand,
+                                    default=True)
+              
+                assignee.save()
             
             messages.add_message(request, messages.INFO, _('Nouvelle demande créée avec succès'))
             return HttpResponseRedirect('demand-4-%i-1.html' % demand.id)

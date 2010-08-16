@@ -272,6 +272,7 @@ class Assignee(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('Utilisateur'), blank=True, null=True)
     value = models.CharField(_('Url ou adresse e-mail'), max_length=256)
     demand = models.ForeignKey(Demand, verbose_name=_('Demande'))
+    default = models.BooleanField(_('Assigné par défaut'))
     
     def __unicode__(self):
         if self.type == 0:
