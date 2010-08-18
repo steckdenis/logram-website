@@ -36,11 +36,15 @@ from pyv4.users.forms import PseudoForm, PassForm, DesignForm, ProfileForm
 from pyv4.pastebin.models import *
 
 actnames = {
-    'demands/add_child.html': gettext_lazy('Ajout d\'une sous-demande'),
-    'demands/edit.html': gettext_lazy('Édition d\'une demande'),
-    'demands/index.html': gettext_lazy('Accueil des demandes'),
+    'demands/addattachment.html': gettext_lazy('Ajout d\'un attachement'),
+    'demands/edit_step1.html': gettext_lazy('Édition d\'une demande, étape 1'),
+    'demands/edit_step2.html': gettext_lazy('Édition d\'une demande, étape 2'),
+    'demands/handleassignees.html': gettext_lazy('Gestion des assignés à une demande'),
+    'demands/handlerelated.html': gettext_lazy('Gestion des demandes liées'),
+    'demands/index.html': gettext_lazy('Index des demandes'),
     'demands/list.html': gettext_lazy('Liste des demandes'),
-    'demands/view.html': gettext_lazy('Affiche d\'une demande'),
+    'demands/viewattachment.html': gettext_lazy('Affichage d\'un attachement'),
+    'demands/view.html': gettext_lazy('Affichage d\'une demande'),
     'feeds/index.html': gettext_lazy('Liste des flux RSS'),
     'forum/addpoll.html': gettext_lazy('Ajout d\'un sondage'),
     'forum/alert.html': gettext_lazy('Création d\'une alerte'),
