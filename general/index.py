@@ -25,6 +25,7 @@ from djapian import space, Indexer, CompositeIndexer
 from pyv4.forum.models import Post
 from pyv4.wiki.models import Page
 from pyv4.news.models import News
+from pyv4.demands.models import Demand
 
 class PostIndexer(Indexer):
     fields = ['contents']
@@ -47,9 +48,17 @@ class WikiIndexer(Indexer):
         ('title', 'title'),
         ('lang', 'lang')
     ]
+    
+class DemandIndexer(Indexer):
+    fields = ['title', 'content']
+    tags = [
+        ('title', 'title'),
+        ('content', 'content')
+    ]
 
 space.add_index(Post, PostIndexer, attach_as='indexer')
 space.add_index(Page, WikiIndexer, attach_as='indexer')
 space.add_index(News, NewsIndexer, attach_as='indexer')
+space.add_index(Demand, DemandIndexer, attach_as='indexer')
 
-complete_indexer = CompositeIndexer(Post.indexer, Page.indexer, News.indexer)
+complete_indexer = CompositeIndexer(Post.indexer, Page.indexer, News.indexer, Demand.indexer)

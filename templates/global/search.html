@@ -47,11 +47,17 @@
                         <em>{{ hit.instance.intro|truncatewords:15 }}</em>
                         (<a href="news-2-{{ hit.instance.id }}-1-{{ hit.instance.title|slugify }}.html">{{ hit.instance.title }}</a>)
                     {% endif %}
+                    
+                    {% if hit.type == "Demand" %}
+                        <em>{{ hit.instance.content|truncatewords:15 }}</em>
+                        (<a href="demand-4-{{ hit.instance.id }}-1.html">{{ hit.instance.title }}</a>)
+                        {% endif %}
                 </td>
                 <td style="text-align: center;">
                     {% if hit.type == "Post" %}{% trans "Message" %}{% endif %}
                     {% if hit.type == "Page" %}{% trans "Wiki" %}{% endif %}
                     {% if hit.type == "News" %}{% trans "Nouvelle" %}{% endif %}
+                    {% if hit.type == "Demand" %}{% trans "Demande" %}{% endif %}
                 </td>
             </tr>
         {% endfor %}
