@@ -321,7 +321,8 @@ def post(request, topic_id):
         maildemand = tpl.render(c)
     
         send_mail( \
-            u'%(user)s a posté un message dans «%(topic)s»' % {
+            u'[DEMAND %(id)i] New message from %(user)s in "%(topic)s"' % {
+                'id': topic.parent_id,
                 'user': request.user.username, 
                 'topic': topic.title}, \
             maildemand, \

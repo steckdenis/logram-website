@@ -28,6 +28,9 @@ from django.utils.translation import gettext as _
 from django.core.cache import cache
 from django.contrib import messages
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context, Template
 
 from pyv4.demands.models import *
 from pyv4.demands.forms import *
@@ -587,6 +590,8 @@ def edit_demand(request, demand_id):
                     .select_related('user') \
                     .filter(product=product)
                     
+                send_assignee_mails(default_assignees, demand, product)
+                    
                 for a in default_assignees:
                     assignee = Assignee(type=a.type,
                                         user=a.user,
@@ -660,6 +665,8 @@ def edit_demand(request, demand_id):
             default_assignees = DefaultAssignee.objects \
                 .select_related('user') \
                 .filter(product=product)
+                
+            send_assignee_mails(default_assignees, demand, product)
                 
             for a in default_assignees:
                 assignee = Assignee(type=a.type,
@@ -787,3 +794,26 @@ def edit_step2(request, type_id, product_id, component_id, platform_id, demand_i
          'archs': archs,
          'status': status,
          'priorities': priorities}, request)
+
+def send_assignee_mails(assignees, demand, product):
+    dests = []
+    
+    for a in assignees:
+        if a.type == 0 or a.type == 1:
+            dests.append(a.value)
+            
+    tpl = get_template('demands/mail.html')
+    c = Context({
+        'demand': demand,
+        'product': product})
+    
+    mailmsg = tpl.render(c)
+    
+    send_mail( \
+        u'[DEMAND %(id)i] New : "%(title)s"' % {
+            'id': demand.id, 
+            'title': demand.title}, \
+        mailmsg, \
+        'website@logram-project.org', \
+        dests, \
+        fail_silently=True)
