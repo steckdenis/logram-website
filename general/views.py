@@ -106,8 +106,8 @@ def index(request):
     
     if not latest_demands:
         latest_demands = Demand.objects \
-            .select_related('author', 'd_type') \
-            .order_by('-created_at')[:5]
+            .select_related('reporter') \
+            .order_by('-updated_at')[:5]
             
         latest_demands = list(latest_demands)
         cache.set('index_last_demands', latest_demands, 60)

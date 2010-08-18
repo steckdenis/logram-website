@@ -27,7 +27,7 @@ from django.contrib.auth.models import User
 
 class RegisterForm(forms.Form):
     username = forms.CharField(label=_('Nom d\'utilisateur'), max_length=64, required=True, min_length=3)
-    email = forms.EmailField(label=_('Adresse e-mail'), required=True, min_length=5)
+    email = forms.EmailField(label=_('Adresse e-mail'), required=True, min_length=5, help_text=_('Cette adresse e-mail sert uniquement à vous permettre de recevoir des mails quand quelqu\'un répond à un sujet que vous surveillez.'))
     password = forms.CharField(label=_('Mot de passe'), required=True, max_length=64, widget=forms.PasswordInput())
     password2 = forms.CharField(label=_('Retapez le mot de passe'), required=True, max_length=64, widget=forms.PasswordInput())
     

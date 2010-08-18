@@ -151,8 +151,8 @@
                     {% for d in latest_demands %}
                         <li>
                             <a
-                                href="demand-5-{{ d.id }}-1.html"
-                                title="{{ d.created_at|format_date|capfirst }} {% trans "par" %} {{d.author.uname }}">
+                                href="demand-4-{{ d.id }}-1.html"
+                                title="{{ d.created_at|format_date|capfirst }} {% trans "par" %} {{ d.reporter.uname }}">
                                     {{ d.title }}
                             </a>
                         </li>
