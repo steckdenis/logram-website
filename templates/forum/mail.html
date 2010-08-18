@@ -1,12 +1,14 @@
-{% load i18n %}
-{% load general_tags %}
-{% blocktrans with body|safe as msg %}Bonjour,
+{% if type == "forum" %}Bonjour,
 
 Un nouveau message a été posté dans le sujet «{{ topic }}» par {{ user }}. Le contenu de ce message est le suivant :
 
-----
+{% else %}Bonjour,
 
-{{ msg }}
+Un nouveau message a été postée dans la demande «{{ topic }}» par {{ user }}. Le contenu de ce message est le suivant :
+
+{% endif %}----
+
+{{ body|safe }}
 
 ----
 
@@ -15,5 +17,6 @@ Vous pouvez consulter ce message directement à l'adresse http://www.logram-proj
 En vous souhaitant une agréable journée et une éventuelle bonne visite sur le site,
 L'équipe de développement de Logram
 
-PS: Vous avez reçu ce mail parce que vous êtes enregistré sur le site de Logram ( http://www.logram-project.org ) et que vous avez décidé de surveiller ce sujet. Si vous ne souhaitez plus recevoir de mails pour ce sujet, suivez le lien donné plus haut et cliquez sur «Ne plus surveiller».
-{% endblocktrans %}
+{% if type == "forum" %}PS: Vous avez reçu ce mail parce que vous êtes enregistré sur le site de Logram ( http://www.logram-project.org ) et que vous avez décidé de surveiller ce sujet. Si vous ne souhaitez plus recevoir de mails pour ce sujet, suivez le lien donné plus haut et cliquez sur «Ne plus surveiller».
+{% else %}PS: Vous avez reçu ce mail parce que vous faites partie des personnes assignées à la demande «{{ topic }}».
+{% endif %}

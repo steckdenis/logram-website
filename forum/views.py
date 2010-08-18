@@ -24,6 +24,7 @@ from pyv4.forum.models import *
 from pyv4.forum.forms import *
 from pyv4.general.functions import *
 from pyv4.news.models import News
+from pyv4.demands.models import Assignee
 
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.shortcuts import get_object_or_404
@@ -272,36 +273,61 @@ def post(request, topic_id):
     # 4. Trouver l'url de redirection
     redirect_url = return_page(topic, msg.id)
     
-    # 5. Envoyer un mail à tous ceux qui surveillent ce topic
+    # 5. Envoyer, si nécessaire, un mail aux assignés de la demande
+    demanddests = []
+    
+    if topic.p_type == 2:
+        assignees = Assignee.objects \
+            .filter(demand__id=topic.parent_id, type__in=[0, 1])
+            
+        for a in assignees:
+            demanddests.append(a.value)
+    
+    # Envoyer un mail à tous ceux qui surveillent ce topic
     bookmarks = Bookmark.objects \
         .select_related('user') \
         .filter(topic=topic)
-        
-    dests = []
+    
+    forumdests = []
     
     for bk in bookmarks:
         if bk.user != request.user:
-            dests.append(bk.user.email)
+            forumdests.append(bk.user.email)
     
-    # Rendre la template du mail
+    # Envoyer le mail
     tpl = get_template('forum/mail.html')
     c = Context({
+        'type': 'forum',
         'topic': topic.title,
         'body': request.POST['body'],
         'url': redirect_url,
         'user': request.user.username})
-        
-    mailmsg = tpl.render(c)
     
-    # Envoyer le mail
-    send_mail( \
-        _(u'%(user)s a posté un message dans «%(topic)s»') % {
-            'user': request.user.username, 
-            'topic': topic.title}, \
-        mailmsg, \
-        'website@logram-project.org', \
-        dests, \
-        fail_silently=True)
+    if len(forumdests) != 0:
+        mailforum = tpl.render(c)
+        
+        send_mail( \
+            _(u'%(user)s a posté un message dans «%(topic)s»') % {
+                'user': request.user.username, 
+                'topic': topic.title}, \
+            mailforum, \
+            'website@logram-project.org', \
+            forumdests, \
+            fail_silently=True)
+    
+    if len(demanddests) != 0:
+        c['type'] = 'demand'
+    
+        maildemand = tpl.render(c)
+    
+        send_mail( \
+            _(u'%(user)s a posté un message dans «%(topic)s»') % {
+                'user': request.user.username, 
+                'topic': topic.title}, \
+            maildemand, \
+            'website@logram-project.org', \
+            demanddests, \
+            fail_silently=True)
     
     # 6. On a fini
     messages.add_message(request, messages.INFO, _('Message posté avec succès'))
