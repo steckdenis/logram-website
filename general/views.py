@@ -241,7 +241,7 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         form.clean()
-        if form.is_valid() and len(request.POST['test']) == 0:
+        if form.is_valid() and request.POST['test'] == 'sqdqf':
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
