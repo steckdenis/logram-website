@@ -49,7 +49,7 @@ def index(request):
     
     # Les dates de fin sont passées
     while i<nbe:
-        if old[i].ended < datetime.now():
+        if old[i].ended < datetime.datetime.now():
             old[i].delete()
             nbe-=1
         i+=1
@@ -258,7 +258,7 @@ def alert(request, uniqid):
 # Calcul de date de fin
 def calc_end_date(fin):
     # Calcul de la date de fin
-    now = datetime.now()
+    now = datetime.datetime.now()
     one_day = 24*60*60 #86400s
     
     if fin == 'w':
@@ -268,7 +268,7 @@ def calc_end_date(fin):
     elif fin == 'n':
         # Un timestamp ne dépasse pas 2038
         Endedyear = now.year + 200 # Ajoute 200 ans
-        end = datetime(Endedyear, now.month, now.day, now.hour, now.minute, now.second)
+        end = datetime.datetime(Endedyear, now.month, now.day, now.hour, now.minute, now.second)
     else:
         end = now.fromtimestamp(mktime(gmtime()) + 1 * one_day) # Ajoute un jour, par défaut
     
