@@ -128,7 +128,7 @@
                     {{ demand.reporter|color_pseudo }}
                 </td>
                 <td>
-                    {% blocktrans with demand.created_at|format_date as created and demand.updated_at|format_date as updated %}
+                    {% blocktrans with demand.created_at|format_date:request as created and demand.updated_at|format_date:request as updated %}
                         Créée {{ created }}<br />
                         Mise à jour {{ updated }}
                     {% endblocktrans %}

@@ -40,7 +40,7 @@
         </h3>
         
         <div class="news_infos">
-            {% blocktrans with entry.distribution as distro and entry.email|obfuscate:entry.author as author and entry.date|format_date as date and entry.tt as type %}
+            {% blocktrans with entry.distribution as distro and entry.email|obfuscate:entry.author as author and entry.date|format_date:request as date and entry.tt as type %}
                 par {{ author }} dans Logram {{ distro }} {{ date }}, <strong>{{ type }}</strong>
             {% endblocktrans %}
         </div>

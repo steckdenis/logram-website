@@ -18,17 +18,17 @@
                     {{ paste.author|color_pseudo }}
                 {% endif %}
                 
-                {% format_date paste.created %}
+                {{ paste.created|format_date:request:request }}
             </li>
             <li>
                 {% trans "Se termine" %}
-                {% format_date paste.ended %}
+                {{ paste.ended|format_date:request:request }}
             </li>
             {% if paste.author_m_id %}
                 <li>
                     {% trans "Modifié par" %}
                     {{ paste.author_m|color_pseudo }}
-                    {% format_date paste.modified %}
+                    {{ paste.modified|format_date:request:request }}
                 </li>
             {% endif %}
             <li>

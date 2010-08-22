@@ -42,6 +42,53 @@ def color_pseudo(profile):
     return mkcolorpseudo(profile.uname, profile.id, profile.main_group_name.lower(), profile.user_id)
     
 @register.filter
+def format_date(date, request):
+    now = datetime.datetime.now()
+    
+    if not date:
+        return ''
+
+    diff = now - date                   # Différence, sans compter la timezone
+
+    # On specifie la difference de jour
+    diffDay = now.day - date.day
+    diffMonth = now.month - date.month
+    diffYear = now.year - date.year 
+    
+    # Convertir la date vers la timezone cliente
+    servertz = pytz.timezone(settings.TIME_ZONE)
+    
+    if request.user.is_anonymous():
+        clienttz = servertz
+    else:
+        clienttz = pytz.timezone(request.user.get_profile().timezone)
+    
+    date = date.replace(tzinfo=servertz).astimezone(clienttz)
+    
+    if diffYear == 0:
+        if diffMonth != 0:
+            return _('le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i') % {'d': date.date().day, 'mt': date.date().month, 'y': date.date().year, 'h': date.time().hour, 'm': date.time().minute}
+        if diffDay == 0:
+            if diff.seconds <= 60:
+                return _('il y a %i secondes') % diff.seconds
+            elif diff.seconds < (60*60):
+                return ngettext('il y a %d minute', 'il y a %d minutes', diff.seconds / 60) % (diff.seconds / 60)
+            elif diff.seconds < (4*60*60):
+                # 4h maxi, sinon on ne voit plus rien
+                return _('il y a %(h)ih%(m)02i') % {'h': diff.seconds / 60 / 60, 'm': diff.seconds % (60*60) / 60}
+            else:
+                # plus de 4h meme journee
+                return _('aujourd\'hui à %(h)ih%(m)02i') % {'h': date.time().hour, 'm': date.time().minute}
+        elif diffDay == 1:
+            return _('hier à %(h)ih%(m)02i') % {'h': date.time().hour, 'm': date.time().minute}
+        elif diffDay == -1:
+            return _('demain à %(h)ih%(m)02i') % {'h': date.time().hour, 'm': date.time().minute}
+        else:
+            return _('le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i') % {'d': date.date().day, 'mt': date.date().month, 'y': date.date().year, 'h': date.time().hour, 'm': date.time().minute}
+    else:
+        return _('le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i') % {'d': date.date().day, 'mt': date.date().month, 'y': date.date().year, 'h': date.time().hour, 'm': date.time().minute}
+    
+@register.filter
 def topic_url(topic):
     return return_page(topic, 0)
     
@@ -116,68 +163,6 @@ class CodeNode(template.Node):
         code = self.nodelist.render(context)
         
         return highlight_code(code, language)
-
-@register.tag(name='format_date')
-def do_format_date(parser, token):
-    try:
-        tag_name, date_variable = token.split_contents()
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
-    
-    return FormatDateNode(date_variable)
-    
-class FormatDateNode(template.Node):
-    def __init__(self, date_variable):
-        self.date_variable = template.Variable(date_variable)
-        self.request_variable = template.Variable('request')
-        
-    def render(self, context):
-        request = self.request_variable.resolve(context)
-        date = self.date_variable.resolve(context)
-        now = datetime.datetime.now()
-        
-        if not date:
-            return ''
-    
-        diff = now - date                   # Différence, sans compter la timezone
-
-        # On specifie la difference de jour
-        diffDay = now.day - date.day
-        diffMonth = now.month - date.month
-        diffYear = now.year - date.year 
-        
-        # Convertir la date vers la timezone cliente
-        servertz = pytz.timezone(settings.TIME_ZONE)
-        
-        if request.user.is_anonymous():
-            clienttz = servertz
-        else:
-            clienttz = pytz.timezone(request.user.get_profile().timezone)
-        
-        date = date.replace(tzinfo=servertz).astimezone(clienttz)
-        
-        if diffYear == 0:
-            if diffMonth != 0:
-                return _('le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i') % {'d': date.date().day, 'mt': date.date().month, 'y': date.date().year, 'h': date.time().hour, 'm': date.time().minute}
-            if diffDay == 0:
-                if diff.seconds <= 60:
-                    return _('il y a %i secondes') % diff.seconds
-                elif diff.seconds < (60*60):
-                    return ngettext('il y a %d minute', 'il y a %d minutes', diff.seconds / 60) % (diff.seconds / 60)
-                elif diff.seconds < (4*60*60):
-                    # 4h maxi, sinon on ne voit plus rien
-                    return _('il y a %(h)ih%(m)02i') % {'h': diff.seconds / 60 / 60, 'm': diff.seconds % (60*60) / 60}
-                else:
-                    # plus de 4h meme journee
-                    return _('aujourd\'hui à %(h)ih%(m)02i') % {'h': date.time().hour, 'm': date.time().minute}
-            elif diffDay == 1:
-                return _('hier à %(h)ih%(m)02i') % {'h': date.time().hour, 'm': date.time().minute}
-            elif diffDay == -1:
-                return _('demain à %(h)ih%(m)02i') % {'h': date.time().hour, 'm': date.time().minute}
-            else:
-                return _('le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i') % {'d': date.date().day, 'mt': date.date().month, 'y': date.date().year, 'h': date.time().hour, 'm': date.time().minute}
-        else:
-            return _('le %(d)i/%(mt)02i/%(y)i à %(h)ih%(m)02i') % {'d': date.date().day, 'mt': date.date().month, 'y': date.date().year, 'h': date.time().hour, 'm': date.time().minute}
 
 class NumMpsNode(template.Node):
     def __init__(self):

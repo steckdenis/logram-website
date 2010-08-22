@@ -23,7 +23,7 @@
     
     <div id="news_pane">
         <div id="news_infos">
-            {{ news.date_published|format_date|capfirst }} {% trans "par" %} {{ news.author|color_pseudo }},
+            {{ news.date_published|format_date:request|capfirst }} {% trans "par" %} {{ news.author|color_pseudo }},
             
             {% if not news.is_private %}
                 {% trans "dans" %} 

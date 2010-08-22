@@ -85,7 +85,7 @@
         </li>
         <li>
             <strong>{% trans "Dernière mise à jour" %} :</strong>
-            {{ changelog.date|format_date }}
+            {{ changelog.date|format_date:request }}
         </li>
         <li>
             <strong>{% trans "Historique de modifications" %} :</strong>

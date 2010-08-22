@@ -108,11 +108,11 @@
                 </td>
                 <td style="text-align: center;">
                     {% if is_connected %}
-                        {% blocktrans with profile.activity as act and profile.date|format_date as date %}
+                        {% blocktrans with profile.activity as act and profile.date|format_date:request as date %}
                             {{ act }}, {{ date }}
                         {% endblocktrans %}
                     {% else %}
-                        {{ profile.user.date_joined|format_date }}
+                        {{ profile.user.date_joined|format_date:request }}
                     {% endif %}
                 </td>
             </tr>

@@ -67,7 +67,7 @@
                         {{ usertopic.topic.num_messages }}
                     </td>
                     <td style="line-height: 15px;">
-                        {{ usertopic.topic.last_message.date_created|format_date|capfirst }}<br />
+                        {{ usertopic.topic.last_message.date_created|format_date:request|capfirst }}<br />
                         {% trans "par" %}
                         {{ usertopic.topic.last_message.author|color_pseudo }}
                     </td>

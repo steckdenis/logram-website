@@ -23,8 +23,8 @@
         </h3>
         
         <div class="news_infos">
-            {% format_date p.created %},
-            {% trans "expires" %} {% format_date p.ended %},
+            {{ p.created|format_date:request }},
+            {% trans "expires" %} {{ p.ended|format_date:request }},
             <strong>{{ p.format_str }}</strong>
         </div>
         

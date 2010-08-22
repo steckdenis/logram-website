@@ -107,7 +107,7 @@
                 </div>
                 
                 <a href="#r{{ post.id }}" id="r{{ post.id }}">#</a>
-                {{ post.date_created|format_date }}
+                {{ post.date_created|format_date:request }}
             </td>
         </tr>
         <tr>
@@ -130,7 +130,7 @@
                     
                     <ul class="forum_post_edits_ul">
                         {% for edit in post.edits %}
-                            <li>{{ edit.date|format_date }} {% trans "par" %} {{ edit.author|color_pseudo }} : {{ edit.comment }}</li>
+                            <li>{{ edit.date|format_date:request }} {% trans "par" %} {{ edit.author|color_pseudo }} : {{ edit.comment }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}

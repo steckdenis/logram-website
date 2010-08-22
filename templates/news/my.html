@@ -62,7 +62,7 @@
                         {% endif %}
                     </td>
                     <td style="text-align: center;">
-                        {{ news.date_modified|format_date }}
+                        {{ news.date_modified|format_date:request }}
                     </td>
                     <td style="text-align: center;">
                         <a href="news-5-1-{{ news.id }}.html">
@@ -119,7 +119,7 @@
                         {{ news.rejected_reason }}
                     </td>
                     <td style="text-align: center;">
-                        {{ news.date_modified|format_date }}
+                        {{ news.date_modified|format_date:request }}
                     </td>
                     <td style="text-align: center;">
                         <a href="news-5-1-{{ news.id }}.html">
@@ -156,7 +156,7 @@
                         {{ news.title }}
                     </td>
                     <td style="text-align: center;">
-                        {{ news.date_modified|format_date }}
+                        {{ news.date_modified|format_date:request }}
                     </td>
                 </tr>
             {% endif %}
@@ -193,7 +193,7 @@
                         {% endif %}
                     </td>
                     <td style="text-align: center;">
-                        {{ news.date_modified|format_date }}
+                        {{ news.date_modified|format_date:request }}
                     </td>
                     <td style="text-align: center;">
                         <a href="news-5-1-{{ news.id }}.html">

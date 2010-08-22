@@ -136,7 +136,7 @@
                 <td style="text-align: center;">
                     {% if topic.last_post %}
                         {% trans "Par" %} {{ topic.last_post.author|color_pseudo }}
-                        {{ topic.last_post.date_created|format_date }}
+                        {{ topic.last_post.date_created|format_date:request }}
                     {% else %}
                         -
                     {% endif %}

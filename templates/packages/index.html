@@ -127,7 +127,7 @@
                     <span style="font-size: 0.8em;">{{ pkg.maintainer_email }}</span>
                 </td>
                 <td>
-                    {{ pkg.date|format_date }}
+                    {{ pkg.date|format_date:request }}
                 </td>
             </tr>
         {% endfor %}

@@ -64,7 +64,7 @@
                         <li>
                             <a 
                                 href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html" 
-                                title="{% blocktrans with news.author.uname as uname and news.date_published|format_date as dt %}par {{ uname }} {{ dt }}{% endblocktrans %}">
+                                title="{% blocktrans with news.author.uname as uname and news.date_published|format_date:request as dt %}par {{ uname }} {{ dt }}{% endblocktrans %}">
                                     {{ news.title }}
                             </a>
                             <div class="index_block_header">
@@ -91,7 +91,7 @@
                         <li>
                             <a
                                 href="{{ topic|topic_url }}#r{{ topic.last_post.id }}"
-                                title="{% trans "par" %} {{ topic.last_post.author.uname }} {{ topic.last_post.date_created|format_date }}">
+                                title="{% trans "par" %} {{ topic.last_post.author.uname }} {{ topic.last_post.date_created|format_date:request }}">
                                     {{ topic.title }}
                             </a>
                         </li>
@@ -115,7 +115,7 @@
                         <li>
                             <a
                                 href="wiki-{{ change.page.slug }}.{{ change.page.lang }}.html"
-                                title="{% trans "par" %} {% if change.author_user %}{{ change.author_user.uname }}{% else %}{{ change.author_ip }}{% endif %} {{ change.date|format_date }}">
+                                title="{% trans "par" %} {% if change.author_user %}{{ change.author_user.uname }}{% else %}{{ change.author_ip }}{% endif %} {{ change.date|format_date:request }}">
                                     {{ change.page.title }}
                             </a>
                             <div class="index_block_header">
@@ -152,7 +152,7 @@
                         <li>
                             <a
                                 href="demand-4-{{ d.id }}-1.html"
-                                title="{{ d.created_at|format_date|capfirst }} {% trans "par" %} {{ d.reporter.uname }}">
+                                title="{{ d.created_at|format_date:request|capfirst }} {% trans "par" %} {{ d.reporter.uname }}">
                                     {{ d.title }}
                             </a>
                         </li>
@@ -176,7 +176,7 @@
                         <li>
                             <a 
                                 href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html" 
-                                title="{{ news.date_published|format_date }}">
+                                title="{{ news.date_published|format_date:request }}">
                                     {{ news.title }}
                             </a>
                             {% trans "par" %}
@@ -200,7 +200,7 @@
                         <li>
                             <a
                                 href="packages-4-{{ package.id }}.html"
-                                title="{{ package.date|format_date|capfirst }}">
+                                title="{{ package.date|format_date:request|capfirst }}">
                                     {{ package.name }}-{{ package.version }} ({{ package.arch.name }})
                             </a>
                         </li>
@@ -264,7 +264,7 @@
                                 <li>
                                     <a 
                                         href="news-2-{{ news.id }}-1-{{ news.title|slugify }}.html" 
-                                        title="{% blocktrans with news.author.uname as uname and news.date_published|format_date as dt %}par {{ uname }} {{ dt }}{% endblocktrans %}">
+                                        title="{% blocktrans with news.author.uname as uname and news.date_published|format_date:request as dt %}par {{ uname }} {{ dt }}{% endblocktrans %}">
                                             {{ news.title }}
                                     </a>
                                     <div class="index_block_header">

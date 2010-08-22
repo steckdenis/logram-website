@@ -60,7 +60,7 @@
         </li>
         <li>
             <strong>{% trans "Date de construction :" %}</strong>
-            {{ log.date|format_date }}
+            {{ log.date|format_date:request }}
         </li>
         {% if log.flag_manual %}
             <li>
@@ -77,7 +77,7 @@
         {% if log.flag_rebuild %}
             <li>
                 <strong>{% trans "Date de demande de reconstruction :" %}</strong>
-                {{ log.date_rebuild_asked|format_date }}
+                {{ log.date_rebuild_asked|format_date:request }}
             </li>
         {% endif %}
         <li>

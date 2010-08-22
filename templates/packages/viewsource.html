@@ -140,7 +140,7 @@
                 
                 (<strong>{{ log.arch.name }}</strong>)
                 
-                {{ log.date|format_date }}
+                {{ log.date|format_date:request }}
                 
                 (<a href="packages-10-{{ log.id }}.html">{% trans "informations" %}</a>)
             </li>

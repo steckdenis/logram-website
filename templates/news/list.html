@@ -63,7 +63,7 @@
         </h3>
         
         <div class="news_infos">
-            {{ news.date_published|format_date|capfirst }},
+            {{ news.date_published|format_date:request|capfirst }},
             
             {% if not is_private %}
                 {% trans "par" %} 
@@ -71,7 +71,7 @@
                 {% trans "dans" %} 
                 <a href="news-1-1-{{ news.category.id }}-0.html">{{ news.category.name }}</a>
             {% else %}
-                {% blocktrans with news.date_modified|format_date as d %}
+                {% blocktrans with news.date_modified|format_date:request as d %}
                     modifié {{ d }}
                 {% endblocktrans %}
             {% endif %}

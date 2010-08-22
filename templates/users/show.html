@@ -40,11 +40,11 @@
                         </li>
                         <li>
                             <strong>{% trans "Dernière connexion :" %}</strong><br />
-                            {{ profile.user.last_login|format_date }}
+                            {{ profile.user.last_login|format_date:request }}
                         </li>
                         <li>
                             <strong>{% trans "Date d'inscription :" %}</strong><br />
-                            {{ profile.user.date_joined|format_date }}
+                            {{ profile.user.date_joined|format_date:request }}
                         </li>
                     </ul>
                 </div>
@@ -85,7 +85,7 @@
                 <td colspan="2" style="width:100%;" class="usertable">
                     <h3>{% trans "Dernier paste" %}</h3>
                     <div class="user_last_paste">
-                        <div class="news_infos">{% trans "Se termine" %} {{ paste.ended|format_date }}</div>
+                        <div class="news_infos">{% trans "Se termine" %} {{ paste.ended|format_date:request }}</div>
                         {% code paste.format %}{{ paste.contents }}{% endcode %}
                     </div>
                 </td>

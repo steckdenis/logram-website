@@ -15,7 +15,7 @@
     
     <div id="demand_pane" style="background-color: #{{ demand.type.lightcolor }}; border-color: #{{ demand.type.darkcolor }};">
         <div id="news_infos">
-            {{ demand.created_at|format_date }}
+            {{ demand.created_at|format_date:request }}
             {% trans "par" %} {{ demand.reporter|color_pseudo }},
             <a href="#comments">{% blocktrans with topic.num_posts as posts %}{{ posts }} commentaires{% endblocktrans %}</a>
         </div>

@@ -1,4 +1,4 @@
 {% load i18n %}
 {% load general_tags %}
-{% trans "Publié " %}{{ obj.date_published|format_date }}<br />
+{% trans "Publié " %}{{ obj.date_published|format_date:request }}<br />
 <div>{{ obj.body|lcode }}</div>

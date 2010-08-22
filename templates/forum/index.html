@@ -71,7 +71,7 @@
                                 -
                             {% else %}
                                 {% trans "Par" %} {{ forum.last_topic.last_post.author|color_pseudo }}<br />
-                                {{ forum.last_topic.last_post.date_created|format_date }}<br />
+                                {{ forum.last_topic.last_post.date_created|format_date:request }}<br />
                                 {% trans "dans" %} <a href="forum-2-{{ forum.last_topic.id }}-{{ forum.last_topic.last_post_page }}-{{ forum.last_topic.title|slugify }}.html#r{{ forum.last_topic.last_post.id }}">
                                     {{ forum.last_topic.title }}
                                 </a>
