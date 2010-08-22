@@ -222,6 +222,8 @@ def opts_pseudo(request):
             usr.username = form.cleaned_data['pseudo']
             usr.email = form.cleaned_data['email']
             prof.show_email = form.cleaned_data['show_email']
+            prof.uname = usr.username
+            prof.timezone = form.cleaned_data['timezone']
             
             usr.save()
             prof.save()
@@ -232,7 +234,8 @@ def opts_pseudo(request):
         form = PseudoForm(
             {'pseudo': request.user.username,
              'email': request.user.email,
-             'show_email': request.user.get_profile().show_email}
+             'show_email': request.user.get_profile().show_email,
+             'timezone': request.user.get_profile().timezone}
         )
         
     return tpl('users/opts_pseudo.html', {'form': form}, request)

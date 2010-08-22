@@ -7,6 +7,7 @@ besoin de ces dépendances :
 * Django >= 1.1 (à télécharger sur djangoproject.com pour être à jour)
 * python-markdown >= 2.0 (http://sourceforge.net/projects/python-markdown/files/)
 * Pygments (celui de la distrib est bon)
+* PyTZ
 * Un serveur MySQL qui marche
 * python-svn
 * Djapian, pour la recherche : http://code.google.com/p/djapian/

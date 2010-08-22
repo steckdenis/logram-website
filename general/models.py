@@ -40,6 +40,7 @@ class Profile(models.Model):
     avatar = models.CharField(_('Avatar'), max_length=256, blank=True, null=True)
     sign = models.TextField(_('Signature'), blank=True, null=True)
     style = models.CharField(_('Design'), max_length=256)
+    timezone = models.CharField(_('Fuseau horaire'), max_length=100)
     
     point = models.IntegerField(_('Nombre de points'), default=0)
     show_email = models.BooleanField(_('Afficher l\'adresse e-mail'), default=True)

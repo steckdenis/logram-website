@@ -26,10 +26,15 @@ from django.utils.translation import gettext_lazy as _
 from pyv4.general.models import Style
 from pyv4.general.fields import ImageURLField
 
+import pytz
+
+TIMEZONES = zip(pytz.common_timezones, pytz.common_timezones)
+
 class PseudoForm(forms.Form):
     pseudo = forms.CharField(label=_('Pseudonyme'), max_length=64)
     email = forms.EmailField(label=_('Adresse e-mail'))
     show_email = forms.BooleanField(label=_('Afficher l\'adresse e-mail'), required=False)
+    timezone = forms.ChoiceField(label=_('Fuseau horaire'), choices=TIMEZONES)
 
 class PassForm(forms.Form):
     password = forms.CharField(label=_('Mot de passe'), required=True, max_length=64, widget=forms.PasswordInput())

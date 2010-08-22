@@ -275,7 +275,20 @@ def register(request):
             d2.save()
             
             # Créer le profile
-            p = Profile(user=usr, uname=usr.username, main_group_name=g.name, website='', quote=_(u'Heureux d\'être là'), pperso='', avatar='', sign='', point=0, show_email=True, main_dir=d, main_group=g, style='/style/default')
+            p = Profile(user=usr, 
+                        uname=usr.username, 
+                        main_group_name=g.name, 
+                        website='', 
+                        quote=_(u'Heureux d\'être là'), 
+                        pperso='', 
+                        avatar='', 
+                        sign='', 
+                        point=0, 
+                        show_email=True, 
+                        main_dir=d, 
+                        main_group=g,
+                        timezone=settings.TIME_ZONE,
+                        style='/style/default')
             p.save()
             
             # Ouf ! On a fini

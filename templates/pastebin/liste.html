@@ -23,8 +23,8 @@
         </h3>
         
         <div class="news_infos">
-            {{ p.created|format_date|capfirst }},
-            {% trans "expires" %} {{ p.ended|format_date }},
+            {% format_date p.created %},
+            {% trans "expires" %} {% format_date p.ended %},
             <strong>{{ p.format_str }}</strong>
         </div>
         
