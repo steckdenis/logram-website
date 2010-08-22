@@ -58,11 +58,11 @@ def mlist(request, type_id, status_id, product_id, sort, page):
     product_id = int(product_id)
     page = int(page)
     
-    # 1. Requête de base
+    # Requête de base
     demands = Demand.objects \
         .select_related('reporter', 'product', 'component', 'product_version', 'status', 'priority', 'type')
         
-    # 2. Filtres demandés
+    # Filtres demandés
     t = None
     
     if type_id != 0:
@@ -77,7 +77,7 @@ def mlist(request, type_id, status_id, product_id, sort, page):
         product = get_object_or_404(Product, pk=product_id)
         demands = demands.filter(product=product)
         
-    # 3. Ordonner
+    # Ordonner
     sign = ''
     
     if sort[0] == '-':
@@ -111,11 +111,11 @@ def mlist(request, type_id, status_id, product_id, sort, page):
     else:
         raise Http404
         
-    # 4. Obtenir des listes (liste des types par exemple)
+    # Obtenir des listes (liste des types par exemple)
     types = Type.objects.all()
     status = Status.objects.all()
     
-    # 5. Paginer
+    # Paginer
     paginator = Paginator(demands, 15)        #15 demandes par pages
 
     try:
@@ -123,7 +123,7 @@ def mlist(request, type_id, status_id, product_id, sort, page):
     except (EmptyPage, InvalidPage):
         pg = paginator.page(paginator.num_pages)
         
-    # 6. Rendre la template
+    # Rendre la template
     return tpl('demands/list.html',
         {'type_id': type_id,
          'status_id': status_id,

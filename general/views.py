@@ -310,10 +310,10 @@ def search(request, page):
     page = int(page)
     q = request.GET['q']
 
-    # 1. Prendre les résultats
+    # Prendre les résultats
     results = complete_indexer.search(q).prefetch()
 
-    # 2. Paginer le tout
+    # Paginer le tout
     paginator = Paginator(results, 20)        # 20 résultats par page
 
     try:
@@ -321,13 +321,13 @@ def search(request, page):
     except (EmptyPage, InvalidPage):
         pg = paginator.page(paginator.num_pages)
 
-    # 3. Trouver le type des résultats
+    # Trouver le type des résultats
     rs = pg.object_list
     
     for r in rs:
         r.type = r.instance.__class__.__name__
 
-    # 4. Rendre la template
+    # Rendre la template
     return tpl('global/search.html',
         {'page': page,
          'q': q,

@@ -36,13 +36,13 @@ def index(request, page):
     # Afficher la liste des MP auxquels participe le membre
     page = int(page)
     
-    # 1. Récupérer tous les UserTopics du membre
+    # Récupérer tous les UserTopics du membre
     usertopics = UserTopic.objects \
         .select_related('topic', 'topic__last_message', 'topic__last_message__author') \
         .filter(user=request.user.get_profile(), has_deleted=False) \
         .order_by('-topic__last_message__date_created')
 
-    # 2. Paginer tout ça
+    # Paginer tout ça
     paginator = Paginator(usertopics, 20)        #20 MPs par page
 
     try:
@@ -52,15 +52,15 @@ def index(request, page):
 
     usertopics = pg.object_list
 
-    # 3. Prendre les ID de tous les sujets
+    # Prendre les ID de tous les sujets
     topic_ids = [ ut.topic_id for ut in usertopics ]
 
-    # 4. Prendre la liste des participants à chaque sujet
+    # Prendre la liste des participants à chaque sujet
     parts = UserTopic.objects \
         .select_related('user') \
         .filter(topic__in=topic_ids)
 
-    # 5. Ajouter la liste des participants aux MPs
+    # Ajouter la liste des participants aux MPs
     for usertopic in usertopics:
         usertopic.parts = []
         usertopic.read = usertopic.last_read_post_id == usertopic.topic.last_message_id
@@ -80,24 +80,24 @@ def index(request, page):
 
         usertopic.pages = pages
     
-    # 6. Préparer le formulaire
+    # Préparer le formulaire
     if request.method == 'POST':
         form = NewForm(request.POST)
             
         if form.is_valid():
-            # 1. Créer le sujet
+            # Créer le sujet
             topic = Topic(title=form.cleaned_data['title'], subtitle=form.cleaned_data['subtitle'], num_messages=1)
             topic.save()
 
-            # 2. Créer le message
+            # Créer le message
             message = Message(author=request.user.get_profile(), body=request.POST['body'], topic=topic)
             message.save()
 
-            # 3. Mettre à jour le sujet pour qu'il ait un dernier message
+            # Mettre à jour le sujet pour qu'il ait un dernier message
             topic.last_message = message
             topic.save()
 
-            # 4. Splitter POST['parts'] pour avoir les participants, et prendre les profiles correspondants
+            # Splitter POST['parts'] pour avoir les participants, et prendre les profiles correspondants
             parts = request.POST['parts'].split(',')
 
             users = Profile.objects \
@@ -106,7 +106,7 @@ def index(request, page):
             users = list(users)
             users.append(request.user.get_profile())  # Nous aussi on participe :-°
 
-            # 5. Créer les usertopics
+            # Créer les usertopics
             alreadyparts = []
             
             for user in users:
@@ -116,7 +116,7 @@ def index(request, page):
                     
                     alreadyparts.append(user)
             
-            # 6. On a fini, afficher le MP
+            # On a fini, afficher le MP
             messages.add_message(request, messages.INFO, _('Message personnel créé'))
             return HttpResponseRedirect('mp-2-%i-1.html' % topic.id)
     else:
@@ -125,7 +125,7 @@ def index(request, page):
         else:
             form = NewForm()
             
-    # 7. Rendre la template
+    # Rendre la template
     return tpl('mp/index.html',
         {'page': page,
          'usertopics': usertopics,
@@ -138,13 +138,13 @@ def view(request, topic_id, page):
     topic_id = int(topic_id)
     page = int(page)
 
-    # 1. Récupérer les messages
+    # Récupérer les messages
     messages = Message.objects \
         .select_related('author', 'author__user') \
         .filter(topic=topic_id) \
         .order_by('date_created')
 
-    # 2. Paginer
+    # Paginer
     paginator = Paginator(messages, 20)        #20 messages par page
 
     try:
@@ -154,7 +154,7 @@ def view(request, topic_id, page):
 
     messages = pg.object_list
 
-    # 3. Mettre à jour l'usertopic
+    # Mettre à jour l'usertopic
     try:
         usertopic = UserTopic.objects \
             .select_related('topic') \
@@ -168,15 +168,15 @@ def view(request, topic_id, page):
         usertopic.last_read_post_id = messages[len(messages)-1].id
         usertopic.save()
 
-    # 4. Prendre la liste des participants
+    # Prendre la liste des participants
     parts = UserTopic.objects \
         .select_related('user') \
         .filter(topic=topic_id)
 
-    # 5. réactualiser le cache
+    # réactualiser le cache
     cache.delete('mps_%i' % request.user.id)
 
-    # 6. Rendre la template
+    # Rendre la template
     return tpl('mp/view.html',
         {'msgs': messages,
          'usertopic': usertopic,
@@ -193,7 +193,7 @@ def post(request, topic_id):
     if request.method != 'POST':
         raise Http404
 
-    # 1. Vérifier que l'utilisateur participe bien au MP
+    # Vérifier que l'utilisateur participe bien au MP
     try:
         usertopic = UserTopic.objects \
             .select_related('topic') \
@@ -202,16 +202,16 @@ def post(request, topic_id):
     except UserTopic.DoesNotExist:
         raise Http404
 
-    # 2. Créer le message
+    # Créer le message
     message = Message(author=request.user.get_profile(), body=request.POST['body'], topic=usertopic.topic)
     message.save()
 
-    # 3. Mettre à jour le topic
+    # Mettre à jour le topic
     usertopic.topic.last_message = message
     usertopic.topic.num_messages += 1
     usertopic.topic.save()
 
-    # 4. On a fini
+    # On a fini
     messages.add_message(request, messages.INFO, _('Message posté'))
     return HttpResponseRedirect('mp-2-%i-%i.html#r%i' % (usertopic.topic_id, (usertopic.topic.num_messages / 20) + 1, message.id))
 
@@ -220,14 +220,14 @@ def edit(request, post_id):
     # Éditer un post
     post_id = int(post_id)
 
-    # 1. Récupérer le post
+    # Récupérer le post
     try:
         post = Message.objects \
             .get(pk=post_id)
     except Message.DoesNotExist:
         raise Http404
 
-    # 2. Vérifier que l'utilisateur modifie bien _son_ post
+    # Vérifier que l'utilisateur modifie bien _son_ post
     if post.author != request.user.get_profile():
         raise Http404
 
@@ -254,19 +254,19 @@ def newmp(request):
 
     
 
-    # 1. Créer le sujet
+    # Créer le sujet
     topic = Topic(title=request.POST['title'], subtitle=request.POST['subtitle'], num_messages=1)
     topic.save()
 
-    # 2. Créer le message
+    # Créer le message
     message = Message(author=request.user.get_profile(), body=request.POST['body'], topic=topic)
     message.save()
 
-    # 3. Mettre à jour le sujet pour qu'il ait un dernier message
+    # Mettre à jour le sujet pour qu'il ait un dernier message
     topic.last_message = message
     topic.save()
 
-    # 4. Splitter POST['parts'] pour avoir les participants, et prendre les profiles correspondants
+    # Splitter POST['parts'] pour avoir les participants, et prendre les profiles correspondants
     parts = request.POST['parts'].split(',')
 
     users = Profile.objects \
@@ -275,12 +275,12 @@ def newmp(request):
     users = list(users)
     users.append(request.user.get_profile())  # Nous aussi on participe :-°
 
-    # 5. Créer les usertopics
+    # Créer les usertopics
     for user in users:
         usertopic = UserTopic(user=user, topic=topic, last_post_page=1, is_master=(user == request.user.get_profile()))
         usertopic.save()
 
-    # 6. On a fini, afficher le MP
+    # On a fini, afficher le MP
     messages.add_message(request, messages.INFO, _('Message personnel créé'))
     return HttpResponseRedirect('mp-2-%i-1.html' % topic.id)
 
@@ -289,7 +289,7 @@ def addparts(request, topic_id):
     # Ajouter des participants
     topic_id = int(topic_id)
     
-    # 1. Récupérer le usertopic
+    # Récupérer le usertopic
     try:
         usertopics = UserTopic.objects \
             .select_related('user') \
@@ -302,13 +302,13 @@ def addparts(request, topic_id):
     for usertopic in usertopics:
         alreadyparts.append(usertopic.user.uname)
 
-    # 2. Splitter la chaîne des utilisateurs et prendre ces utilisateurs
+    # Splitter la chaîne des utilisateurs et prendre ces utilisateurs
     parts = request.POST['parts'].split(',')
 
     users = Profile.objects \
         .filter(uname__in=parts)
 
-    # 3. Créer les usertopics, pour ceux qui ne participent pas déjà
+    # Créer les usertopics, pour ceux qui ne participent pas déjà
     for user in users:
         #user = unicode(user)
         if not user in alreadyparts:
@@ -317,7 +317,7 @@ def addparts(request, topic_id):
             
             alreadyparts.append(user)
 
-    # 4. On a fini
+    # On a fini
     messages.add_message(request, messages.INFO, _('Participants ajoutés'))
     return HttpResponseRedirect('mp-2-%i-1.html' % usertopic.topic.id)
 
@@ -328,21 +328,21 @@ def delete(request):
     if not request.method == 'POST':
         raise Http404
 
-    # 1. Parser POST, qui contient des champs de la forme mp[id]
+    # Parser POST, qui contient des champs de la forme mp[id]
     ids = []
 
     for p in request.POST:
         if p.startswith('mp'):
             ids.append(int(p.split('[')[1][0:-1]))
 
-    # 2. Mettre à jour les usertopics concernés
+    # Mettre à jour les usertopics concernés
     UserTopic.objects \
         .filter(user=request.user.get_profile(), topic__in=ids) \
         .update(has_deleted=True)
         
-    # 3. Réactualiser le cache
+    # Réactualiser le cache
     cache.delete('mps_%i' % request.user.id)
 
-    # 4. On a fini
+    # On a fini
     messages.add_message(request, messages.INFO, _('Les messages privés ont été supprimés'))
     return HttpResponseRedirect('mp-1-1.html')

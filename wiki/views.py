@@ -43,16 +43,16 @@ def viewpage(request, slug):
 def viewpagelang(request, slug, lang):
     # Afficher une page de wiki
     
-    # 1. Récupérer toutes les pages qui ont le slug demandé (ces pages ont des langues différentes)
+    # Récupérer toutes les pages qui ont le slug demandé (ces pages ont des langues différentes)
     pages = Page.objects.filter(slug=slug)
     
-    # 2. Voir s'il y a au moins une page (len() fait une requête, c'est mieux, ça met en cache les résultats)
+    # Voir s'il y a au moins une page (len() fait une requête, c'est mieux, ça met en cache les résultats)
     if len(pages) == 0:
         # Pas de page, l'afficher
         return tpl('wiki/notfound.html',
             {'slug': slug}, request)
     
-    # 3. Si plus d'une page a ce slug, alors prendre celle qui a la langue de l'utilisateur.
+    # Si plus d'une page a ce slug, alors prendre celle qui a la langue de l'utilisateur.
     #    Si aucune n'a sa langue, prendre la version en anglais
     if len(pages) == 1:
         page = pages[0]
@@ -77,16 +77,16 @@ def viewpagelang(request, slug, lang):
         if not lang_found:
             page = page_en
     
-    # 4. Si la page est privée, seul le staff y a accès
+    # Si la page est privée, seul le staff y a accès
     if page.is_private and not request.user.has_perm('wiki.view_private_pages'):
         raise Http404
     
-    # 5. Trouver toutes les langues de la page (utiliser l'identificateur pour ça)
+    # Trouver toutes les langues de la page (utiliser l'identificateur pour ça)
     langs = Page.objects \
         .only('lang', 'slug') \
         .filter(identifier=page.identifier)
     
-    # 6. Rendre la template
+    # Rendre la template
     return tpl('wiki/show.html', 
         {'page': page,
          'in_discover': slug.startswith('discover'),
@@ -242,19 +242,19 @@ def edit(request, page_id, identifier, slug):
 def randompage(request):
     # Une page au hasard, dans la langue de l'utilisateur
     
-    # 1. Prendre une page
+    # Prendre une page
     pages = Page.objects \
         .filter(lang=request.LANGUAGE_CODE.split('-')[0], is_private=False) \
         .order_by('?')
     
     page = pages[0]
     
-    # 3. Trouver toutes les langues de la page (utiliser l'identificateur pour ça)
+    # Trouver toutes les langues de la page (utiliser l'identificateur pour ça)
     langs = Page.objects \
         .only('lang', 'slug') \
         .filter(identifier=page.identifier)
     
-    # 4. Rendre la template
+    # Rendre la template
     return tpl('wiki/show.html', 
         {'page': page,
          'langs': langs}, request)
@@ -263,14 +263,14 @@ def changes(request, page):
     # Historique de tout le wiki
     page = int(page)
     
-    # 1. Récupérer tout l'historique du wiki
+    # Récupérer tout l'historique du wiki
     changes = LogEntry.objects \
         .select_related('author_user', 'author_user', 'page') \
         .defer('body') \
         .filter(page__is_private=False) \
         .order_by('-date')
     
-    # 2. Paginer tout ça
+    # Paginer tout ça
     paginator = Paginator(changes, 20)        # 20 changements par page
     
     if page < 1:
@@ -281,10 +281,10 @@ def changes(request, page):
     except (EmptyPage, InvalidPage):
         pg = paginator.page(paginator.num_pages)
         
-    # 3. Construire manuellement une page pour la template (ok, c'est sale, mais quand-même plus propre que des hacks dans la template)
+    # Construire manuellement une page pour la template (ok, c'est sale, mais quand-même plus propre que des hacks dans la template)
     dict_page = {'title': _('Le wiki'), 'ignore_breadcrumb': True}
     
-    # 4. Afficher
+    # Afficher
     return tpl('wiki/changes.html',
         {'page': dict_page,
          'list_pages': get_list_page(page, paginator.num_pages, 4),
@@ -295,7 +295,7 @@ def pagedate(request, change_id):
     # Affiche une page à un certain niveau de changement
     change_id = int(change_id)
     
-    # 1. Prendre le changement
+    # Prendre le changement
     try:
         change = LogEntry.objects \
             .select_related('page') \
@@ -303,16 +303,16 @@ def pagedate(request, change_id):
     except LogEntry.DoesNotExist:
         raise Http404
     
-    # 2. Adapter la page
+    # Adapter la page
     page = change.page
     page.body = change.body     # Ancien contenu
     
-    # 3. Trouver toutes les langues de la page (utiliser l'identificateur pour ça)
+    # Trouver toutes les langues de la page (utiliser l'identificateur pour ça)
     langs = Page.objects \
         .only('lang', 'slug') \
         .filter(identifier=page.identifier)
     
-    # 4. Rendre la template
+    # Rendre la template
     return tpl('wiki/show.html', 
         {'page': page,
          'langs': langs}, request)
@@ -326,7 +326,7 @@ def cancelchange(request, change_id):
     if not request.user.is_staff:
         raise Http404
     
-    # 1. Prendre le changement
+    # Prendre le changement
     try:
         change = LogEntry.objects \
             .select_related('page') \
@@ -334,14 +334,14 @@ def cancelchange(request, change_id):
     except LogEntry.DoesNotExist:
         raise Http404
     
-    # 2. Remettre la page comme elle était
+    # Remettre la page comme elle était
     page = change.page
     previous_body = page.body
     
     page.body = change.body
     page.save()
     
-    # 3. Créer un autre changement pour cette page
+    # Créer un autre changement pour cette page
     nchange = LogEntry(page=page, 
         comment=_('Retour en arrière : %s') % change.date.strftime('%d/%m/%Y %H:%M:%S'),
         body=previous_body,
@@ -349,7 +349,7 @@ def cancelchange(request, change_id):
     
     nchange.save()
     
-    # 4. On a fini
+    # On a fini
     messages.add_message(request, messages.INFO, _('Changement défait'))
     return HttpResponseRedirect('wiki-%s.%s.html' % (page.slug, page.lang))
 
@@ -357,17 +357,17 @@ def history(request, page_id):
     # Historique d'une page
     page_id = int(page_id)
     
-    # 1. Récupérer la page
+    # Récupérer la page
     page = get_object_or_404(Page, pk=page_id)
     
-    # 2. Récupérer tout l'historique de la page
+    # Récupérer tout l'historique de la page
     changes = LogEntry.objects \
         .select_related('author_user', 'author_user') \
         .defer('body') \
         .filter(page=page) \
         .order_by('-date')
     
-    # 3. Afficher
+    # Afficher
     return tpl('wiki/changes.html',
         {'page': page,
          'changes': changes}, request)

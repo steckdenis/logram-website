@@ -125,9 +125,9 @@ def my_tools(request, acti, news_id):
     except News.DoesNotExist:
         raise Http404
         
-    # 1. Supprimer
-    # 2. Mettre en attente de validation ou pas
-    # 3. Publier ou pas (si privée)
+    # Supprimer
+    # Mettre en attente de validation ou pas
+    # Publier ou pas (si privée)
     
     if acti == '1':
         #Supprimer

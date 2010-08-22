@@ -134,12 +134,12 @@ def online(request, page):
     # Afficher les utilisateurs en ligne
     page = int(page)
     
-    # 1. Récupérer les informations du cache des connectés
+    # Récupérer les informations du cache des connectés
     activities = Activity.objects \
                 .select_related('user') \
                 .order_by('-date')
     
-    # 2. Compter
+    # Compter
     anon = 0
     users = 0
     
@@ -156,7 +156,7 @@ def online(request, page):
         else:
             act.activity = _('Page privée')
             
-    # 3. Paginer
+    # Paginer
     paginator = Paginator(activities, 30)  # 30 utilisateurs par page
 
     try:
@@ -164,7 +164,7 @@ def online(request, page):
     except (EmptyPage, InvalidPage):
         pg = paginator.page(paginator.num_pages)
 
-    # 4. Rendre la template
+    # Rendre la template
     return tpl('users/list.html',
         {'list_pages': get_list_page(page, paginator.num_pages, 4),
          'profiles': pg.object_list,

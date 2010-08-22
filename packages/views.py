@@ -67,17 +67,17 @@ def str_of_package(package, language, type, strs, changelog):
 def index(request):
     # Page d'accueil des téléchargements, doit être claire
     
-    # 1. Récupérer la liste des derniers paquets
+    # Récupérer la liste des derniers paquets
     packages = Package.objects \
         .select_related('distribution', 'arch') \
         .order_by('-date')[:10]
         
-    # 2. Récupérer la liste des téléchargements
+    # Récupérer la liste des téléchargements
     dws = DwVariant.objects \
         .select_related('download', 'download__cat') \
         .order_by('download__cat__weight', 'download__weight')
         
-    # 3. Créer l'arbre des téléchargements, les templates ne sachant pas le faire
+    # Créer l'arbre des téléchargements, les templates ne sachant pas le faire
     downloads = {}
     
     for dw in dws:
@@ -110,7 +110,7 @@ def index(request):
         # Ajouter la variante
         variants[dw.name] = dw
     
-    # 4. Afficher la template
+    # Afficher la template
     return tpl('packages/index.html', 
         {'packages': packages,
          'downloads': downloads}, request)
@@ -118,10 +118,10 @@ def index(request):
 def home(request):
     # Affichage des paquets des distributions et recherche de paquets
     
-    # 1. Récupérer la liste des distributions
+    # Récupérer la liste des distributions
     distros = Distribution.objects.all()
     
-    # 2. Rendre la template (c'est elle qui fait tout)
+    # Rendre la template (c'est elle qui fait tout)
     return tpl('packages/home.html',
         {'distros': distros}, request)
 
@@ -129,13 +129,13 @@ def sections(request, distro_id):
     # Affichage des sections d'une distribution
     distro_id = int(distro_id)
     
-    # 1. Récupérer la distribution
+    # Récupérer la distribution
     distro = get_object_or_404(Distribution, pk=distro_id)
     
-    # 2. Prendre la liste des sections
+    # Prendre la liste des sections
     sections = Section.objects.order_by('name')
     
-    # 3. Rendre la template
+    # Rendre la template
     return tpl('packages/sections.html',
         {'distro': distro,
          'sections': sections}, request)
@@ -145,19 +145,19 @@ def listsection(request, distro_id, section_id, page):
     distro_id = int(distro_id)
     section_id = int(section_id)
     
-    # 1. Récupérer la distribution
+    # Récupérer la distribution
     distro = get_object_or_404(Distribution, pk=distro_id)
     
-    # 2. Récupérer la section
+    # Récupérer la section
     section = get_object_or_404(Section, pk=section_id)
     
-    # 3. Récupérer les versions (et leurs paquets) de la distribution dans la bonne section
+    # Récupérer les versions (et leurs paquets) de la distribution dans la bonne section
     packages = Package.objects \
         .select_related('arch') \
         .filter(distribution=distro, section=section) \
         .order_by('name')
         
-    # 4. Paginer
+    # Paginer
     paginator = Paginator(packages, 20)
     
     try:
@@ -170,7 +170,7 @@ def listsection(request, distro_id, section_id, page):
     except (EmptyPage, InvalidPage):
         packages = paginator.page(paginator.num_pages).object_list
         
-    # 5. Rendre la template
+    # Rendre la template
     return tpl('packages/list.html',
         {'distro': distro,
          'section': section,
@@ -180,17 +180,17 @@ def listsection(request, distro_id, section_id, page):
 def search(request, page):
     # Recherche q, method, distro
     
-    # 1. Construire le début de la requete
+    # Construire le début de la requete
     packages = Package.objects \
         .select_related('arch', 'distribution') \
         .order_by('-distribution', 'name')
     
-    # 2. Récupérer les variables
+    # Récupérer les variables
     q = request.GET['q']
     method = request.GET['method']
     distro = request.GET['distro']
     
-    # 4. Filtrer pour la distro (dans ce cas le order_by est ignoré)
+    # Filtrer pour la distro (dans ce cas le order_by est ignoré)
     di = None
     
     if distro != 'all':
@@ -198,7 +198,7 @@ def search(request, page):
         
         di = get_object_or_404(Distribution, pk=distro)
     
-    # 5. Filtrer suivant le critère de recherche
+    # Filtrer suivant le critère de recherche
     if method == 'match':
         packages = packages.filter(name__exact=q)
     elif method == 'contains':
@@ -210,7 +210,7 @@ def search(request, page):
     else:
         raise Http404
     
-    # 6. Paginer
+    # Paginer
     paginator = Paginator(packages, 20)
     
     try:
@@ -223,7 +223,7 @@ def search(request, page):
     except (EmptyPage, InvalidPage):
         packages = paginator.page(paginator.num_pages).object_list
     
-    # 7. Rendre la template
+    # Rendre la template
     return tpl('packages/list.html', 
         {'packages': packages,
          'list_pages': get_list_page(page, paginator.num_pages, 4),
@@ -236,7 +236,7 @@ def showpackage(request, package_id):
     # Afficher un paquet. Pas oublier de gérer distro_id=0
     package_id = int(package_id)
     
-    # 1. Récupérer le paquet
+    # Récupérer le paquet
     try:
         package = Package.objects \
             .select_related('arch', 'distribution', 'section', 'sourcepkg') \
@@ -244,28 +244,28 @@ def showpackage(request, package_id):
     except Package.DoesNotExist:
         raise Http404
 
-    # 2. Splitter les chaînes
+    # Splitter les chaînes
     package.depends = package.depends.split(';')
     package.conflicts = package.conflicts.split(';')
     package.suggests = package.suggests.split(';')
     package.provides = package.provides.split(';')
     package.replaces = package.replaces.split(';')
 
-    # 3. Prendre les paquets qui ont le même nom pour proposer un joli
+    # Prendre les paquets qui ont le même nom pour proposer un joli
     #    menu à l'utilisateur
     pkgs = Package.objects \
         .select_related('arch', 'distribution') \
         .filter(name__exact=package.name) \
         .order_by('-distribution')
 
-    # 4. Prendre les chaînes du paquet
+    # Prendre les chaînes du paquet
     strings = String.objects.filter(package=package)
 
     package.title = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 0, strings, None).content
     package.short_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 1, strings, None).content
     package.long_desc = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 2, strings, None).content
     
-    # 5. Gestion des votes
+    # Gestion des votes
     if package.total_votes == 0:
         package.rating = 0.0
     else:
@@ -277,15 +277,15 @@ def showpackage(request, package_id):
         votes = PackageVote.objects.filter(package=package, user=request.user.get_profile())
         can_vote = (votes.count() == 0)
     
-    # 6. Prendre la dernière entrée de changelog
+    # Prendre la dernière entrée de changelog
     changelog = ChangeLog.objects \
                     .filter(package=package) \
                     .order_by('-date')[0]
     
-    # 7. On a besoin du premier mirroir pour afficher l'icône
+    # On a besoin du premier mirroir pour afficher l'icône
     mirror = Mirror.objects.get(pk=1)
     
-    # 8. Rendre la template
+    # Rendre la template
     return tpl('packages/view.html', 
         {'package': package,
          'changelog': changelog,
@@ -302,17 +302,17 @@ def vote(request, package_id, vote):
     if (vote < 0) or (vote > 3):
         raise Http404   # Oh oh mon petit pirate, on fausse les résultats ?
     
-    # 1. Prendre le paquet
+    # Prendre le paquet
     package = get_object_or_404(Package, pk=package_id)
     
-    # 2. Vérifier que l'utilisateur peur voter
+    # Vérifier que l'utilisateur peur voter
     votes = PackageVote.objects.filter(package=package, user=request.user.get_profile())
     can_vote = (votes.count() == 0)
     
     if not can_vote:
         raise Http404
     
-    # 3. Enregistrer le vote
+    # Enregistrer le vote
     package.total_votes += 3
     package.votes += vote
     package.save()
@@ -320,32 +320,32 @@ def vote(request, package_id, vote):
     vote = PackageVote(package=package, user=request.user.get_profile())
     vote.save()
     
-    # 4. On a fini
+    # On a fini
     messages.add_message(request, messages.INFO, _('Votre vote a été pris en compte'))
     return HttpResponseRedirect('packages-4-%i.html' % package_id)
          
 def viewsource(request, source_id, topic_page, list_page):
     source_id = int(source_id)
     
-    # 1. Prendre le paquet source
+    # Prendre le paquet source
     try:
         source = SourcePackage.objects.select_related('topic').get(pk=source_id)
     except:
         raise Http404
     
-    # 2. Prendre les paquets binaires qu'elle construit
+    # Prendre les paquets binaires qu'elle construit
     packages = Package.objects \
         .select_related('arch', 'distribution', 'section') \
         .filter(sourcepkg=source) \
         .order_by('name')
         
-    # 3. Prendre l'historique de la source
+    # Prendre l'historique de la source
     logs = SourceLog.objects \
         .select_related('distribution') \
         .filter(source=source) \
         .order_by('-id')
     
-    # 4. Paginer le tout
+    # Paginer le tout
     paginator = Paginator(logs, 25)
     
     try:
@@ -358,7 +358,7 @@ def viewsource(request, source_id, topic_page, list_page):
     except (EmptyPage, InvalidPage):
         plogs = paginator.page(paginator.num_pages)
         
-    # 5. Dernier log pour les informations intéressantes
+    # Dernier log pour les informations intéressantes
     if list_page == 1:
         # Première page, lastlog est le premier log, on peut économiser une requête
         logs = list(plogs.object_list)
@@ -372,7 +372,7 @@ def viewsource(request, source_id, topic_page, list_page):
     lastlog.conflicts = lastlog.conflicts.split(';')
     lastlog.suggests = lastlog.suggests.split(';')
     
-    # 5. Flags de chaque log
+    # Flags de chaque log
     for log in logs:
         log.flag_latest = ((log.flags & 1) != 0)
         log.flag_automatic = ((log.flags & 2) == 0) # Le flag est MANUAL
@@ -380,7 +380,7 @@ def viewsource(request, source_id, topic_page, list_page):
         log.flag_warnings = ((log.flags & 64) != 0)
         log.flag_building = ((log.flags & 128) != 0)
         
-    # 6. Rendre la template
+    # Rendre la template
     config = {'source': source,
               'packages': packages,
               'logs': logs,
@@ -396,7 +396,7 @@ def viewsourcelog(request, log_id):
     # Afficher les informations sur une construction d'une source
     log_id = int(log_id)
     
-    # 1. Récupérer le log
+    # Récupérer le log
     try:
         log = SourceLog.objects \
                 .select_related('source', 'distribution', 'arch') \
@@ -404,7 +404,7 @@ def viewsourcelog(request, log_id):
     except SourceLog.DoesNotExist:
         raise Http404
     
-    # 2. Gérer les flags
+    # Gérer les flags
     log.flag_latest = ((log.flags & 1) != 0)
     log.flag_manual = ((log.flags & 2) != 0)
     log.flag_failed = ((log.flags & 4) != 0)
@@ -414,16 +414,16 @@ def viewsourcelog(request, log_id):
     log.flag_warnings = ((log.flags & 64) != 0)
     log.flag_building = ((log.flags & 128) != 0)
     
-    # 3. Gérer les dépendances
+    # Gérer les dépendances
     log.depends = log.depends.split(';')
     log.conflicts = log.conflicts.split(';')
     log.suggests = log.suggests.split(';')
     
-    # 4. Adresse des logs
+    # Adresse des logs
     part = (log_id >> 10) << 10;
     filename = '/files/logs/%i-%i' % (part, part + 1024)
     
-    # 5. Afficher la template
+    # Afficher la template
     return tpl('packages/loginfo.html',
         {'log': log,
          'filename': filename}, request)
@@ -433,14 +433,14 @@ def setflags(request, log_id):
     # Définir les flags d'un enregistrement de log
     log_id = int(log_id)
     
-    # 1. Vérifier qu'on est bien en post
+    # Vérifier qu'on est bien en post
     if request.method != 'POST':
         raise Http404
     
-    # 2. Récupérer le log
+    # Récupérer le log
     log = get_object_or_404(SourceLog, pk=log_id)
     
-    # 3. Calculer les flags
+    # Calculer les flags
     flags = log.flags
     
     if request.POST.get('rebuild', None) == 'on':
@@ -471,13 +471,13 @@ def viewmirrors(request, package_id):
     # Afficher les mirroirs et proposer le téléchargement du paquet
     package_id = int(package_id)
     
-    # 1. Récupérer le paquet
+    # Récupérer le paquet
     package = get_object_or_404(Package, pk=package_id)
     
-    # 2. Récupérer la liste des mirroirs
+    # Récupérer la liste des mirroirs
     mirrors = Mirror.objects.order_by('place')
     
-    # 3. Rendre la template
+    # Rendre la template
     return tpl('packages/mirrors.html', 
         {'package': package,
          'mirrors': mirrors}, request)
@@ -486,13 +486,13 @@ def viewfiles(request, package_id):
     # Afficher les fichiers d'un paquet
     package_id = int(package_id)
     
-    # 1. Récupérer le paquet
+    # Récupérer le paquet
     package = get_object_or_404(Package, pk=package_id)
     
-    # 2. Nom du fichier qui contient la liste des fichiers contenus dans l'archive
+    # Nom du fichier qui contient la liste des fichiers contenus dans l'archive
     filename = settings.LOCAL_MIRROR + package.download_url + '.files'
 
-    # 3. Lire le fichier, et retirer tout ce qui ne doit pas être affiché
+    # Lire le fichier, et retirer tout ce qui ne doit pas être affiché
     f = open(filename)
     files = []
 
@@ -502,7 +502,7 @@ def viewfiles(request, package_id):
 
         files.append(line)
     
-    # 4. Rendre la template
+    # Rendre la template
     return tpl('packages/files.html',
         {'files': files,
          'pkg': package.name + '-' + package.version + ' (' + package.arch.name + ')'}, request)
@@ -511,22 +511,22 @@ def changelog(request, package_id, page):
     # Afficher les changements d'un paquet
     package_id = int(package_id)
     
-    # 1. Récupérer le paquet
+    # Récupérer le paquet
     package = get_object_or_404(Package, pk=package_id)
     
-    # 2. Récupérer les éléments de changelog de ce paquet
+    # Récupérer les éléments de changelog de ce paquet
     entries = ChangeLog.objects \
                 .filter(package=package_id) \
                 .select_related('distribution') \
                 .order_by('-date')
                 
-    # 3. Pour chaque entrée, récupérer la chaîne traduite
+    # Pour chaque entrée, récupérer la chaîne traduite
     strings = String.objects.filter(package=package)
     
     for entry in entries:
         entry.content = str_of_package(package, request.LANGUAGE_CODE.split('-')[0], 3, strings, entry).content
         
-    # 4. Paginer
+    # Paginer
     paginator = Paginator(entries, 20)
     
     try:
@@ -539,7 +539,7 @@ def changelog(request, package_id, page):
     except (EmptyPage, InvalidPage):
         entries = paginator.page(paginator.num_pages).object_list
         
-    # 4. Afficher dans la template
+    # Afficher dans la template
     return tpl('packages/changelog.html',
         {'package': package,
          'list_pages': get_list_page(page, paginator.num_pages, 4),

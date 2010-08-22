@@ -112,20 +112,20 @@ def random_letters():
     return p
     
 def captcha(request):
-    # 1. Find random letters
+    # Find random letters
     letters = random_letters()
     
-    # 2. Read in the session the color of the good letters
+    # Read in the session the color of the good letters
     colour = request.session.get('captcha_good_color_rgb', 'rgb(255, 0, 0)')
     
-    # 2. Create a nice image with them
+    # Create a nice image with them
     infos = captcha_image(letters, colour)
     image = infos['image']
     
-    # 3. Save in the session the good result
+    # Save in the session the good result
     request.session['captcha_good_letters'] = infos['selected']
     
-    # 4. Display the image
+    # Display the image
     response = HttpResponse(mimetype='image/png')
     response['cache-control'] = 'no-store, no-cache, must-revalidate'
     image.save(response, 'PNG')

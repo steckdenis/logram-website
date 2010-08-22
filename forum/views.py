@@ -66,10 +66,10 @@ def return_page(topic, msg_id):
 def index(request):
     # Afficher la liste des forums dans leurs catégories. La fonction est complexe, mais j'explique ;-)
     
-    # 1. Récupérer les forums, leur catégorie, et leurs informations sur les derniers posts (par qui quand et où)
+    # Récupérer les forums, leur catégorie, et leurs informations sur les derniers posts (par qui quand et où)
     forums = Forum.objects.select_related('category', 'last_topic', 'last_topic__last_post', 'last_topic__last_post__author').all()
     
-    # 2. Récupérer la liste des topics lus par l'utilisateur, si pas anonyme
+    # Récupérer la liste des topics lus par l'utilisateur, si pas anonyme
     if not request.user.is_anonymous():
         # On a besoin de la liste des derniers topics des forums
         last_topics = [ forum.last_topic for forum in forums ]
@@ -85,12 +85,12 @@ def index(request):
                     if ut.last_read_post == forum.last_topic.last_post:
                         forum.read = True
     
-    # 3. À cause d'une limitation des templates (pas d'assignation de variables),
+    # À cause d'une limitation des templates (pas d'assignation de variables),
     #    on a besoin d'une autre liste : categories
     categories = [ frm.category for frm in forums ]
     categories = list(set(categories))
     
-    # 4. Valà, c'est fini, on rend la template. Simple non ? Vive django !
+    # Valà, c'est fini, on rend la template. Simple non ? Vive django !
     return tpl('forum/index.html',
         {'forums': forums,
          'categories': categories}, request)
@@ -98,7 +98,7 @@ def index(request):
 def list_topics(request, topics, page, conf):
     # Liste des topics
     
-    # 1. Paginer le tout
+    # Paginer le tout
     paginator = Paginator(topics, 20)        #20 topics par page
     
     if int(page) < 1:
@@ -111,7 +111,7 @@ def list_topics(request, topics, page, conf):
     
     topics = pg.object_list
     
-    # 4. Si l'utilisateur est connecté, récupérer les informations de lecture
+    # Si l'utilisateur est connecté, récupérer les informations de lecture
     if not request.user.is_anonymous():
         uts = UserTopic.objects.select_related('topic', 'last_read_post').filter(topic__id__in=[ t.id for t in topics ], user=request.user.get_profile())
         
@@ -124,12 +124,12 @@ def list_topics(request, topics, page, conf):
                     if ut.last_read_post == topic.last_post:
                         topic.read = True
     
-    # 5. Toujours à cause des templates, il faut manuellement créer le tableau des pages
+    # Toujours à cause des templates, il faut manuellement créer le tableau des pages
     for topic in topics:
         pages = range(1, (topic.num_posts / 20)+2) #20 posts par page
         topic.pages = pages
     
-    # 6. Rendre la template
+    # Rendre la template
     conf['topics'] = topics
     conf['list_pages'] = get_list_page(page, paginator.num_pages, 4)
     
@@ -138,22 +138,22 @@ def list_topics(request, topics, page, conf):
 def viewforum(request, forum_id, page):
     # Afficher un forum
     
-    # 1. Récupérer les infos du forum (pour afficher titre et sous-titre)
+    # Récupérer les infos du forum (pour afficher titre et sous-titre)
     forum = get_object_or_404(Forum, pk=forum_id)
     
-    # 2. Récupérer les topics de ce forum TODO: filtrer les langues que l'utilisateur veut
+    # Récupérer les topics de ce forum TODO: filtrer les langues que l'utilisateur veut
     topics = Topic.objects.select_related('last_post', 'author', 'last_post__author').filter(p_type=0, parent_id=forum_id).order_by('-stick', '-last_post__date_created')
     
-    # 3. Plein de fonctions affichent des topics, donc tout est regroupé
+    # Plein de fonctions affichent des topics, donc tout est regroupé
     return list_topics(request, topics, page, 
         {'forum': forum})
 
 # Equivalent de viewtopic, mais peut etre réutilisée pour afficher les commentaires de bugs, wiki et autres
 def list_posts(request, topic, page, config, template):
-    # 1. Récupérer la liste des messages du topic
+    # Récupérer la liste des messages du topic
     posts = Post.objects.select_related('author', 'topic', 'topic__author', 'author__user').filter(topic=topic).order_by('date_created')
     
-    # 2. Paginer tout ça
+    # Paginer tout ça
     paginator = Paginator(posts, 20)        #20 posts par page
     
     if int(page) < 1:
@@ -166,10 +166,10 @@ def list_posts(request, topic, page, config, template):
     
     posts = pg.object_list
     
-    # 3. Récupérer les historiques des posts
+    # Récupérer les historiques des posts
     edits = History.objects.select_related('author', 'post').filter(post__id__in=[ p.id for p in posts ])
     
-    # 4. Associer les éditions aux posts
+    # Associer les éditions aux posts
     for post in posts:
         for edit in edits:
             if post == edit.post:
@@ -178,7 +178,7 @@ def list_posts(request, topic, page, config, template):
                 else:
                     post.edits.append(edit)
     
-    # 5. Mettre à jour le dernier post lu
+    # Mettre à jour le dernier post lu
     if not request.user.is_anonymous() and len(posts) != 0:
         try:
             ut = UserTopic.objects.get(topic=topic, user=request.user.get_profile())
@@ -194,20 +194,20 @@ def list_posts(request, topic, page, config, template):
             ut = UserTopic(topic=topic, user=request.user.get_profile(), last_read_post=posts[len(posts)-1], last_read_post_page=page)
             ut.save()
     
-    # 6. Si modo (ou autre), afficher la liste des forums dans lequel le topic peut être déplacé
+    # Si modo (ou autre), afficher la liste des forums dans lequel le topic peut être déplacé
     if topic.p_type == 0:
         forums = {}
         if request.user.has_perm('forum.can_change_topic'):
             forums = Forum.objects.all()
         config['forums'] = forums
     
-    # 7. Prendre le sondage
+    # Prendre le sondage
     poll = False
     
     if topic.poll_id:
         poll = get_poll(request, topic.poll)
     
-    # 8. Si l'utilisateur est enregistré, savoir s'il surveille le sujet
+    # Si l'utilisateur est enregistré, savoir s'il surveille le sujet
     watch = False
     
     if not request.user.is_anonymous():
@@ -215,7 +215,7 @@ def list_posts(request, topic, page, config, template):
         
         watch = (bookmarks.count() != 0)
     
-    # 8. Rendre la template
+    # Rendre la template
     config['posts'] = posts
     config['topic'] = topic
     config['poll'] = poll
@@ -229,13 +229,13 @@ def list_posts(request, topic, page, config, template):
 
 def viewtopic(request, topic_id, page):
     # Afficher un topic
-    # 1. Prendre le sujet
+    # Prendre le sujet
     topic = get_object_or_404(Topic, pk=topic_id)
     
-    # 2. Prendre le forum
+    # Prendre le forum
     forum = get_object_or_404(Forum, pk=topic.parent_id)
     
-    # 3. Afficher les posts
+    # Afficher les posts
     return list_posts(request, topic, page, {
         'forum': forum}, 'forum/viewtopic.html')
 
@@ -245,17 +245,17 @@ def post(request, topic_id):
     if request.method != 'POST':
         raise Http404
     
-    # 1. Vérifier que le topic n'est pas fermé
+    # Vérifier que le topic n'est pas fermé
     topic = get_object_or_404(Topic, pk=topic_id)
     
     if topic.closed:
         raise Http404
     
-    # 2. Poster le message
+    # Poster le message
     msg = Post(topic=topic, author=request.user.get_profile(), has_helped=False, contents=request.POST['body'])
     msg.save()
     
-    # 3. Incrémenter l'occupation du topic, et définir son dernier post
+    # Incrémenter l'occupation du topic, et définir son dernier post
     topic.last_post = msg
     topic.num_posts += 1
     topic.last_post_page = (topic.num_posts / 20) + 1
@@ -270,10 +270,10 @@ def post(request, topic_id):
         
     topic.save()
     
-    # 4. Trouver l'url de redirection
+    # Trouver l'url de redirection
     redirect_url = return_page(topic, msg.id)
     
-    # 5. Envoyer, si nécessaire, un mail aux assignés de la demande
+    # Envoyer, si nécessaire, un mail aux assignés de la demande
     demanddests = []
     
     if topic.p_type == 2:
@@ -330,7 +330,7 @@ def post(request, topic_id):
             demanddests, \
             fail_silently=True)
     
-    # 6. On a fini
+    # On a fini
     messages.add_message(request, messages.INFO, _('Message posté avec succès'))
     return HttpResponseRedirect(redirect_url)
 
@@ -739,14 +739,14 @@ def addpoll(request, topic_id):
     # Ajouter un sondage au sujet
     topic_id = int(topic_id)
     
-    # 1. Récupérer le sujet
+    # Récupérer le sujet
     topic = get_object_or_404(Topic, pk=topic_id)
     
-    # 2. Si le sujet a déjà un sondage, abandonner
+    # Si le sujet a déjà un sondage, abandonner
     if topic.poll_id:
         raise Http404
     
-    # 3. Vérifier que l'utilisateur est sur son topic et a les droits add_poll, ou qu'il a le droit poll_on_all_topics
+    # Vérifier que l'utilisateur est sur son topic et a les droits add_poll, ou qu'il a le droit poll_on_all_topics
     if topic.author != request.user.get_profile() and not request.user.has_perm('forum.poll_on_all_topics'):
         raise Http404
     
@@ -754,7 +754,7 @@ def addpoll(request, topic_id):
     if topic.author == request.user.get_profile() and not request.user.has_perm('forum.add_poll'):
         raise Http404
         
-    # 4. Afficher le formulaire
+    # Afficher le formulaire
     if request.method == 'POST':
         form = PollForm(request.POST)
         
@@ -797,7 +797,7 @@ def view_votes(request, poll_id):
     # Afficher les résultats d'un sondage
     poll_id = int(poll_id)
     
-    # 1. Récupérer le sondage
+    # Récupérer le sondage
     try:
         poll = Poll.objects \
                 .select_related('topic') \
@@ -807,13 +807,13 @@ def view_votes(request, poll_id):
     
     poll = get_poll(request, poll)
     
-    # 2. Prendre les choix des utilisateurs
+    # Prendre les choix des utilisateurs
     choices = UserChoice.objects \
                 .select_related('user', 'choice') \
                 .filter(choice__poll=poll['object']) \
                 .order_by('choice')
                 
-    # 3. Afficher
+    # Afficher
     return tpl('forum/viewvotes.html',
         {'topic': poll['object'].topic,
          'poll': poll,
@@ -827,7 +827,7 @@ def vote(request, poll_id):
     if request.method != 'POST':
         raise Http404
     
-    # 1. Vérifier que l'utilisateur peut voter
+    # Vérifier que l'utilisateur peut voter
     user_choices = UserChoice.objects \
                     .filter(user=request.user.get_profile(), choice__poll=poll_id)
                     
@@ -836,22 +836,22 @@ def vote(request, poll_id):
     if not poll_can_vote:
         raise Http404
         
-    # 2. Récupérer le vote qui appartient au sondage et qui a l'ID envoyée en POST
+    # Récupérer le vote qui appartient au sondage et qui a l'ID envoyée en POST
     choices = Choice.objects.filter(poll=poll_id, pk=request.POST['choice'])
     
     if len(choices) == 0:
         raise Http404
         
-    # 3. Lui ajouter un vote
+    # Lui ajouter un vote
     choice = choices[0]
     choice.votes += 1
     choice.save()
     
-    # 4. Dire qu'on a voté
+    # Dire qu'on a voté
     user_choice = UserChoice(user=request.user.get_profile(), choice=choice)
     user_choice.save()
     
-    # 5. On a fini
+    # On a fini
     topic = get_object_or_404(Topic, poll=poll_id)
     
     messages.add_message(request, messages.INFO, _(u'Votre vote a été pris en compte'))
@@ -862,26 +862,26 @@ def vote(request, poll_id):
 def toggle_watch(request, topic_id):
     # Placer un topic sous surveillance
     
-    # 1. Récupérer le sujet
+    # Récupérer le sujet
     topic = get_object_or_404(Topic, pk=topic_id)
     
-    # 2. Récupérer les bookmarks déjà existants
+    # Récupérer les bookmarks déjà existants
     bookmarks = Bookmark.objects.filter(topic=topic, user=request.user)
     
     if bookmarks.count() == 0:
-        # 3. Créer le Bookmark, l'utilisateur n'en ayant pas encore
+        # Créer le Bookmark, l'utilisateur n'en ayant pas encore
         bk = Bookmark(topic=topic, user=request.user)
         bk.save()
         
         message = _(u'Vous êtes abonné au sujet «%s»') % topic.title
     else:
-        # 3. Supprimer l'unique bookmark
+        # Supprimer l'unique bookmark
         bk = bookmarks[0]
         
         bk.delete()
         
         message = _(u'Vous n\'êtes plus abonné au sujet «%s»') % topic.title
     
-    # 4. Retourner au sujet
+    # Retourner au sujet
     messages.add_message(request, messages.INFO, message)
     return HttpResponseRedirect(return_page(topic, 0))

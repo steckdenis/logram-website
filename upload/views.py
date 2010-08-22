@@ -162,30 +162,30 @@ def delete(request, file_id):
 def newdir(request, hash, parent_type, quota, uniqid):
     # Créer un nouveau dossier avec un bon quota
 
-    # 1. Trouver le hash
+    # Trouver le hash
     h = upload_hash(parent_type, quota, uniqid)
 
-    # 2. Vérifier que c'est le bon hash
+    # Vérifier que c'est le bon hash
     if h != hash:
         raise Http404
 
-    # 3. Vérifier qu'il n'y a encore aucun dossier avec ce hash et appartenant à l'utilisateur
+    # Vérifier qu'il n'y a encore aucun dossier avec ce hash et appartenant à l'utilisateur
     ds = Directory.objects.filter(user=request.user, sha1hash=hash)
 
     if len(ds) != 0:
         # Un dossier a déjà été créé
         return HttpResponseRedirect('upload-1-%i.html' % ds[0].id)
 
-    # 4. Trouver le dossier du membre qui a le bon uniqid
+    # Trouver le dossier du membre qui a le bon uniqid
     try:
         d = Directory.objects.filter(user=request.user).get(type=parent_type)
     except Directory.DoesNotExist:
         raise Http404
 
-    # 5. Créer un nouveau dossier qui a ce dossier comme parent
+    # Créer un nouveau dossier qui a ce dossier comme parent
     ndir = Directory(name=request.session['create_dir_name'], quota=quota, used=0, user=request.user, parent=d, sha1hash=hash)
     ndir.save()
 
-    # 6. Rediriger l'utilisateur vers ce dossier
+    # Rediriger l'utilisateur vers ce dossier
     messages.add_message(request, messages.INFO, _('Le dossier a été créé'))
     return HttpResponseRedirect('upload-1-%i.html' % ndir.id)
