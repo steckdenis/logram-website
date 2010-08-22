@@ -21,8 +21,8 @@
                         {{ paste.title }}
                     </a>,
                     
-                    {% trans "créé" %} {{ paste.created|format_date:request:request }},
-                    {% trans "se termine" %} {{ paste.ended|format_date:request:request }}
+                    {% trans "créé" %} {{ paste.created|format_date:request }},
+                    {% trans "se termine" %} {{ paste.ended|format_date:request }}
                     
                     <br />
                     
