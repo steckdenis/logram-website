@@ -8,27 +8,27 @@
         {% if topic.author_id == user.get_profile.id %}
             {% if topic.p_type == 0 %}
                 {% if not topic.resolved %}
-                    <a href="forum-11-{{ topic.id }}.html">{% trans "Mon problème est résolu" %}</a>
+                    <a href="forum-11-{{ topic.id }}.html" class="forum_tool_link">{% trans "Mon problème est résolu" %}</a>
                 {% else %}
-                    <a href="forum-11-{{ topic.id }}.html">{% trans "Mon problème n'est plus résolu" %}</a>
+                    <a href="forum-11-{{ topic.id }}.html" class="forum_tool_link">{% trans "Mon problème n'est plus résolu" %}</a>
                 {% endif %}
             {% endif %}
             
             {% if not topic.poll_id and perms.forum.add_poll %}
-                <a href="forum-15-{{ topic.id }}.html">
+                <a href="forum-15-{{ topic.id }}.html" class="forum_tool_link">
                     {% trans "Ajouter un sondage" %}
                 </a>
             {% endif %}
         {% else %}
             {% if perms.forum.poll_on_all_topics and not topic.poll_id %}
-                <a href="forum-15-{{ topic.id }}.html">
+                <a href="forum-15-{{ topic.id }}.html" class="forum_tool_link">
                     {% trans "Ajouter un sondage" %}
                 </a>
             {% endif %}
         {% endif %}
         
         {% if perms.forum.add_alert %}
-            <a href="forum-12-{{ topic.id }}.html">{% trans "Avertir les modérateurs" %}</a>
+            <a href="forum-12-{{ topic.id }}.html" class="forum_tool_link">{% trans "Avertir les modérateurs" %}</a>
         {% endif %}
         
         {% if perms.forum.change_topic %}

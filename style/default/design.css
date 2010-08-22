@@ -688,6 +688,12 @@ hr
     margin: 10px;
 }
 
+.forum_tool_link
+{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 #forum_watch
 {
     text-align: right;
@@ -930,7 +936,7 @@ table.diff {}
 }
 
 td.diff_header {
-    text-align:rightµ
+    text-align:right;
 }
 
 table.diff td {
