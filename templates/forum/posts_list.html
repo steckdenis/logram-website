@@ -5,7 +5,7 @@
     <div id="forum_tools">
         <strong>{% trans "Actions :" %}</strong>
         
-        {% if topic.author == user.get_profile %}
+        {% if topic.author_id == user.get_profile.id %}
             {% if topic.p_type == 0 %}
                 {% if not topic.resolved %}
                     <a href="forum-11-{{ topic.id }}.html">{% trans "Mon problème est résolu" %}</a>

@@ -472,7 +472,6 @@ hr
 #messages ul
 {
     margin: 0px;
-    list-style-image: url('img/bullet_messages.png');
 }
 
 /* Coloration syntaxique et lCode */
@@ -565,14 +564,20 @@ hr
 
 .errorlist
 {
-    list-style-image: none !important;
-    list-style-type: disc !important;
     color: #a00;
     padding: 2px;
     margin: 2px;
     padding-left: 25px;
     border: 1px solid #800;
     background-color: #fcc;
+}
+
+.errorlist li
+{
+    background: none !important;
+    list-style-type: disc;
+    margin-left: 10px !important;
+    padding-left: 0px !important;
 }
 
 /* Coloration des utilisateurs */

@@ -112,7 +112,6 @@
     <table class="demand_tbl" style="text-align: center;">
         <tr>
             <th>{% trans "Auteur" %}</th>
-            <th>{% trans "Date" %}</th>
             <th>{% trans "Titre" %}</th>
             {% if product %}
                 <th>{% trans "Type" %}</th>
@@ -128,16 +127,15 @@
                     {{ demand.reporter|color_pseudo }}
                 </td>
                 <td>
-                    {% blocktrans with demand.created_at|format_date:request as created and demand.updated_at|format_date:request as updated %}
-                        Créée {{ created }}<br />
-                        Mise à jour {{ updated }}
-                    {% endblocktrans %}
-                </td>
-                <td>
                     {% if demand.status.closed %}
-                        <del><a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a></del>
-                    {% else %}
-                        <a href="demand-4-{{ demand.id }}-1.html">{{ demand.title }}</a>
+                        <del>
+                    {% endif %}
+                    <a href="demand-4-{{ demand.id }}-1.html"
+                       title="{% blocktrans with demand.created_at|format_date:request as created and demand.updated_at|format_date:request as updated %}Créée {{ created }}, mise à jour {{ updated }}{% endblocktrans %}">
+                        {{ demand.title }}
+                    </a>
+                    {% if demand.status.closed %}
+                        </del>
                     {% endif %}
                 </td>
                 <td>
@@ -146,9 +144,9 @@
                             {% trans demand.type.name %}
                         </a>
                     {% else %}
-                        <a href="demand-2-0-{{ status_id }}-{{ demand.product.id }}{{ sort }}-{{ page }}.html">
-                            {{ demand.product.title }}<br />
-                            {{ demand.component.name }} {{ demand.product_version.name }}
+                        <a href="demand-2-0-{{ status_id }}-{{ demand.product.id }}{{ sort }}-{{ page }}.html"
+                           title="{% blocktrans with demand.component.name as component and demand.product_version.name as version %}Composant {{ component }}, à la version {{ version }}{% endblocktrans %}">
+                            {{ demand.product.title }}
                         </a>
                     {% endif %}
                 </td>

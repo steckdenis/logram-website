@@ -116,7 +116,7 @@ def mlist(request, type_id, status_id, product_id, sort, page):
     status = Status.objects.all()
     
     # Paginer
-    paginator = Paginator(demands, 15)        #15 demandes par pages
+    paginator = Paginator(demands, 20)
 
     try:
         pg = paginator.page(page)
