@@ -606,7 +606,6 @@ def edit_demand(request, demand_id):
             demand.title = title
             demand.content = body
             demand.done = done
-            demand.reporter = request.user.get_profile()
             demand.type = type
             demand.product = product
             demand.component = component
