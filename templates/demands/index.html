@@ -25,6 +25,24 @@
             </ul>
         </p>
     {% endblocktrans %}
+    
+    <h2>{% trans "Produits" %}</h2>
+    
+    <p>
+        {% blocktrans %}
+            Les demandes sont classées par produits, ce qui permet de les retrouver plus facilement et de les gérer au mieux. Voici la liste des produits conçus par Logram. Cliquer dessus vous mène à une page comprenant des informations sur ce produit, ses composants, et toutes ses demandes (quelque soit leur type).
+        {% endblocktrans %}
+    </p>
+    
+    <ul>
+        {% for p in products %}
+            <li>
+                <a href="demand-2-0-0-{{ p.id }}-update-1.html">
+                    {% trans p.title %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 
     <h2>{% trans "Types de demandes" %}</h2>
 

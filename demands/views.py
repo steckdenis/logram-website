@@ -47,9 +47,11 @@ import datetime
 def index(request):
     # Afficher les types de demandes
     types = Type.objects.all()
+    products = Product.objects.all()
 
     return tpl('demands/index.html',
-        {'types': types}, request)
+        {'types': types,
+         'products': products}, request)
         
 def mlist(request, type_id, status_id, product_id, sort, page):
     # Afficher les demandes
