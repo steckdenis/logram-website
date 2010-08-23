@@ -8,8 +8,8 @@ besoin de ces dépendances :
 * python-markdown >= 2.0 (http://sourceforge.net/projects/python-markdown/files/)
 * Pygments (celui de la distrib est bon)
 * PyTZ
+* reCAPTCHA client
 * Un serveur MySQL qui marche
-* python-svn
 * Djapian, pour la recherche : http://code.google.com/p/djapian/
 
 Installation

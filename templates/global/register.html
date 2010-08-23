@@ -31,12 +31,10 @@
             <p>
                 <ul class="form_ul">
                     {{ form.as_ul }}
-                    <li style="display: none;">
-                        <label for="test">{% trans "Laissez cette zone comme elle est si vous êtes un humain" %}</label>
-                        <input type="text" id="test" name="test" value="sqdqf" />
-                    </li>
                 </ul>
             </p>
+            
+            {{ html_captcha|safe }}
             
             <p style="text-align: center;">
                 <input type="submit" value="{% trans "S'enregistrer" %}" /> {% trans "Une fois enregistré, il vous faut encore vous connecter" %}

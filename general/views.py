@@ -42,6 +42,8 @@ from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.contrib import messages
 
+from recaptcha.client import captcha
+
 def index(request):
     # Nouvelles
     latest_news = cache.get('index_last_news', None)
@@ -239,9 +241,20 @@ def register(request):
     # Enregistre un nouvel utilisateur
     #print request.method
     if request.method == 'POST':
+        # Vérifier le CAPTCHA
+        check_captcha = captcha.submit(request.POST['recaptcha_challenge_field'],
+                                       request.POST['recaptcha_response_field'],
+                                       settings.RECAPTCHA_PRIVATE_KEY,
+                                       request.META['REMOTE_ADDR'])
+                                       
+        if check_captcha.is_valid is False:
+             messages.add_message(request, messages.ERROR, _('Le CAPTCHA est mauvais !'))
+             return HttpResponseRedirect('/register.html')
+        
         form = RegisterForm(request.POST)
         form.clean()
-        if form.is_valid() and request.POST['test'] == 'sqdqf':
+        
+        if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -292,14 +305,17 @@ def register(request):
             p.save()
             
             # Ouf ! On a fini
-            
+            messages.add_message(request, messages.INFO, _('Bienvenue sur le site de Logram ! N\'oubliez-pas de vous connecter avec votre compte en cliquant sur «Se connecter»'))
             return HttpResponseRedirect('/')
     else:
         # Afficher le formulaire
         form = RegisterForm()
     
+    html_captcha = captcha.displayhtml(settings.RECAPTCHA_PUB_KEY)
+    
     return tpl('global/register.html',
-        {'form': form}, request)
+        {'form': form,
+         'html_captcha': html_captcha}, request)
         
 def devcorner(request):
     # Page quasi statique

@@ -134,11 +134,11 @@ INTERNAL_IPS = ('127.0.0.1')
 
 AUTH_PROFILE_MODULE = 'general.profile'
 
+RECAPTCHA_PUB_KEY = "public reCAPTCHA key"
+RECAPTCHA_PRIVATE_KEY = "private reCAPTCHA key"
+
 # Cache
 CACHE_BACKEND = 'file:///tmp/django_cache'
-
-# WebSVN
-WEBSVN_BASE = 'svn://logram-project.org/logram'
 
 # Gestion des paquets
 LOCAL_MIRROR = '/home/steckdenis/repo/'  # Dossier local qui contient le dépôt de paquets
