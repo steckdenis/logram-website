@@ -50,16 +50,6 @@ fieldset legend {
     border: 1px solid #888;
     background-color: #ddd;
 }
-#wiki_page img
-{
-    border: 0px;
-    display: block;
-    margin: auto;
-}
-#wiki_page img.smiley
-{
-    display: inline;
-}
 img.login_image
 {
     vertical-align: middle;
@@ -535,13 +525,15 @@ hr
 .files_dir
 {
     line-height: 22px;
-    list-style-image: url('img/folder.png');
+    background-image: url('img/folder.png') !important;
+    padding-left: 26px !important;
 }
 
 .files_file
 {
     line-height: 22px;
-    list-style-image: url('img/file.png');
+    background-image: url('img/file.png') !important;
+    padding-left: 26px !important;
 }
 
 .form_ul
@@ -552,7 +544,8 @@ hr
 
 .form_ul li
 {
-    list-style-image: none;
+    background-image: none !important;
+    padding-left: 0px !important;
 }
 
 .form_ul label
@@ -742,25 +735,8 @@ hr
 
 #wiki_links
 {
-    list-style-type: none;
-    list-style-image: none;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    padding-bottom: 0px;
     text-align: right;
-    padding-right: 30px;
-}
-
-#wiki_links li
-{
-    display: inline;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 3px;
-    border: 1px solid #888;
-    border-bottom: none;
-    margin-left: 5px;
-    font-size: 13px;
+    margin-right: 20px;
 }
 
 /* Paquets */

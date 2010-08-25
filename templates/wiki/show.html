@@ -9,37 +9,36 @@
 {% block body %}
     <h1>{{ page.title }}</h1>
     
-    <ul id="wiki_links">
+    <div id="wiki_links">
+        <a href="wiki-4-{{ page.id }}.html">{% trans "Historique" %}</a>
+        
         {% if not user.is_anonymous %}
-            <li><a href="wiki-3-{{ page.id }}-0-{{ page.slug }}.html">{% trans "Éditer" %}</a></li>
-            <li><a href="wiki-3-{{ page.id }}-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Traduire" %}</a></li>
+            &bull; <a href="wiki-3-{{ page.id }}-0-{{ page.slug }}.html">{% trans "Éditer" %}</a>
+            &bull; <a href="wiki-3-{{ page.id }}-{{ page.identifier }}-{{ page.slug }}.html">{% trans "Traduire" %}</a>
         {% endif %}
-        <li><a href="wiki-4-{{ page.id }}.html">{% trans "Historique" %}</a></li>
         
         {% if perms.wiki.change_page %}
-            <li>
-                <a href="wiki-5-{{ page.id }}.html">
-                    {% if not page.is_protected %}
-                        {% trans "Protéger" %}
-                    {% else %}
-                        {% trans "Déprotéger" %}
-                    {% endif %}
-                </a>
-            </li>
+            &bull;
+            <a href="wiki-5-{{ page.id }}.html">
+                {% if not page.is_protected %}
+                    {% trans "Protéger" %}
+                {% else %}
+                    {% trans "Déprotéger" %}
+                {% endif %}
+            </a>
         {% endif %}
         
         {% if perms.wiki.private_page %}
-            <li>
-                <a href="wiki-6-{{ page.id }}.html">
-                    {% if not page.is_private %}
-                        {% trans "Rendre privée" %}
-                    {% else %}
-                        {% trans "Rendre publique" %}
-                    {% endif %}
-                </a>
-            </li>
+            &bull;
+            <a href="wiki-6-{{ page.id }}.html">
+                {% if not page.is_private %}
+                    {% trans "Rendre privée" %}
+                {% else %}
+                    {% trans "Rendre publique" %}
+                {% endif %}
+            </a>
         {% endif %}
-    </ul>
+    </div>
     
     <div id="forum_tools" style="margin-top: 0px;">
         <strong>{% trans "Autres langues" %} :</strong>
