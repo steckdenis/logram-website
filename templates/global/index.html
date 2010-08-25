@@ -7,16 +7,31 @@
 {% block Accueil %}class="actif"{% endblock %}
 
 {% block body %}
-    <h1>{% trans "Distribution Linux Logram : Ne subissez plus, choisissez !" %}</h1>
+    <h1>{% trans "Distribution Linux Logram" %}</h1>
         
     <p>
         {% blocktrans %}
-            Logram est une distribution Linux simple, belle et efficace. Elle regroupe
-            tout le nécessaire à une distribution de qualité agréable à utiliser, et à la pointe de la
-            technologie : un gestionnaire de paquets fait maison et très performant, KDE dans sa dernière version, des outils
-            simples et puissants, et plein d'applications 100% Libres.
+            Logram est un projet de distribution GNU/Linux dont le but est d'apporter un mouvement nouveau à l'écosystème libre, dans la mesure du possible. Pour cela, Logram est découpé en trois projets :
         {% endblocktrans %}
     </p>
+    
+    <ul>
+        <li>
+            {% blocktrans %}
+                Un <strong><a href="wiki-portal-setup.html">gestionnaire de paquets</a></strong>, Setup, bâti à partir de rien et proposant des fonctionnalités avancées telles qu'un serveur de construction, le tag de fichiers, ou une résolution des dépendances avancées.
+            {% endblocktrans %}
+        </li>
+        <li>
+            {% blocktrans %}
+                Un <strong><a href="wiki-portal-website.html">site web</a></strong>, portail communautaire et de développement, dont le but est de permettre aux développeurs et aux utilisateurs de se rencontrer. Vous êtes actuellement en train de le visiter.
+            {% endblocktrans %}
+        </li>
+        <li>
+            {% blocktrans %}
+                Des <strong><a href="wiki-portal-packaging.html">paquets</a></strong>. Ce dernier point est à peine commencés (les autres sont quasiment finis). Les paquets Logram se baseront sur les outils Setup, et utiliseront des ressources libres méconnues, comme LLVM.
+            {% endblocktrans %}
+        </li>
+    </ul>
         
     <div id="index_dblocks">
         <div id="index_discover">
@@ -24,7 +39,7 @@
                 
             <p>
                 {% blocktrans %}
-                    <a href="wiki-discover.html">Découvrez Logram</a>, son univers, ce qu'il peut vous apporter, à quoi il ressemble, comment il s'utilise, et bien plus encore.
+                    <a href="wiki-discover.html">Découvrez Logram</a>, ses projets, son avenir, ce qu'il propose déjà et ce à quoi il servira.
                 {% endblocktrans %}
             </p>
         </div>
@@ -34,7 +49,7 @@
                 
             <p>
                 {% blocktrans %}
-                    <a href="downloads.html">Téléchargez</a> et <a href="wiki-install.html">installez</a> Logram, ou testez-le simplement sans toucher à votre ordinateur. Le tout est extrêmement simple et agréable.
+                    <a href="downloads.html">Téléchargez des projets</a> et <a href="wiki-portal-testing.html">testez-les</a>. Vous pourrez juger par vous-même ce que Logram apporte.
                 {% endblocktrans %}
             </p>
         </div>
