@@ -115,9 +115,9 @@ def index(request):
         cache.set('index_last_demands', latest_demands, 60)
         
     # Sondage en cours
-    mpoll = cache.get('index_last_poll', -1)
+    mpoll = cache.get('index_last_poll', None)
     
-    if mpoll == -1:
+    if not mpoll:
         mpoll = Poll.objects \
                 .select_related('topic') \
                 .order_by('-pub_date')[:1]
@@ -130,13 +130,14 @@ def index(request):
         cache.set('index_last_poll', mpoll, 60)
         
     # Savoir si on peut voter
-    if request.user.is_anonymous():
-         mpoll['can_vote'] = False
-    else:
-        user_choices = UserChoice.objects \
-                        .filter(user=request.user.get_profile(), choice__poll=mpoll['object'])
+    if mpoll:
+        if request.user.is_anonymous():
+            mpoll['can_vote'] = False
+        else:
+            user_choices = UserChoice.objects \
+                            .filter(user=request.user.get_profile(), choice__poll=mpoll['object'])
 
-        mpoll['can_vote'] = (user_choices.count() == 0)
+            mpoll['can_vote'] = (user_choices.count() == 0)
     
     #Statistique
     stats = cache.get('index_stats', False)
