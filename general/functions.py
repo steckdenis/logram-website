@@ -274,7 +274,7 @@ def lcode(text):
     markdown.TAB_LENGTH = 4 # Tabulation normale
 
     if rs == False:
-        rs = markdown.markdown(force_unicode(text.replace('\\', '\\\\')), ['toc', 'tables', 'codehilite', 'wikilinks(base_url=/wiki-,end_url=.html'], True)
+        rs = markdown.markdown(force_unicode(text.replace('\\', '\\\\')), ['toc', 'def_list', 'tables', 'codehilite', 'wikilinks(base_url=/wiki-,end_url=.html'], True)
         
         # Gérer les smileys
         

@@ -32,7 +32,7 @@ th {
     background: #ddf;
 }
 strong {
-    color: #555;
+    color: #333;
 }
 #corps ul {
     list-style: none;
@@ -232,6 +232,15 @@ hr
 #corps a:hover {
     color: #699ad1;
     text-decoration: underline;
+}
+div.toc {
+    border: 1px solid #aaf;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 75%;
+}
+div.toc ul {
+    margin: 0px;
 }
 
 /* Menu */
