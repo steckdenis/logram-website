@@ -38,7 +38,7 @@ class Page(models.Model):
     is_private = models.BooleanField(_('Page privée (accessible uniquement au staff)'))
     
     def __unicode__(self):
-        return self.title + ' | ' + self.lang
+        return self.title
     
     class Meta:
         verbose_name = _('Page')

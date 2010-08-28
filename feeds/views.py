@@ -28,11 +28,10 @@ from django.utils.translation import gettext as _
 from pyv4.news.models import News
 from pyv4.demands.models import Demand
 from pyv4.forum.models import Topic
-from pyv4.wiki.models import Page
+from pyv4.wiki.models import Page, LogEntry
 from pyv4.packages.models import Package
 from pyv4.general.functions import *
 from pyv4.forum.views import return_page
-
 
 class LatestNews(Feed):
     title = _("Logram-Project: News")
@@ -50,10 +49,14 @@ class LatestNews(Feed):
             cache.set('feeds_news', list(NList), 30*60)
         return NList
     
+    def item_title(self, item):
+        return item.title
+        
+    def item_description(self, item):
+        return item.body
     
-    def item_link(self, News):
-        return '/news-2-%d-1-%s.html' % (int(News.id), slugify(News.title))
-    
+    def item_link(self, item):
+        return '/news-2-%i-1-%s.html' % (item.id, slugify(item.title))
     
 class LatestJournal(Feed):
     title = _("Logram-Project: Journal")
@@ -67,14 +70,19 @@ class LatestJournal(Feed):
             JList = News.objects.select_related('category', 'author') \
                     .order_by('-date_published') \
                     .filter(published=True,is_private=1)[:10]
+                    
             # Ecris le cache du RSS jounral de 30min
             cache.set('feeds_journal', list(JList), 30*60)
         return JList
     
+    def item_title(self, item):
+        return item.title
+        
+    def item_description(self, item):
+        return item.body
     
-    def item_link(self, News):
-        return '/news-2-%d-1-%s.html' % (int(News.id), slugify(News.title))
-    
+    def item_link(self, item):
+        return '/news-2-%i-1-%s.html' % (item.id, slugify(item.title))
 
 class LatestAsk(Feed):
     title = _("Logram-Project: Demandes")
@@ -91,11 +99,14 @@ class LatestAsk(Feed):
             cache.set('feeds_ask', list(DList), 30*60)
         return DList
     
+    def item_title(self, item):
+        return item.title
+        
+    def item_description(self, item):
+        return lcode(item.content)
     
-    def item_link(self, Demand):
-        return '/demand-5-%d-1.html' % int(Demand.id)
-    
-    
+    def item_link(self, item):
+        return '/demand-5-%d-1.html' % int(item.id)
     
 class LatestMessage(Feed):
     title = _("Logram-Project: Messages")
@@ -114,9 +125,14 @@ class LatestMessage(Feed):
             cache.set('feeds_msg', list(MList), 30*60)
         return MList
     
+    def item_title(self, item):
+        return item.title
+        
+    def item_description(self, item):
+        return lcode(item.contents)
     
-    def item_link(self, Topic):
-        return '/' + return_page(Topic, Topic.last_post_id)
+    def item_link(self, item):
+        return '/' + return_page(item, item.last_post_id)
 
 def index(request):
     return tpl('feeds/index.html',"", request)
@@ -129,17 +145,25 @@ class LatestWiki(Feed):
     
     def items(self):
         # Si le cache du rss existe, on l'utilise
-        WList = cache.get('feeds_wiki', False)
+        WList = cache.get('feeds2_wiki', False)
         if not WList:
-            WList = Page.objects.filter(is_private=False).order_by('-id')[:10]
+            WList = LogEntry.objects \
+                .select_related('page', 'author_user') \
+                .filter(page__is_private=False) \
+                .order_by('-date')[:10]
             
             # Ecris le cache du RSS Wiki de 30min
             cache.set('feeds_wiki', list(WList), 30*60)
         return WList
     
+    def item_description(self, item):
+        return lcode(item.page.body)
+        
+    def item_title(self, item):
+        return item.page.title
     
-    def item_link(self, Page):
-        return '/wiki-%s.%s.html' % (Page.slug, Page.lang)
+    def item_link(self, item):
+        return '/wiki-%s.%s.html' % (item.page.slug, item.page.lang)
 
 		
 class LatestPackages(Feed):
@@ -157,6 +181,11 @@ class LatestPackages(Feed):
             cache.set('feeds_packages', list(PList), 30*60)
         return PList
     
+    def item_title(self, item):
+        return item.name
+        
+    def item_description(self, item):
+        return item.name + ' ' + item.version
     
-    def item_link(self, Package):
-        return '/packages-4-%d.html' % (Package.id)
+    def item_link(self, item):
+        return '/packages-4-%d.html' % (item.id)
