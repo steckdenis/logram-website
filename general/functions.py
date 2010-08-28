@@ -26,6 +26,7 @@ from django.utils.encoding import force_unicode
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.utils.cache import cache
+from django.db.models import Q
 
 from django.utils.translation import gettext_lazy as _
 
@@ -252,7 +253,7 @@ def tpl(name, args, request):
             request.session['style'] = style
 
     # Enregistrer l'activité
-    from pyv4.general.models import Activity
+    from pyv4.general.models import Activity, GlobalMessage
     act = Activity(ip=request.META.get('REMOTE_ADDR'), template=name)
     act.date = datetime.datetime.now()
     
@@ -260,10 +261,21 @@ def tpl(name, args, request):
         act.user = request.user.get_profile()
         
     act.save()
+    
+    # Prendre un éventuel message global
+    lang = request.LANGUAGE_CODE.split('_')[0]
+    globalmessages = cache.get('globalf_messages_%s' % lang, None)
+    
+    if not globalmessages:
+        globalmessages = GlobalMessage.objects.filter(Q(lang=lang) | Q(lang__isnull=True) | Q(lang=''))
+        globalmessages = list(globalmessages)
+        
+        cache.set('global_messages_%s' % lang, globalmessages, 10 * 60)
 
     # Rendre la template
     return render_to_response(name, args, context_instance=RequestContext(request, {
         'style': style,
+        'globalmessages': globalmessages,
         'settings': settings}))
 
 def lcode(text):

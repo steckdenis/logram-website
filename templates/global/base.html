@@ -157,9 +157,12 @@
             
                     </div>
                     
-                    {% if messages %}
+                    {% if messages or globalmessages %}
                         <div id="messages">
                             <ul>
+                                {% for message in globalmessages %}
+                                    <li class="globalmessage">{{ message.content|safe }}</li>
+                                {% endfor %}
                                 {% for message in messages %}
                                     <li>{{ message|safe }}</li>
                                 {% endfor %}

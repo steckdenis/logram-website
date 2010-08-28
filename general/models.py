@@ -66,6 +66,21 @@ class Style(models.Model):
     def __unicode__(self):
         return self.name
         
+    class Meta:
+        verbose_name = _('Style')
+        verbose_name_plural = _('Styles')
+        
+class GlobalMessage(models.Model):
+    content = models.TextField(_('Contenu'))
+    lang = models.CharField(_('Langue'), max_length=2, blank=True, null=True)
+    
+    def __unicode__(self):
+        return self.lang + ' : ' + self.content
+    
+    class Meta:
+        verbose_name = _('Message global')
+        verbose_name_plural = _('Messages globaux')
+        
 class Activity(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('Utilisateur'), blank=True, null=True)
     ip = models.CharField(_('Adresse IP'), max_length=39, primary_key=True)

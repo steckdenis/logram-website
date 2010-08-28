@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor,
 # Boston, MA  02110-1301  USA
 #
-from pyv4.general.models import Profile, Style
+from pyv4.general.models import Profile, Style, GlobalMessage
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
@@ -30,3 +30,4 @@ class ProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Style)
+admin.site.register(GlobalMessage)
