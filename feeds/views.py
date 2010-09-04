@@ -53,7 +53,7 @@ class LatestNews(Feed):
         return item.title
         
     def item_description(self, item):
-        return item.body
+        return lcode(item.body)
     
     def item_link(self, item):
         return '/news-2-%i-1-%s.html' % (item.id, slugify(item.title))
@@ -79,7 +79,7 @@ class LatestJournal(Feed):
         return item.title
         
     def item_description(self, item):
-        return item.body
+        return lcode(item.body)
     
     def item_link(self, item):
         return '/news-2-%i-1-%s.html' % (item.id, slugify(item.title))
