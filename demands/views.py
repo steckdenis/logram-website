@@ -528,10 +528,17 @@ def setstep1(request, demand_id, component_id):
         # Simplement rediriger vers l'étape 2
         return HttpResponseRedirect('demand-12-%i-%i-%i-%i.html' % (type_id, product_id, component_id, platform_id))
 
-@permission_required('demands.change_demand')
+@login_required
 def edit_demand(request, demand_id):
     # Éditer une demande
     demand_id = int(demand_id)
+    
+    # Vérifier les permissions
+    if not request.user.has_perm('demands.add_demand'):
+        raise Http404
+    
+    if demand_id != 0 and not request.user.has_perm('demands.change_demand'):
+        raise Http404
     
     if request.method == 'GET':
         return edit_step2(request,
